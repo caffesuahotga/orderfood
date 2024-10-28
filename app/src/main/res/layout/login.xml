@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<TextView
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="Login">
+    android:background="#f007ae"
+    android:gravity="center">
 
-</TextView>
 
-    // button ggole ,
-    
-    .. button fb
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="test branch">
 
-    </TextView>
+    <Button
+        android:id="@+id/btn_login_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login FB"
+        android:gravity="center"
+        android:background="#0726f0"
+        android:textColor="#fcfcfc"
+        >
+
+    </Button>
+
     
 </LinearLayout>
