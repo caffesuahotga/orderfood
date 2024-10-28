@@ -58,7 +58,9 @@ public class login extends AppCompatActivity {
                                         + auth.getCurrentUser().getDisplayName() +
                                         ", Email: " + auth.getCurrentUser().getEmail());
                             } else {
-                                Log.d("fail", "oh shit");
+                                Exception exception = task.getException();  // Lấy lỗi chi tiết
+                                Log.d("login thất bại", "Lỗi: " + (exception != null ? exception.getMessage() : "Không rõ nguyên nhân"));
+
                             }
                         }
                     });
@@ -89,7 +91,6 @@ public class login extends AppCompatActivity {
 
         // set cho button login google call giao diện đăng nhập.
         signInButton.setOnClickListener(new View.OnClickListener() {
-            
             @Override
             public void onClick(View view) {
                 Log.d("GoogleSignIn", "hello");
