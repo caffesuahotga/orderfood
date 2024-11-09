@@ -1,4 +1,4 @@
 package com.example.orderfood.services;
 
-public class product {
+public class ProductActivity {
 }

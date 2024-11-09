@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         auth = FirebaseAuth.getInstance();
 
         auth.signOut();
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d("GoogleSignIn", "hello da vao trong");
         }
-
 
 //        db.collection("user")
 //                .get()
