@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">orderfood</string>
+
     <string name="facebook_app_id">3855134911423875</string>
     <string name="fb_login_protocol_scheme">fb3855134911423875</string>
     <string name="facebook_client_token">427b88d96f99aec3e3eb5de1b3763d2e</string>
+
+    <string name="client_id">775705757390-074erd09590i9i5cgggodclgt6b72fcm.apps.googleusercontent.com</string>
+
 </resources>
