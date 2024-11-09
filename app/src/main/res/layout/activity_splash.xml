@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- CardView với logo nằm giữa và đẩy lên một chút -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="246dp"
+        android:layout_height="246dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="150dp"
+        app:cardCornerRadius="123dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Hình ảnh 1 ở dưới bên trái -->
+    <ImageView
+    android:id="@+id/image1"
+    android:layout_width="246dp"
+    android:layout_height="331dp"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="-37dp"
+    android:layout_marginBottom="-74dp"
+    android:src="@drawable/img_splash_1" />
+
+    <!-- Hình ảnh 2 ở bên phải của Hình ảnh 1 -->
+    <ImageView
+    android:id="@+id/image2"
+    android:layout_width="212dp"
+    android:layout_height="295dp"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="-66dp"
+    android:layout_marginBottom="-69dp"
+    android:layout_toEndOf="@id/image1"
+    android:src="@drawable/img_splash_2" />
+
+    </RelativeLayout>
