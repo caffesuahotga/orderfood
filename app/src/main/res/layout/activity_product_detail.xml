@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
     <RelativeLayout
         android:id="@+id/pd_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="10dp"
+        android:orientation="horizontal"
 
-        android:orientation="horizontal">
+        android:paddingRight="10dp">
 
         <Button
             android:layout_width="50dp"
@@ -30,7 +29,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/select_opt"
+        android:layout_above="@+id/l_order"
         android:layout_below="@+id/pd_header">
 
         <LinearLayout
@@ -69,51 +68,191 @@
 
                 </LinearLayout>
             </RelativeLayout>
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:text="Cơm Sường Nướng Mật Ong Thơm Ngon"></TextView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Cơm Sường Nướng Mật Ong Thơm Ngon"
                     android:textSize="25dp"
-                    android:text="★4.8 - 14 mins "></TextView>
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="★4.8 - 14 mins "
+                    android:textSize="25dp"></TextView>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chi tiết sản phẩm"
+                    android:textSize="20dp"
+                    android:textStyle="bold"></TextView>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textStart"
-                    android:textSize="20dp"
                     android:text="Đầu tiên phải kể tới ngôi sao của món ăn chính là sườn cốt lết nướng được ướp ngấm gia vị trên từng thớ thịt và được nướng chín thơm lừng. Khi ăn thịt vừa đậm đà, vừa mềm. Ở Tường Hân phần thịt cốt lết đã được bỏ phần xương, giữ lại phần thịt để khách tiện lợi khi ăn uống hơn."
-                >
+                    android:textAlignment="textStart"
+                    android:textSize="20dp">
 
-            </TextView>
+                </TextView>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="ĐÁNH GIÁ SẢN PHẨM"
+                android:textSize="25dp"
+                android:textStyle="bold"></TextView>
+
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                style="@style/BorderRating">
+
+                <Button
+                    style="@style/BorderRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Tất cả ( 4.9 )"></Button>
+
+                <Button
+                    style="@style/BorderRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="5 Sao (12)"></Button>
+
+                <Button
+                    style="@style/BorderRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="4 Sao (4)"></Button>
+
+                <Button
+                    style="@style/BorderRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="3 Sao (12)"></Button>
+
+                <Button
+                    style="@style/BorderRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text=" Sao (1)"></Button>
+
+            </GridLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/comment_avt"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/c_s"></ImageView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Đặng Vỹ Khôi"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="★★★★"></TextView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Món ăn này thật sự tuyệ vờthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vi, tôi ăn vào mà khóc luôn"></TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#D3D3D3"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/comment_avt2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/c_s"></ImageView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Đặng Vỹ Khôi"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="★★★★"></TextView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Món ăn này thật sự tuyệ vờthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vthật sự tuyệ vời, tôi ăn vi, tôi ăn vào mà khóc luôn"></TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/select_opt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/l_order"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="dang vy khoi"></TextView>
-
-    </LinearLayout>
 
 
     <LinearLayout
