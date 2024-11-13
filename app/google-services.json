@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "775705757390",
     "project_id": "order-food-8cf79",
-    "storage_bucket": "order-food-8cf79.appspot.com"
+    "storage_bucket": "order-food-8cf79.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "775705757390-qnbr4p4dsdpjut5oo1ftef5va2efni70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.orderfood",
+            "certificate_hash": "4f3bc67b129405272d2a274d3675025656e839c6"
+          }
+        },
         {
           "client_id": "775705757390-074erd09590i9i5cgggodclgt6b72fcm.apps.googleusercontent.com",
           "client_type": 3
