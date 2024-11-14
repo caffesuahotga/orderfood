@@ -112,5 +112,5 @@
             android:padding="8dp" />
 
     </LinearLayout>
-
+    
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
