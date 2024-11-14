@@ -103,7 +103,4 @@ public class Product {
     public void setStoreID(int storeID) {
         StoreID = storeID;
     }
-
-
-
 }

@@ -8,12 +8,17 @@ import android.util.Log;
 import com.example.orderfood.R;
 import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Address;
+import com.example.orderfood.models.FeedBack;
+import com.example.orderfood.models.Order;
+import com.example.orderfood.models.OrderDetail;
+import com.example.orderfood.models.Product;
 import com.example.orderfood.models.Store;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,18 +39,20 @@ public class SeedingDataActivity extends AppCompatActivity {
 //        addMultipleAccountsToFirestore(db);
 //
 //        addStore();
+        addProduct();
+        addOrder();
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-
-                    // Lấy FCM token và log ra để gửi thông báo tới thiết bị này
-                    String token = task.getResult();
-                    Log.d(TAG, "FCM Token: " + token);
-                });
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(task -> {
+//                    if (!task.isSuccessful()) {
+//                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                        return;
+//                    }
+//
+//                    // Lấy FCM token và log ra để gửi thông báo tới thiết bị này
+//                    String token = task.getResult();
+//                    Log.d(TAG, "FCM Token: " + token);
+//                });
 
     }
 
@@ -155,9 +162,89 @@ public class SeedingDataActivity extends AppCompatActivity {
     }
 
 
-    // tạo product
+    // tạo product ( tạo 1 product )
     private void addProduct() {
+        Product pro1 = new Product(
+                1,
+                "Pizza",
+                101,
+                new ArrayList<>(Arrays.asList("image1.jpg", "image2.jpg")),
+                "100,000 VND",
+                4.5,
+                30,
+                "Delicious Italian Pizza",
+                1
+        );
 
+        Map<String, Object> proMap = new HashMap<>();
+        proMap.put("id", pro1.getId());
+        proMap.put("name", pro1.getName());
+        proMap.put("image_source", pro1.getImage_source());
+        proMap.put("image", pro1.getImage());
+        proMap.put("price", pro1.getPrice());
+        proMap.put("rate", pro1.getRate());
+        proMap.put("minutes", pro1.getMinutes());
+        proMap.put("description", pro1.getDescription());
+        proMap.put("storeID", pro1.getStoreID());
+
+        db.collection("product")
+                .document("1")
+                .set(proMap)
+                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm pro", e));
+
+    }
+
+    // tạo order ( tạo 1 đơn )
+    private void addOrder()
+    {
+        Order or = new Order(1,1,4,2,10,10);
+
+        Map<String, Object> orMap = new HashMap<>();
+        orMap.put("id", or.getId());
+        orMap.put("addressId", or.getAddressId());
+        orMap.put("shipperId", or.getShipperId());
+        orMap.put("customerId", or.getCustomerId());
+        orMap.put("shipLatitude", or.getShipLatitude());
+        orMap.put("shipLongitude", or.getShipLongtitude());
+
+        db.collection("order")
+                .document("1")
+                .set(orMap)
+                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm order", e));
+
+    }
+
+    private void addOrderDetail()
+    {
+        OrderDetail orDetail = new OrderDetail(1,1,1,20000,1);
+        Map<String, Object> orDetailMap = new HashMap<>();
+        orDetailMap.put("id", orDetail.getId());
+        orDetailMap.put("orderId", orDetail.getOrderId());
+        orDetailMap.put("productId", orDetail.getProductId());
+        orDetailMap.put("price", orDetail.getPrice());
+        orDetailMap.put("amount", orDetail.getAmount());
+
+        db.collection("orderDetail")
+                .document("1")
+                .set(orDetailMap)
+                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm order", e));
+
+    }
+
+    private void addFeedBack()
+    {
+        FeedBack fb = new FeedBack(1,1,"Bình luân của siêu cấp khách hàng",5);
+        Map<String, Object> fbMap = new HashMap<>();
+
+        fbMap.put("id", fb.getId());
+        fbMap.put("orderDetailId", fb.getOrderDetailId());
+        fbMap.put("content", fb.getContent());
+        fbMap.put("star", fb.getStar());
+
+        db.collection("feedback")
+                .document("1")
+                .set(fbMap)
+                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm feedback", e));
     }
 
 }
