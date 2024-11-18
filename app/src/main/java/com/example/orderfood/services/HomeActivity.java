@@ -11,7 +11,7 @@ import com.example.orderfood.R;
 import com.example.orderfood.component.category_adapter;
 import com.example.orderfood.component.product_adapter;
 import com.example.orderfood.models.category;
-import com.example.orderfood.models.product;
+import com.example.orderfood.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     private List<category> categoryList;
     private RecyclerView recyclerView1;
     private product_adapter  productAdapter;
-    private List<product> productList;
+    private List<Product> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +65,18 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setAdapter(categoryAdapter);
 
 
-        recyclerView1 = findViewById(R.id.view_product);
-        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
-        recyclerView1.setLayoutManager(gridLayoutManager1);  // Áp dụng LayoutManager
-        productList = new ArrayList<>();
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 3.0));
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 5.0));
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 4.5));
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 3.0));
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 5.0));
-        productList.add(new product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 4.5));
-        productAdapter = new product_adapter(productList);
-        recyclerView1.setAdapter(productAdapter);
+//        recyclerView1 = findViewById(R.id.view_product);
+//        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
+//        recyclerView1.setLayoutManager(gridLayoutManager1);  // Áp dụng LayoutManager
+//        productList = new ArrayList<>();
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 3.0));
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 5.0));
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 4.5));
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 3.0));
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 5.0));
+//        productList.add(new Product("cơm gà xối mỡ", R.drawable.icon_com_chay, "24000", 4.5));
+//        productAdapter = new product_adapter(productList);
+//        recyclerView1.setAdapter(productAdapter);
 
 
     }
