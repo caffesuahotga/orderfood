@@ -3,6 +3,6 @@
     <solid android:color="@color/white" /> <!-- Màu nền trắng -->
     <stroke
         android:width="2dp"
-        android:color="#ff9600" /> <!-- Viền màu đỏ -->
+        android:color="#EF2A39" /> <!-- Viền màu đỏ -->
     <corners android:radius="4dp" /> <!-- Bo góc -->
 </shape>

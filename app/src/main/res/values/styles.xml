@@ -8,7 +8,6 @@
 
     <style name="BorderRating" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_border_red</item>
-        <item name="android:textColor">#ff9600</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>

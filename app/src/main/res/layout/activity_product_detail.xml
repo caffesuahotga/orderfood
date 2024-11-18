@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:paddingRight="10dp">
 
         <Button
@@ -48,25 +47,13 @@
                     android:padding="5dp"
                     android:src="@drawable/c_s"></ImageView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/pd_main_pic"
-                    android:orientation="horizontal">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/r_product_detail_mini"
+                        android:layout_below="@+id/pd_main_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </androidx.recyclerview.widget.RecyclerView>
 
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:padding="5dp"
-                        android:src="@drawable/c_s"></ImageView>
-
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:padding="5dp"
-                        android:src="@drawable/c_s"></ImageView>
-
-                </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout
@@ -75,16 +62,16 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/proDetail_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cơm Sường Nướng Mật Ong Thơm Ngon"
                     android:textSize="25dp"
                     android:textStyle="bold"></TextView>
 
                 <TextView
+                    android:id="@+id/proDetail_star_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="★4.8 - 14 mins "
                     android:textSize="25dp"></TextView>
 
 
@@ -96,9 +83,9 @@
                     android:textStyle="bold"></TextView>
 
                 <TextView
+                    android:id="@+id/proDetail_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Đầu tiên phải kể tới ngôi sao của món ăn chính là sườn cốt lết nướng được ướp ngấm gia vị trên từng thớ thịt và được nướng chín thơm lừng. Khi ăn thịt vừa đậm đà, vừa mềm. Ở Tường Hân phần thịt cốt lết đã được bỏ phần xương, giữ lại phần thịt để khách tiện lợi khi ăn uống hơn."
                     android:textAlignment="textStart"
                     android:textSize="20dp">
 
@@ -110,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="ĐÁNH GIÁ SẢN PHẨM"
+                android:textColor="#EF2A39"
                 android:textSize="25dp"
                 android:textStyle="bold"></TextView>
 
@@ -117,7 +105,7 @@
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="4"
+                android:columnCount="3"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 style="@style/BorderRating">
@@ -128,6 +116,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:padding="5dp"
+                    android:background="#EF2A39"
+                    android:textColor="@color/white"
                     android:text="Tất cả ( 4.9 )"></Button>
 
                 <Button

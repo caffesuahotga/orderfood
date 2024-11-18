@@ -110,7 +110,6 @@
             android:src="@drawable/ic_baseline_account_circle_24"
             android:contentDescription="Icon 4"
             android:padding="8dp" />
-
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
