@@ -10,14 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.orderfood.R;
-import com.example.orderfood.models.product;
+import com.example.orderfood.models.Product;
 import java.util.List;
 
 public class product_adapter extends RecyclerView.Adapter<product_adapter.ProductViewHolder> {
 
-    private List<product> productList;
+    private List<Product> productList;
 
-    public product_adapter(List<product> productList) {
+    public product_adapter(List<Product> productList) {
         this.productList = productList;
     }
 
@@ -30,9 +30,9 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        product product = productList.get(position);
+        Product product = productList.get(position);
         holder.productName.setText(product.getName());
-        holder.productImage.setImageResource(product.getImageSource());
+        holder.productImage.setImageResource(product.getImage_source());
         holder.productPrice.setText(formatVND(product.getPrice()));
 
         // Thiết lập mức độ đổ màu cho xếp hạng sao
