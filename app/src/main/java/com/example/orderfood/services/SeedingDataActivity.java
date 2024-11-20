@@ -41,6 +41,8 @@ public class SeedingDataActivity extends AppCompatActivity {
 //        addStore();
         addProduct();
         addOrder();
+        addOrderDetail();
+        addFeedBack();
 
 //        FirebaseMessaging.getInstance().getToken()
 //                .addOnCompleteListener(task -> {
