@@ -43,7 +43,7 @@
                 <ImageView
                     android:id="@+id/pd_main_pic"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="300dp"
                     android:padding="5dp"
                     android:src="@drawable/c_s"></ImageView>
 
@@ -103,51 +103,15 @@
 
 
             <GridLayout
+                android:id="@+id/product_detail_rating"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:columnCount="3"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                style="@style/BorderRating">
-
-                <Button
-                    style="@style/BorderRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:background="#EF2A39"
-                    android:textColor="@color/white"
-                    android:text="Tất cả ( 4.9 )"></Button>
-
-                <Button
-                    style="@style/BorderRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="5 Sao (12)"></Button>
-
-                <Button
-                    style="@style/BorderRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="4 Sao (4)"></Button>
-
-                <Button
-                    style="@style/BorderRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="3 Sao (12)"></Button>
-
-                <Button
-                    style="@style/BorderRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text=" Sao (1)"></Button>
-
+                android:stretchMode="columnWidth"
+                style="@style/BorderRating"
+                android:orientation="horizontal">
             </GridLayout>
 
             <LinearLayout
