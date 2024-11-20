@@ -22,22 +22,20 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
 
-        <!-- Main Activity -->
+    
         <activity
             android:name=".services.HomeActivity"
             android:exported="true">
-
-        </activity>
-
-        <activity
-            android:name=".services.login"
-            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".services.login"
+            android:exported="true" >
+        </activity>
         <!-- Facebook Login Activity -->
         <activity
             android:name="com.facebook.FacebookActivity"
