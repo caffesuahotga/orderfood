@@ -31,6 +31,7 @@
         <activity
             android:name=".services.SeedingDataActivity"
             android:exported="true" >
+
         </activity>
 
         <!-- Facebook SDK Application ID and Client Token -->
@@ -46,6 +47,11 @@
         <activity
             android:name=".services.login"
             android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity> <!-- Facebook Login Activity -->
         <activity
