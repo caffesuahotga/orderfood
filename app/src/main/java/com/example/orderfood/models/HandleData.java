@@ -428,11 +428,9 @@ public class HandleData {
     public List<Store> getAllStores() {
         List<Store> storeList = new ArrayList<>();
         try {
-            Task<QuerySnapshot> task = db.collection("stores").get(); // Thay "stores" bằng tên collection của bạn
-
-            // Chờ Task hoàn thành
+            Task<QuerySnapshot> task = db.collection("stores").get();
             while (!task.isComplete()) {
-                Thread.sleep(10); // Đợi Task hoàn thành
+                Thread.sleep(10);
             }
 
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -448,7 +446,7 @@ public class HandleData {
         } catch (Exception e) {
             System.err.println("Error getting all stores: " + e.getMessage());
         }
-        return storeList; // Trả về danh sách Store
+        return storeList;
     }
 
 
