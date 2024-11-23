@@ -8,13 +8,13 @@ public class Product {
 
     private String name;
     private int image_source;
-    private ArrayList<String> Image; // danh sách ảnh món ăn n
+    private ArrayList<String> Image; // danh sách ảnh món ăn
     private String price;
     private Double rate;
     private int minutes; // thời gian làm món ăn
     private String Description;
-
     private int StoreID;
+    private int CategoryID;
 
 
     public int getId() {
@@ -24,7 +24,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, int image_source, ArrayList<String> image, String price, Double rate, int minutes, String description, int storeID) {
+    public Product(int id, String name, int image_source, ArrayList<String> image, String price, Double rate, int minutes, String description, int storeID, int categoryID) {
         Id = id;
         this.name = name;
         this.image_source = image_source;
@@ -34,6 +34,8 @@ public class Product {
         this.minutes = minutes;
         Description = description;
         StoreID = storeID;
+        CategoryID = categoryID;
+
     }
 
     public void setId(int id) {
@@ -103,4 +105,8 @@ public class Product {
     public void setStoreID(int storeID) {
         StoreID = storeID;
     }
+
+    public int getCategoryID(){ return CategoryID;}
+
+    public void setCategoryID(int categoryID){ CategoryID = categoryID;}
 }

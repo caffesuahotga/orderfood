@@ -8,16 +8,18 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
-import com.example.orderfood.models.category;
+import com.example.orderfood.models.Category;
+
 
 import java.util.List;
 
 public class category_adapter extends RecyclerView.Adapter<category_adapter.CategoryViewHolder> {
 
-    private List<category> categoryList;
+    private List<Category> categoryList;
 
-    public category_adapter(List<category> categoryList) {
+    public category_adapter(List<Category> categoryList) {
         this.categoryList = categoryList;
     }
 
@@ -28,12 +30,19 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.Cate
         return new CategoryViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        category categoryItem = categoryList.get(position);
+        Category categoryItem = categoryList.get(position);
 
+        // Sử dụng Glide để tải ảnh từ URL
+        Glide.with(holder.itemView.getContext())
+                .load(categoryItem.getImage()) // URL từ thuộc tính Image
+                .placeholder(R.drawable.image_loading) // Ảnh hiển thị khi đang tải (nên có trong drawable)
+                .error(R.drawable.image_error) // Ảnh hiển thị nếu có lỗi
+                .into(holder.categoryImage);
 
-        holder.categoryImage.setImageResource(categoryItem.getImageResource());
+        // Thiết lập tên danh mục
         holder.categoryName.setText(categoryItem.getName());
     }
 
@@ -48,8 +57,8 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.Cate
 
         public CategoryViewHolder(View itemView) {
             super(itemView);
-            categoryImage = itemView.findViewById(R.id.category_image);  // ID trong item_category.xml
-            categoryName = itemView.findViewById(R.id.category_name);    // ID trong item_category.xml
+            categoryImage = itemView.findViewById(R.id.category_image);
+            categoryName = itemView.findViewById(R.id.category_name);
         }
     }
 }

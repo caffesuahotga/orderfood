@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.orderfood">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission
-        android:name="com.google.android.gms.permission.AD_ID"
-        tools:node="remove" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -30,7 +24,7 @@
 
         <activity
             android:name=".services.SeedingDataActivity"
-            android:exported="true" >
+            android:exported="true">
 
         </activity>
 
@@ -40,24 +34,24 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
-            android:value="@string/facebook_client_token" /> <!-- Main Activity -->
+            android:value="@string/facebook_client_token" />
+
+        <!-- Main Activity -->
         <activity
             android:name=".services.HomeActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".services.login"
             android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity> <!-- Facebook Login Activity -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" /> <!-- Facebook Custom Tab Activity for Chrome -->
+            android:label="@string/app_name" />
+
+        <!-- Facebook Custom Tab Activity for Chrome -->
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -70,6 +64,22 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".test.TestUtil"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
 
 </manifest>
