@@ -14,6 +14,20 @@
         android:theme="@style/Theme.Orderfood"
         tools:targetApi="31">
 
+        <service
+            android:name=".models.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".services.SeedingDataActivity"
+            android:exported="true">
+
+        </activity>
+
         <!-- Facebook SDK Application ID and Client Token -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -26,21 +40,12 @@
         <activity
             android:name=".services.HomeActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
 
-        <activity
-            android:name=".services.SeedingDataActivity"
-            android:exported="true" >
-
-
-
-        </activity>
-
-        <!-- Facebook Login Activity -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -60,9 +65,6 @@
             </intent-filter>
         </activity>
 
-
-
-
         <activity
             android:name=".test.TestUtil"
             android:exported="true">
@@ -71,12 +73,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-
-
-
 
 
     </application>

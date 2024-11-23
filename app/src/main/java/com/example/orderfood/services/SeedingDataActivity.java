@@ -41,8 +41,6 @@ public class SeedingDataActivity extends AppCompatActivity {
 //        addMultipleAccountsToFirestore(db);
 //
 //        addStore();
-        addProduct();
-//        addOrder();
 
 //        FirebaseMessaging.getInstance().getToken()
 //                .addOnCompleteListener(task -> {
@@ -142,7 +140,6 @@ public class SeedingDataActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> Log.d(TAG, "Thêm địa chỉ thành công cho Account ID: " + address.getAccountId()))
                     .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm địa chỉ", e));
         }
-
     }
 
 
