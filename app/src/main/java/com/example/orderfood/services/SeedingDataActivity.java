@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.orderfood.R;
 import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Address;
+import com.example.orderfood.models.Category;
 import com.example.orderfood.models.FeedBack;
 import com.example.orderfood.models.Order;
 import com.example.orderfood.models.OrderDetail;
@@ -29,6 +30,7 @@ public class SeedingDataActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class SeedingDataActivity extends AppCompatActivity {
 //
 //        addStore();
         addProduct();
-        addOrder();
+//        addOrder();
 
 //        FirebaseMessaging.getInstance().getToken()
 //                .addOnCompleteListener(task -> {
@@ -173,10 +175,13 @@ public class SeedingDataActivity extends AppCompatActivity {
                 4.5,
                 30,
                 "Delicious Italian Pizza",
+                1,
                 1
+
         );
 
         Map<String, Object> proMap = new HashMap<>();
+
         proMap.put("id", pro1.getId());
         proMap.put("name", pro1.getName());
         proMap.put("image_source", pro1.getImage_source());
@@ -186,12 +191,12 @@ public class SeedingDataActivity extends AppCompatActivity {
         proMap.put("minutes", pro1.getMinutes());
         proMap.put("description", pro1.getDescription());
         proMap.put("storeID", pro1.getStoreID());
+        proMap.put("categoryID", pro1.getCategoryID());
 
         db.collection("product")
                 .document("1")
                 .set(proMap)
                 .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm pro", e));
-
     }
 
     // tạo order ( tạo 1 đơn )
@@ -245,6 +250,21 @@ public class SeedingDataActivity extends AppCompatActivity {
                 .document("1")
                 .set(fbMap)
                 .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm feedback", e));
+    }
+    private void addCategory()
+    {
+       Category cate = new Category(1,"check1","check1");
+       Map<String, Object> cateMap = new HashMap<>();
+       cateMap.put("id", cate.getId());
+       cateMap.put("name",cate.getName());
+        cateMap.put("image",cate.getImage());
+        db.collection("category")
+                .document("1")
+                .set(cateMap)
+                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm category", e));
+
+
+
     }
 
 }

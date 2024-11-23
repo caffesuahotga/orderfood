@@ -26,16 +26,18 @@
         <activity
             android:name=".services.HomeActivity"
             android:exported="true">
-
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
-            android:name=".services.login"
+            android:name=".services.SeedingDataActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+
+
         </activity>
 
         <!-- Facebook Login Activity -->
@@ -57,6 +59,26 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+
+
+
+        <activity
+            android:name=".test.TestUtil"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
+
+
+
+
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
