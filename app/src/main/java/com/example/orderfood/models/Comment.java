@@ -1,8 +1,9 @@
 package com.example.orderfood.models;
 
-public class comment {
+public class Comment {
     private int Id;
     private int Uid;
     private int Star;
     private String Comment;
+
 }

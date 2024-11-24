@@ -5,20 +5,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.component.ImageProductDetailAdapter;
+import com.example.orderfood.data.ProductDetailUtil;
 import com.example.orderfood.models.dto.ProductDetailDTO;
 
 import java.util.ArrayList;
@@ -26,11 +22,17 @@ import java.util.ArrayList;
 public class ProductDetailActivity extends AppCompatActivity {
 
     TextView selectedRating = null;
+    private  int ProductID = 1; // giả xử nhận được id là 1
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        // get product có id là 1
+
+
 
 
         // giả sử nhận đc data 1 object product detail đủ thông tin
@@ -59,10 +61,12 @@ public class ProductDetailActivity extends AppCompatActivity {
                 "Description for another product.",
                 4,
                 5,
-                images
+                images, new ArrayList<>()
         );
 
-        BindData(proDetail);
+//        BindData(proDetail);
+        ProductDetailDTO productDetail = ProductDetailUtil.getProductById(1);
+        BindData(productDetail);
     }
 
     // hàm này dùng để bind data lên giao diện
@@ -164,10 +168,19 @@ public class ProductDetailActivity extends AppCompatActivity {
             // Thêm item vào container layout
             gv_rating.addView(ratingView);
         }
+
+        // bind bình luận
+
+        RecyclerView comment_view = findViewById(R.id.product_detail_comment_view);
+        comment_view.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
     }
 
+    // nạp data
+    private  ProductDetailDTO GetProduct(int productID)
+    {
+        ProductDetailDTO proDTO = new ProductDetailDTO();
 
 
-
-
+        return proDTO;
+    }
 }

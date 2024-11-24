@@ -1,25 +1,29 @@
 package com.example.orderfood.models.dto;
 
+import com.example.orderfood.models.FeedBack;
+
 import java.util.ArrayList;
 
 public class ProductDetailDTO {
     private int PID;
     private String Name ;
     private String Description ;
-    private int Star;
-    private int Min;
-    private ArrayList<String> ListImage = new ArrayList<>(); // ảnh sản phẩm
+    private double Star;
+    private double Min;
+    private ArrayList<String> ListImage = new ArrayList<String>(); // ảnh sản phẩm
+    private ArrayList<FeedBackDTO> ListFeedBack = new ArrayList<FeedBackDTO>();
 
     public ProductDetailDTO() {
     }
 
-    public ProductDetailDTO(int PID, String name, String description, int star, int min, ArrayList<String> listImage) {
+    public ProductDetailDTO(int PID, String name, String description, int star, int min, ArrayList<String> listImage, ArrayList<FeedBackDTO> listFeedBack) {
         this.PID = PID;
         Name = name;
         Description = description;
         Star = star;
         Min = min;
         ListImage = listImage;
+        ListFeedBack = listFeedBack;
     }
 
     public int getPID() {
@@ -38,11 +42,11 @@ public class ProductDetailDTO {
         Description = description;
     }
 
-    public void setStar(int star) {
+    public void setStar(double star) {
         Star = star;
     }
 
-    public void setMin(int min) {
+    public void setMin(double min) {
         Min = min;
     }
 
@@ -58,16 +62,24 @@ public class ProductDetailDTO {
         return Description;
     }
 
-    public int getStar() {
+    public double getStar() {
         return Star;
     }
 
-    public int getMin() {
+    public double getMin() {
         return Min;
     }
 
     public ArrayList<String> getListImage() {
         return ListImage;
+    }
+
+    public ArrayList<FeedBackDTO> getListFeedBack() {
+        return ListFeedBack;
+    }
+
+    public void setListFeedBack(ArrayList<FeedBackDTO> listFeedBack) {
+        ListFeedBack = listFeedBack;
     }
 }
 
