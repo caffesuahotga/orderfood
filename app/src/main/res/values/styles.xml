@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="radius_rounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="color">@color/black</item>
+    </style>
+
+
+    <style name="BorderRating" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_border_red</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BorderRatingActive" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_rating_product_detail_active</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+</resources>
+
