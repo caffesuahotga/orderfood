@@ -423,7 +423,7 @@ public class HandleData {
                 product.setName(document.getString("name"));
                 product.setImage_source(document.getLong("image_source").intValue());
                 product.setImage((ArrayList<String>) document.get("image"));
-                product.setPrice(document.getString("price"));
+                product.setPrice(document.getDouble("price"));
                 product.setRate(document.getDouble("rate"));
                 product.setMinutes(document.getLong("minutes").intValue());
                 product.setDescription(document.getString("description"));
@@ -457,7 +457,7 @@ public class HandleData {
                     product.setName(document.getString("name"));
                     product.setImage_source(document.getLong("image_source").intValue());
                     product.setImage((ArrayList<String>) document.get("Image"));
-                    product.setPrice(document.getString("price"));
+                    product.setPrice(document.getDouble("price"));
                     product.setRate(document.getDouble("rate"));
                     product.setMinutes(document.getLong("minutes").intValue());
                     product.setDescription(document.getString("Description"));

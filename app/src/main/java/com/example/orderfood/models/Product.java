@@ -9,7 +9,7 @@ public class Product {
     private String name;
     private int image_source;
     private ArrayList<String> Image; // danh sách ảnh món ăn
-    private String price;
+    private double price;
     private Double rate;
     private int minutes; // thời gian làm món ăn
     private String Description;
@@ -24,7 +24,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, int image_source, ArrayList<String> image, String price, Double rate, int minutes, String description, int storeID, int categoryID) {
+    public Product(int id, String name, int image_source, ArrayList<String> image, double price, Double rate, int minutes, String description, int storeID, int categoryID) {
         Id = id;
         this.name = name;
         this.image_source = image_source;
@@ -66,11 +66,11 @@ public class Product {
         Image = image;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
