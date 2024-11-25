@@ -41,8 +41,9 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore:25.1.1'
     implementation 'com.google.firebase:firebase-auth:21.1.0'
-    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+
     implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.google.firebase:firebase-messaging:24.0.3'
 
 
@@ -54,12 +55,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:21.2.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
 
-
-
-
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
-
+<<<<<<< HEAD
 }
 
 apply plugin: 'com.google.gms.google-services'
+=======
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+}
+>>>>>>> d4aa7dfc846065ec15dd3a2ab6bd3699e04abc93

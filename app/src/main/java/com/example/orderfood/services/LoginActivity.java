@@ -48,7 +48,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "login"; // Thêm TAG cho log
     private CallbackManager mCallbackManager;
@@ -64,7 +64,7 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         // fb
         FacebookSdk.sdkInitialize(getApplicationContext()); // Sử dụng getApplicationContext()
@@ -100,7 +100,7 @@ public class login extends AppCompatActivity {
                 .requestIdToken(getString(R.string.client_id))
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(login.this, options);
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
 
         auth = FirebaseAuth.getInstance();
 
@@ -127,7 +127,7 @@ public class login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProgressDialog mDialog = new ProgressDialog(login.this);
+                ProgressDialog mDialog = new ProgressDialog(LoginActivity.this);
                 mDialog.setMessage("Vui lòng đợi...");
                 mDialog.show();
 
@@ -148,22 +148,22 @@ public class login extends AppCompatActivity {
                                         mDialog.dismiss();
                                         // Kiểm tra mật khẩu
                                         if (user != null && user.getPassword().equals(edtpassword.getText().toString())) {
-                                            Toast.makeText(login.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(login.this, "Tên đăng nhập hoặc mật khẩu đã nhập sai, vui lòng sửa lại !", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu đã nhập sai, vui lòng sửa lại !", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         mDialog.dismiss();
-                                        Toast.makeText(login.this, "Tên đăng nhập không tồn tại !", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "Tên đăng nhập không tồn tại !", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     mDialog.dismiss();
-                                    Toast.makeText(login.this, "Lỗi truy xuất dữ liệu!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Lỗi truy xuất dữ liệu!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }else{
                     mDialog.dismiss();
-                    Toast.makeText(login.this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -185,7 +185,7 @@ public class login extends AppCompatActivity {
                         } else {
                             // Nếu đăng nhập thất bại, hiển thị thông báo cho người dùng
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
@@ -203,7 +203,6 @@ public class login extends AppCompatActivity {
     }
 
 
-    // google
     FirebaseAuth auth;
     GoogleSignInClient googleSignInClient;
     Shape shape;
@@ -240,5 +239,4 @@ public class login extends AppCompatActivity {
         }
 
     });
-    
 }

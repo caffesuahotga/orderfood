@@ -14,11 +14,8 @@ import java.util.List;
 
 public class HandleData {
 
-
     private static final String TAG = "FirestoreData";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
 
     public Account getAccountByID(int id) {
         try {
@@ -449,42 +446,7 @@ public class HandleData {
         return storeList;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                public void getCategories(final FirestoreCallback callback) {
+    public void getCategories(final FirestoreCallback callback) {
         db.collection("category")       
                 .get()
                 .addOnCompleteListener(task -> {
@@ -506,15 +468,7 @@ public class HandleData {
                     }
                 });
     }
-
     public interface FirestoreCallback {
         void onCallback(List<Category> categoryList);
     }
-
-
-
-
-
-
-
 }
