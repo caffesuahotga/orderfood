@@ -1,9 +1,5 @@
 package com.example.orderfood.services;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +7,11 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
@@ -24,28 +25,55 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     TextView selectedRating = null;
-    private  int ProductID = 1; // giả xử nhận được id là 1
+    private int ProductID = 1; // giả xử nhận được id là 1
     LinearLayout emptyFeedbackPlaceholder;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         emptyFeedbackPlaceholder = findViewById(R.id.product_detail_feedback_empt);
+        swipeRefreshLayout = findViewById(R.id.product_detail_refresh);
 
         // get product có id là 1
-        ProductDetailDTO productDetail = ProductDetailUtil.getProductById(1);
-        BindData(productDetail);
+        loadProductData(1);
+
+        // Xử lý refresh
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Show loading spinner
+            swipeRefreshLayout.setRefreshing(true);
+
+            // Call lại API hoặc logic tải dữ liệu trong background thread
+            new Thread(() -> {
+                loadProductData(1); // Load dữ liệu
+
+                // Sau khi dữ liệu được tải, thực hiện thao tác trên UI thread
+                runOnUiThread(() -> {
+                    // Kết thúc hiệu ứng refresh
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }).start();
+
+        });
+    }
+
+    private void loadProductData(int productID) {
+        // Lấy dữ liệu product và hiển thị
+        ProductDetailDTO productDetail = ProductDetailUtil.getProductById(productID);
+
+        // Đảm bảo rằng việc cập nhật UI phải thực hiện trên main thread
+        runOnUiThread(() -> {
+            BindData(productDetail); // Cập nhật UI với dữ liệu mới
+        });
     }
 
     // hàm này dùng để bind data lên giao diện
-    private void BindData(ProductDetailDTO proDetail)
-    {
+    private void BindData(ProductDetailDTO proDetail) {
         // ảnh chính
         ImageView imageView = findViewById(R.id.pd_main_pic);
 
@@ -59,7 +87,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // 1 lấy recy
         RecyclerView re_imagePro = findViewById(R.id.r_product_detail_mini);
         //2 cái hình layout cho recy đó
-        re_imagePro.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        re_imagePro.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         ImageProductDetailAdapter imgDapter = new ImageProductDetailAdapter(this, proDetail.getListImage(), new ImageProductDetailAdapter.OnImageClickListener() {
             @Override
@@ -79,7 +107,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         proDetail_name.setText(proDetail.getName());
 
         // set sao & min
-        String star_min = " ★ "+ proDetail.getStar() + " - " + proDetail.getMin() + " Mins ";
+        String star_min = " ★ " + proDetail.getStar() + " - " + proDetail.getMin() + " Mins ";
         TextView proDetail_star_min = findViewById(R.id.proDetail_star_min);
         proDetail_star_min.setText(star_min);
 
@@ -95,6 +123,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // bind số lượng sao.
         GridLayout gv_rating = findViewById(R.id.product_detail_rating);
+        gv_rating.removeAllViews();
         ArrayList<String> ratingList = new ArrayList<String>();
 
         double totalFeedback = proDetail.getListFeedBack().size(); // Dùng double để dễ tính toán
@@ -179,9 +208,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 //         bind bình luận
         RecyclerView comment_view = findViewById(R.id.product_detail_comment_view);
-        comment_view.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        comment_view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        FeedbackProductDetailAdapter feedbackAdaper = new FeedbackProductDetailAdapter(this,proDetail.getListFeedBack());
+        FeedbackProductDetailAdapter feedbackAdaper = new FeedbackProductDetailAdapter(this, proDetail.getListFeedBack());
         comment_view.setAdapter(feedbackAdaper);
     }
 
