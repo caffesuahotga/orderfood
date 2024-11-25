@@ -43,7 +43,6 @@ public class HandleData {
                 Account account = new Account();
                 account.setId(document.getLong("Id").intValue());
                 account.setName(document.getString("Name"));
-                account.setUsername(document.getString("Username"));
                 account.setPassword(document.getString("Password"));
                 account.setPhone(document.getString("Phone"));
                 account.setRole(document.getLong("Role").intValue());
@@ -443,7 +442,7 @@ public class HandleData {
     public List<Product> getAllProducts() {
         List<Product> productList = new ArrayList<>();
         try {
-            Task<QuerySnapshot> task = db.collection("products").get(); // Thay "products" bằng tên collection của bạn
+            Task<QuerySnapshot> task = db.collection("product").get(); // Thay "products" bằng tên collection của bạn
 
             // Chờ Task hoàn thành
             while (!task.isComplete()) {
@@ -453,16 +452,16 @@ public class HandleData {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = new Product();
-                    product.setId(document.getLong("Id").intValue());
+                    product.setId(document.getLong("id").intValue());
                     product.setName(document.getString("name"));
                     product.setImage_source(document.getLong("image_source").intValue());
-                    product.setImage((ArrayList<String>) document.get("Image"));
+                    product.setImage((ArrayList<String>) document.get("image"));
                     product.setPrice(document.getDouble("price"));
                     product.setRate(document.getDouble("rate"));
                     product.setMinutes(document.getLong("minutes").intValue());
-                    product.setDescription(document.getString("Description"));
-                    product.setStoreID(document.getLong("StoreID").intValue());
-                    product.setCategoryID(document.getLong("CategoryID").intValue());
+                    product.setDescription(document.getString("description"));
+                    product.setStoreID(document.getLong("storeID").intValue());
+                    product.setCategoryID(document.getLong("categoryID").intValue());
                     productList.add(product);
                 }
             }

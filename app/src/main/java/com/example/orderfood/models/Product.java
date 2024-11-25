@@ -9,9 +9,9 @@ public class Product {
     private String name;
     private int image_source;
     private ArrayList<String> Image; // danh sách ảnh món ăn
-    private double price;
+    private Double price;
     private Double rate;
-    private int minutes; // thời gian làm món ăn
+    private  int minutes;
     private String Description;
     private int StoreID;
     private int CategoryID;
