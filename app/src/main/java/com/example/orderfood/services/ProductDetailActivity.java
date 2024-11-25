@@ -18,6 +18,7 @@ import com.example.orderfood.data.ProductDetailUtil;
 import com.example.orderfood.models.dto.ProductDetailDTO;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -31,40 +32,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         // get product có id là 1
-
-
-
-
-        // giả sử nhận đc data 1 object product detail đủ thông tin
-
-        ArrayList<String> images = new ArrayList<>();
-        images.add("https://tamnhuhoa.com/datafiles/37/2023-08/31848625-com-tam-suon-bi-ba-chi.png");
-        images.add("https://cdn.tgdd.vn/Files/2021/08/16/1375565/cach-nau-com-tam-suon-bi-cha-tai-nha-ngon-nhu-ngoai-tiem-202108162216045436.jpg");
-        images.add("https://cdn.tgdd.vn/Files/2021/08/09/1373996/tu-lam-com-tam-suon-trung-don-gian-thom-ngon-nhu-ngoai-hang-202201151416543367.jpg");
-        images.add("https://tamnhuhoa.com/datafiles/37/2023-08/31848625-com-tam-suon-bi-ba-chi.png");
-        images.add("https://cdn.tgdd.vn/Files/2021/08/16/1375565/cach-nau-com-tam-suon-bi-cha-tai-nha-ngon-nhu-ngoai-tiem-202108162216045436.jpg");
-        images.add("https://cdn.tgdd.vn/Files/2021/08/09/1373996/tu-lam-com-tam-suon-trung-don-gian-thom-ngon-nhu-ngoai-hang-202201151416543367.jpg");
-
-
-        ProductDetailDTO proDetail = new ProductDetailDTO();
-        proDetail.setPID(1);
-        proDetail.setName("Cơm Sường Nướng Mật Ong Thơm Ngon");
-        proDetail.setDescription("Điểm nhấn của món ăn là phần sườn cốt lết nướng thơm ngon, được ướp kỹ lưỡng cho thấm gia vị vào từng thớ thịt. Sườn được nướng chín đều, tỏa hương thơm nức. Khi thưởng thức, bạn sẽ cảm nhận được vị đậm đà và độ mềm mại của từng miếng thịt.\n\nTại Tường Hân, phần xương đã được bỏ đi, chỉ giữ lại phần thịt, giúp khách dễ dàng thưởng thức món ăn mà không phải lo lắng về xương.");
-        proDetail.setStar(5);
-        proDetail.setMin(10);
-        proDetail.setListImage(images);
-
-        // Hoặc sử dụng constructor có tham số
-        ProductDetailDTO proDetail2 = new ProductDetailDTO(
-                2,
-                "Another Product",
-                "Description for another product.",
-                4,
-                5,
-                images, new ArrayList<>()
-        );
-
-//        BindData(proDetail);
         ProductDetailDTO productDetail = ProductDetailUtil.getProductById(1);
         BindData(productDetail);
     }
@@ -110,7 +77,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         //set mô tả sản phẩm
         TextView proDetail_des = findViewById(R.id.proDetail_des);
-        proDetail_des.setText(proDetail.getDescription());
+        String description = proDetail.getDescription().replace("\\n", "\n");
+        proDetail_des.setText(description);
 
         // bind số lượng sao.
         GridLayout gv_rating = findViewById(R.id.product_detail_rating);
@@ -173,14 +141,5 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         RecyclerView comment_view = findViewById(R.id.product_detail_comment_view);
         comment_view.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
-    }
-
-    // nạp data
-    private  ProductDetailDTO GetProduct(int productID)
-    {
-        ProductDetailDTO proDTO = new ProductDetailDTO();
-
-
-        return proDTO;
     }
 }

@@ -1,21 +1,31 @@
-package com.example.orderfood.models;
+package com.example.orderfood.data;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.orderfood.models.Account;
+import com.example.orderfood.models.Address;
+import com.example.orderfood.models.Category;
+import com.example.orderfood.models.FeedBack;
+import com.example.orderfood.models.Order;
+import com.example.orderfood.models.OrderDetail;
+import com.example.orderfood.models.Product;
+import com.example.orderfood.models.Store;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class HandleData {
 
     private static final String TAG = "FirestoreData";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public  static  final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public Account getAccountByID(int id) {
         try {
@@ -72,6 +82,21 @@ public class HandleData {
             Log.e(TAG, "Error getting all accounts", e);
         }
         return accountList;
+    }
+    public static List<Account> getAllAccounts(List<Integer> accId) throws ExecutionException, InterruptedException {
+        Task<QuerySnapshot> accountTask = db.collection("account")
+                .whereIn("id", accId)
+                .get();
+
+        QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+        List<Account> AccountList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot accountDoc : accountSnapshot) {
+            Account ac = accountDoc.toObject(Account.class);
+            AccountList.add(ac);
+        }
+
+        return AccountList;
     }
 
     public Address getAddressByID(int id) {
@@ -226,6 +251,20 @@ public class HandleData {
         }
         return feedbackList;
     }
+    public static List<FeedBack> getAllFeedbacksByListOrderDetailID(List<Integer> OrderDetailIDs) throws ExecutionException, InterruptedException {
+        Task<QuerySnapshot> feedbackTask = db.collection("feedback")
+                .whereIn("orderDetailId", OrderDetailIDs)
+                .get();
+
+        QuerySnapshot feedbackSnapshot = Tasks.await(feedbackTask);
+        List<FeedBack> feedBackS = new ArrayList<>();
+
+        for (QueryDocumentSnapshot feedbackDoc : feedbackSnapshot) {
+            FeedBack feedBack = feedbackDoc.toObject(FeedBack.class);
+            feedBackS.add(feedBack);
+        }
+        return  feedBackS;
+    }
 
     public Order getOrderById(int id) {
         try {
@@ -281,6 +320,21 @@ public class HandleData {
         }
         return orderList; // Trả về danh sách Order
     }
+    public static List<Order> getAllOrders(List<Integer> OrderIDs) throws ExecutionException, InterruptedException {
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereIn("id", OrderIDs)
+                .get();
+
+        QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+        List<Order> orderList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
+            Order or = orderDoc.toObject(Order.class);
+            orderList.add(or);
+        }
+
+        return orderList;
+    }
 
     public OrderDetail getOrderDetailById(int id) {
         try {
@@ -334,37 +388,57 @@ public class HandleData {
         }
         return orderDetailList; // Trả về danh sách OrderDetail
     }
+    public static List<OrderDetail> getOrderDetailsByProductID(int productID) throws ExecutionException, InterruptedException {
+        // Tiếp tục truy vấn OrderDetail
+        Task<QuerySnapshot> orderDetailTask = db.collection("orderDetail")
+                .whereEqualTo("productId", productID)
+                .get();
 
-    public Product getProductById(int id) {
+        // Chờ đợi kết quả trả về từ Firestore
+        QuerySnapshot orderDetailSnapshot = Tasks.await(orderDetailTask);
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        for (QueryDocumentSnapshot orderDoc : orderDetailSnapshot) {
+            OrderDetail orderDetail = orderDoc.toObject(OrderDetail.class);
+            orderDetails.add(orderDetail);
+        }
+
+        return orderDetails;
+    }
+
+    public static Product getProductById(int id) throws ExecutionException, InterruptedException {
         try {
-            Task<QuerySnapshot> task = db.collection("products") // Thay "products" bằng tên collection của bạn
-                    .whereEqualTo("Id", id)
+            // Truy vấn collection "product" với điều kiện whereEqualTo
+            Task<QuerySnapshot> task = db.collection("product")
+                    .whereEqualTo("id", id)
                     .get();
 
-            // Chờ Task hoàn thành
-            while (!task.isComplete()) {
-                Thread.sleep(10); // Đợi Task hoàn thành
-            }
+            QuerySnapshot querySnapshot = Tasks.await(task);
 
-            if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+            if (!querySnapshot.isEmpty()) {
+                QueryDocumentSnapshot document = (QueryDocumentSnapshot) querySnapshot.getDocuments().get(0);
+
                 Product product = new Product();
-                product.setId(document.getLong("Id").intValue());
+                product.setId(document.getLong("id").intValue());
                 product.setName(document.getString("name"));
                 product.setImage_source(document.getLong("image_source").intValue());
-                product.setImage((ArrayList<String>) document.get("Image"));
+                product.setImage((ArrayList<String>) document.get("image"));
                 product.setPrice(document.getString("price"));
                 product.setRate(document.getDouble("rate"));
                 product.setMinutes(document.getLong("minutes").intValue());
-                product.setDescription(document.getString("Description"));
-                product.setStoreID(document.getLong("StoreID").intValue());
-                product.setCategoryID(document.getLong("CategoryID").intValue());
+                product.setDescription(document.getString("description"));
+                product.setStoreID(document.getLong("storeID").intValue());
+                product.setCategoryID(document.getLong("categoryID").intValue());
+
                 return product; // Trả về Product
             }
+        } catch (ExecutionException | InterruptedException e) {
+            System.err.println("Error retrieving product by ID: " + e.getMessage());
+            throw e; // Ném lại ngoại lệ để xử lý ở mức cao hơn nếu cần
         } catch (Exception e) {
-            System.err.println("Error getting product by ID: " + e.getMessage());
+            System.err.println("Unexpected error: " + e.getMessage());
         }
-        return null; // Trả về null nếu không tìm thấy hoặc có lỗi
+        return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
     }
     public List<Product> getAllProducts() {
         List<Product> productList = new ArrayList<>();

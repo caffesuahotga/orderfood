@@ -87,7 +87,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="textStart"
-                    android:textSize="20dp">
+                    android:textSize="20dp"
+                    android:lineSpacingExtra="4dp"
+                    android:scrollHorizontally="false"
+                    android:singleLine="false">
 
                 </TextView>
             </LinearLayout>
