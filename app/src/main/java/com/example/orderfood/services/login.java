@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.orderfood.MainActivity;
 import com.example.orderfood.R;
 import com.example.orderfood.models.Account;
 import com.facebook.CallbackManager;
@@ -55,7 +56,7 @@ public class login extends AppCompatActivity {
     private LoginButton loginButton; // Đổi tên biến để tuân thủ quy tắc đặt tên
     private FirebaseAuth mAuth;
     private EditText edtusername, edtpassword;
-    private Button btnLogin;
+    private Button btnLogin, btnSignUp;
 
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
@@ -120,6 +121,8 @@ public class login extends AppCompatActivity {
         edtusername = findViewById(R.id.username);
         edtpassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSignUp = findViewById(R.id.btnSignUp);
+
 
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
         final CollectionReference table_user = database.collection("account");
@@ -165,6 +168,15 @@ public class login extends AppCompatActivity {
                     mDialog.dismiss();
                     Toast.makeText(login.this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        //signup
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(login.this, SignUp.class);
+                startActivity(intent);
             }
         });
     }

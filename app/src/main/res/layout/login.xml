@@ -35,13 +35,13 @@
         android:text="Đăng Nhập" />
 
     <Button
-        android:id="@+id/btnSigup"
+        android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Đăng Ký" />
+        android:text="Đăng Ký"/>
 
     <LinearLayout
         android:layout_width="match_parent"
