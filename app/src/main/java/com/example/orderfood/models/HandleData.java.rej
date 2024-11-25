@@ -1,0 +1,9 @@
+diff a/app/src/main/java/com/example/orderfood/models/HandleData.java b/app/src/main/java/com/example/orderfood/models/HandleData.java	(rejected hunks)
+@@ -446,7 +446,6 @@
+         return storeList;
+     }
+ 
+-
+     public void getCategories(final FirestoreCallback callback) {
+         db.collection("category")       
+                 .get()
