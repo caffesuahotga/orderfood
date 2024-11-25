@@ -53,6 +53,7 @@ public class ProductDetailUtil {
                     data.setStar(product.getRate());
                     data.setMin(product.getMinutes());
                     data.setListImage(product.getImage());
+                    data.setPrice(product.getPrice());
 
                     // tạo danh sách feedback của món ăn
                     ArrayList<FeedBackDTO> tmpFeadBackList = new ArrayList<>();
@@ -88,7 +89,7 @@ public class ProductDetailUtil {
                         if (account != null) {
                             FeedBackDTO fbDTO = new FeedBackDTO();
 
-                            fbDTO.setImageUser("https://tamnhuhoa.com/datafiles/37/2023-08/31848625-com-tam-suon-bi-ba-chi.png");
+                            fbDTO.setImageUser(account.getImage());
                             fbDTO.setNameUser(account.getName());
                             fbDTO.setContent(feedBack.getContent());
                             fbDTO.setStar(feedBack.getStar());

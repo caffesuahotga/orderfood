@@ -9,5 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#8B4513</color>
     <color name="selected_rating_color">#EF2A39</color>
+    <color name="yellow">#fffa0b</color>
+    <color name="dark_yellow">#ddd900</color>
+    <color name="grean">#19d100</color>
+
+
+    <color name="dark_orange">#e28100</color>
+
+    <color name="tieu_de_mon_an">#d01825</color>
 
 </resources>
