@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,154 +24,157 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/ic_search_heart"
             android:padding="10dp"></Button>
+        
     </RelativeLayout>
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/product_detail_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/l_order"
         android:layout_below="@+id/pd_header">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--                ảnh chính-->
-                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pd_main_pic_box"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginBottom="5dp"
-                    >
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:id="@+id/pd_main_pic"
-                        android:src="@drawable/c_s"></ImageView>
-
-                </androidx.cardview.widget.CardView>
-
-                <!--                danh sách ảnh con-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/r_product_detail_mini"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/pd_main_pic_box"></androidx.recyclerview.widget.RecyclerView>
-
-            </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/l_order">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!--                tên sản phẩm-->
-                <TextView
-                    android:id="@+id/proDetail_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tieu_de_mon_an"
-                    android:textSize="25dp"
-                    android:layout_marginTop="5dp"
-                    android:textStyle="bold"></TextView>
-
-                <!--                sao - min -->
-                <TextView
-                    android:id="@+id/proDetail_star_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/dark_orange"
-                    android:textSize="25dp"></TextView>
-
-                <TextView
-                    android:id="@+id/proDetail_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grean"
-                    android:text="30.00VND"
-                    android:textSize="25dp"></TextView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chi tiết sản phẩm"
-                    android:textSize="20dp"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-                    android:id="@+id/proDetail_des"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4dp"
-                    android:scrollHorizontally="false"
-                    android:singleLine="false"
-                    android:textAlignment="textStart"
-                    android:textSize="20dp">
-
-                </TextView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="ĐÁNH GIÁ SẢN PHẨM"
-                android:textColor="#EF2A39"
-                android:textSize="25dp"
-                android:textStyle="bold"></TextView>
-
-<!--             rating -->
-            <GridLayout
-                android:id="@+id/product_detail_rating"
-                style="@style/BorderRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:columnCount="3"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:stretchMode="columnWidth"></GridLayout>
-
-<!-- feed back-->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/product_detail_comment_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/product_detail_feedback_empt"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                >
+                    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/pd_main_pic_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        app:cardBackgroundColor="@android:color/white"
+                        app:cardCornerRadius="10dp">
 
-                <ImageView
+                        <ImageView
+                            android:id="@+id/pd_main_pic"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:src="@drawable/c_s"></ImageView>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!--                danh sách ảnh con-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/r_product_detail_mini"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pd_main_pic_box"></androidx.recyclerview.widget.RecyclerView>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!--                tên sản phẩm-->
+                    <TextView
+                        android:id="@+id/proDetail_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/tieu_de_mon_an"
+                        android:textSize="25dp"
+                        android:textStyle="bold"></TextView>
+
+                    <!--                sao - min -->
+                    <TextView
+                        android:id="@+id/proDetail_star_min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/dark_orange"
+                        android:textSize="25dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/proDetail_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30.00VND"
+                        android:textColor="@color/grean"
+                        android:textSize="25dp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chi tiết sản phẩm"
+                        android:textSize="20dp"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/proDetail_des"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:scrollHorizontally="false"
+                        android:singleLine="false"
+                        android:textAlignment="textStart"
+                        android:textSize="20dp">
+
+                    </TextView>
+                </LinearLayout>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/no_data">
-                </ImageView>
+                    android:paddingTop="10dp"
+                    android:text="ĐÁNH GIÁ SẢN PHẨM"
+                    android:textColor="#EF2A39"
+                    android:textSize="25dp"
+                    android:textStyle="bold"></TextView>
+
+                <!--             rating -->
+                <GridLayout
+                    android:id="@+id/product_detail_rating"
+                    style="@style/BorderRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="3"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:stretchMode="columnWidth"></GridLayout>
+
+                <!-- feed back-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_detail_comment_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/product_detail_feedback_empt"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/no_data"></ImageView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
-    </ScrollView>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/l_order"
