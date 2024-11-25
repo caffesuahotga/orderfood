@@ -10,6 +10,7 @@ public class ProductDetailDTO {
     private String Description ;
     private double Star;
     private double Min;
+    private double Price;
     private ArrayList<String> ListImage = new ArrayList<String>(); // ảnh sản phẩm
     private ArrayList<FeedBackDTO> ListFeedBack = new ArrayList<FeedBackDTO>();
 
@@ -24,6 +25,14 @@ public class ProductDetailDTO {
         Min = min;
         ListImage = listImage;
         ListFeedBack = listFeedBack;
+    }
+
+    public double getPrice() {
+        return Price;
+    }
+
+    public void setPrice(double price) {
+        Price = price;
     }
 
     public int getPID() {

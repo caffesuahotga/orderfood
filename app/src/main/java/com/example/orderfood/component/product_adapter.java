@@ -40,7 +40,7 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
                 .into(holder.productImage);
 
         // Thiết lập tên danh mục
-        holder.productPrice.setText(formatVND(product.getPrice()));
+        holder.productPrice.setText(formatVND(( product.getPrice()+"" )));
 
         // Thiết lập mức độ đổ màu cho xếp hạng sao
         setStarRating(holder.starRating, product.getRate());

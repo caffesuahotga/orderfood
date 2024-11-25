@@ -14,7 +14,7 @@ import com.example.orderfood.component.category_adapter;
 
 import com.example.orderfood.component.product_adapter;
 import com.example.orderfood.models.Category;
-import com.example.orderfood.models.HandleData;
+import com.example.orderfood.data.HandleData;
 import com.example.orderfood.models.Product;
 import com.google.firebase.firestore.FirebaseFirestore;
 

@@ -36,7 +36,8 @@ public class SeedingDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeding_data);
 
-
+//        addMultipleAccountsToFirestore(db);
+            addProduct();
 //        // thêm accoount lên db
 //        addMultipleAccountsToFirestore(db);
           addCategory();
@@ -60,11 +61,11 @@ public class SeedingDataActivity extends AppCompatActivity {
     private void addMultipleAccountsToFirestore(FirebaseFirestore db) {
 // Tạo danh sách các tài khoản cần thêm hoặc cập nhật
         List<Account> accounts = new ArrayList<>();
-        accounts.add(new Account(1, "Admin User", "adminuser", "adminpass", "0123456789", 0, 1));
-        accounts.add(new Account(2, "Customer One", "customer1", "customerpass1", "0987654321", 2, 1));
-        accounts.add(new Account(3, "Customer Two", "customer2", "customerpass2", "0112233445", 2, 1));
-        accounts.add(new Account(4, "Shipper One", "shipper1", "shipperpass1", "0554433221", 1, 1));
-        accounts.add(new Account(5, "Shipper Two", "shipper2", "shipperpass2", "0665544332", 1, 1));
+        accounts.add(new Account(1, "Admin User", "adminuser", "adminpass", "0123456789", 0, 1, "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732522352/ac2aab4b58cd4472edcfd62bd4618177_lpa8eo.gif"));
+        accounts.add(new Account(2, "Customer One", "customer1", "customerpass1", "0987654321", 2, 1,"https://res.cloudinary.com/duf1lmvzu/image/upload/v1732524468/b028096d34128a39b8f90ef834307f0e_q0w705.jpg"));
+        accounts.add(new Account(3, "Customer Two", "customer2", "customerpass2", "0112233445", 2, 1,"https://res.cloudinary.com/duf1lmvzu/image/upload/v1732524487/cute-girl-pic44_ka7ri1.jpg"));
+        accounts.add(new Account(4, "Shipper One", "shipper1", "shipperpass1", "0554433221", 1, 1,"https://res.cloudinary.com/duf1lmvzu/image/upload/v1732524798/39187815-2900-4b3a-ae70-e6977d5111dc_qh3wln.jpg"));
+        accounts.add(new Account(5, "Shipper Two", "shipper2", "shipperpass2", "0665544332", 1, 1,"https://res.cloudinary.com/duf1lmvzu/image/upload/v1732524841/183d9076-bfe4-4363-b4f4-6e993599a661_iyfauk.jpg"));
 
         for (Account account : accounts) {
             Map<String, Object> accountData = new HashMap<>();
@@ -75,7 +76,7 @@ public class SeedingDataActivity extends AppCompatActivity {
             accountData.put("phone", account.getPhone());
             accountData.put("role", account.getRole());
             accountData.put("storeId", account.getStoreId());
-
+            accountData.put("image", account.getImage());
 
             // Chọn tài liệu dựa trên "id" của tài khoản
             DocumentReference docRef = db.collection("account").document(String.valueOf(account.getId()));
@@ -165,16 +166,24 @@ public class SeedingDataActivity extends AppCompatActivity {
     private void addProduct() {
         Product pro1 = new Product(
                 1,
-                "Pizza",
+                "Cơm Sườn Sốt Chua Ngọt Mật Ong",
                 101,
-                new ArrayList<>(Arrays.asList("image1.jpg", "image2.jpg")),
-                "100,000 VND",
+                new ArrayList<>(Arrays.asList("https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455101/3_cdjfuj.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455101/2_druuh2.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455103/1_ms2fch.png",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457411/download_xqzbxs.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457418/savsdav_jnlnqm.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457546/images_lgzvre.jpg")),
+                100000,
                 4.5,
                 30,
-                "Delicious Italian Pizza",
+                "Cơm sườn sốt mật ong là món ăn đặc biệt, kết hợp giữa sườn heo mềm và nước sốt mật ong đậm đà, tạo nên một trải nghiệm ẩm thực khó quên. Sườn heo được chọn lọc kỹ càng, tẩm ướp với các gia vị truyền thống, sau đó nướng hoặc chiên đến khi thịt săn lại và vàng đều. Sốt mật ong được chế biến từ mật ong nguyên chất, kết hợp cùng các gia vị như tỏi, hành và một chút tiêu, mang lại hương vị ngọt ngào, mặn mà đầy quyến rũ.\\n" +
+                        "\\n" +
+                        "Món ăn được dọn kèm với cơm trắng nóng hổi, tạo nên sự hòa quyện tuyệt vời giữa vị ngọt của mật ong và vị mặn của sườn. Sự kết hợp này khiến cơm sườn sốt mật ong trở thành món ăn được yêu thích trong những bữa ăn gia đình hay những dịp sum vầy.\\n" +
+                        "\\n" +
+                        "Với sự sáng tạo trong cách chế biến và trình bày, cơm sườn sốt mật ong không chỉ hấp dẫn bởi hương vị mà còn bởi vẻ ngoài bắt mắt. Món ăn này chắc chắn sẽ khiến thực khách khó lòng quên, mang lại cảm giác ngon miệng và thỏa mãn.",
                 1,
                 1
-
         );
 
         Map<String, Object> proMap = new HashMap<>();

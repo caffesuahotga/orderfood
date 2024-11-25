@@ -40,19 +40,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/pd_main_pic"
+                <!--                ảnh chính-->
+                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:padding="5dp"
-                    android:src="@drawable/c_s"></ImageView>
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pd_main_pic_box"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    android:layout_marginBottom="5dp"
+                    >
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/r_product_detail_mini"
-                        android:layout_below="@+id/pd_main_pic"
+                    <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    </androidx.recyclerview.widget.RecyclerView>
+                        android:layout_height="300dp"
+                        android:id="@+id/pd_main_pic"
+                        android:src="@drawable/c_s"></ImageView>
+
+                </androidx.cardview.widget.CardView>
+
+                <!--                danh sách ảnh con-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/r_product_detail_mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pd_main_pic_box"></androidx.recyclerview.widget.RecyclerView>
 
             </RelativeLayout>
 
@@ -61,19 +73,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!--                tên sản phẩm-->
                 <TextView
                     android:id="@+id/proDetail_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/tieu_de_mon_an"
                     android:textSize="25dp"
+                    android:layout_marginTop="5dp"
                     android:textStyle="bold"></TextView>
 
+                <!--                sao - min -->
                 <TextView
                     android:id="@+id/proDetail_star_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dark_orange"
                     android:textSize="25dp"></TextView>
 
+                <TextView
+                    android:id="@+id/proDetail_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grean"
+                    android:text="30.00VND"
+                    android:textSize="25dp"></TextView>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,6 +110,9 @@
                     android:id="@+id/proDetail_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
+                    android:scrollHorizontally="false"
+                    android:singleLine="false"
                     android:textAlignment="textStart"
                     android:textSize="20dp">
 
@@ -101,27 +128,44 @@
                 android:textSize="25dp"
                 android:textStyle="bold"></TextView>
 
-
+<!--             rating -->
             <GridLayout
                 android:id="@+id/product_detail_rating"
+                style="@style/BorderRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:columnCount="3"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:stretchMode="columnWidth"
-                style="@style/BorderRating"
-                android:orientation="horizontal">
-            </GridLayout>
+                android:stretchMode="columnWidth"></GridLayout>
 
+<!-- feed back-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/product_detail_comment_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
+
             </androidx.recyclerview.widget.RecyclerView>
 
+            <LinearLayout
+                android:id="@+id/product_detail_feedback_empt"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/no_data">
+                </ImageView>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -144,9 +188,8 @@
             android:background="@drawable/btn_product_page"
             android:backgroundTint="#ef2a39"
             android:padding="20dp"
-            android:text="$235"
+            android:text="CART"
             android:textColor="@color/white"
-
             android:textSize="20dp"></Button>
 
         <Space
