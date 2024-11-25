@@ -446,29 +446,5 @@ public class HandleData {
         return storeList;
     }
 
-    public void getCategories(final FirestoreCallback callback) {
-        db.collection("category")       
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<Category> categoryList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Lấy dữ liệu từ Firestore và tạo đối tượng Category
-                            Category category = new Category();
-                            category.setId(document.getLong("id").intValue()); // Chuyển kiểu Long sang int
-                            category.setName(document.getString("name"));
-                            category.setImage(document.getString("image"));
 
-                            categoryList.add(category); // Thêm vào danh sách
-                        }
-                        callback.onCallback(categoryList); // Trả kết quả qua callback
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                        callback.onCallback(null); // Trả về null nếu có lỗi
-                    }
-                });
-    }
-    public interface FirestoreCallback {
-        void onCallback(List<Category> categoryList);
-    }
 }
