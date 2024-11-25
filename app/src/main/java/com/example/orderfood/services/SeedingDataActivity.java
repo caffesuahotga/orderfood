@@ -40,7 +40,7 @@ public class SeedingDataActivity extends AppCompatActivity {
             addProduct();
 //        // thêm accoount lên db
 //        addMultipleAccountsToFirestore(db);
-//
+          addCategory();
 //        addStore();
 
 //        FirebaseMessaging.getInstance().getToken()
@@ -259,15 +259,28 @@ public class SeedingDataActivity extends AppCompatActivity {
     }
     private void addCategory()
     {
-       Category cate = new Category(1,"check1","check1");
-       Map<String, Object> cateMap = new HashMap<>();
-       cateMap.put("id", cate.getId());
-       cateMap.put("name",cate.getName());
-        cateMap.put("image",cate.getImage());
-        db.collection("category")
-                .document("1")
-                .set(cateMap)
-                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm category", e));
+
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1,"Đồ ăn nhanh","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526597/tyathkobox215lxipfri.png"));
+        categories.add(new Category(2,"Đồ uống","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526605/grfbr1alz1bowcg3hpui.png"));
+        categories.add(new Category(3,"Món tráng miệng","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526622/obfdb0bxc2uaxmxvw3kr.png"));
+        categories.add(new Category(4,"Món chính","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526654/xqadh6rcj6hwuzzbrshn.png"));
+        categories.add(new Category(5,"Rau củ","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526634/gxfvy56wa7a3rlzpn9ub.png"));
+        categories.add(new Category(6,"Hải sản","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526646/vezhsgh1dif55tclyele.png"));
+        categories.add(new Category(7,"Healthy","https://res.cloudinary.com/duf1lmvzu/image/upload/v1732526664/qqa3qioelqwxcwdrcbyg.png"));
+        for (Category category : categories){
+            Map<String, Object> categoryData = new HashMap<>();
+            categoryData.put("id", category.getId());
+            categoryData.put("name",category.getName());
+            categoryData.put("image",category.getImage());
+            db.collection("category")
+                    .document(String.valueOf(category.getId()))
+                    .set(categoryData)
+                    .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm category", e));
+        }
+
+
+
 
 
 
