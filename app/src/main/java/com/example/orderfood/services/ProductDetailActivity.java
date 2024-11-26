@@ -3,10 +3,16 @@ package com.example.orderfood.services;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +26,7 @@ import com.example.orderfood.component.ImageProductDetailAdapter;
 import com.example.orderfood.data.ProductDetailUtil;
 import com.example.orderfood.models.dto.FeedBackDTO;
 import com.example.orderfood.models.dto.ProductDetailDTO;
+import com.example.orderfood.sqlLite.dao.CartDAO;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,6 +39,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private int ProductID = 1; // giả xử nhận được id là 1
     LinearLayout emptyFeedbackPlaceholder;
     private SwipeRefreshLayout swipeRefreshLayout;
+    CartDAO cartDAO = new CartDAO(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +220,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         FeedbackProductDetailAdapter feedbackAdaper = new FeedbackProductDetailAdapter(this, proDetail.getListFeedBack());
         comment_view.setAdapter(feedbackAdaper);
+
+
+        // bind data 2 nút thêm vào giỏ hàng
+        BindDataCart(proDetail);
     }
 
     private void filterCommentsByRating(int selectedStar, ProductDetailDTO proDetail) {
@@ -242,4 +254,58 @@ public class ProductDetailActivity extends AppCompatActivity {
             emptyFeedbackPlaceholder.setVisibility(View.GONE);  // Ẩn thông báo
         }
     }
+
+    // dùng để bind data cho nút thêm vào cart
+    private void BindDataCart(ProductDetailDTO proDetail)
+    {
+        Button addCart = findViewById(R.id.product_detail_cart);
+        addCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shakeAndRotateButton(view);
+
+                cartDAO.deleteAll();
+                cartDAO.addProduct(proDetail.getPID(),proDetail.getName(),1,proDetail.getListImage().get(0));
+                cartDAO.showAllProducts();
+
+                Toast.makeText(view.getContext(), "Thành công! thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void shakeAndRotateButton(View view) {
+        // Lấy vị trí trung tâm của nút
+        float centerX = view.getWidth() / 2;
+        float centerY = view.getHeight() / 2;
+
+        // Di chuyển từ vị trí trung tâm sang trái/phải và lên/xuống
+        TranslateAnimation shake = new TranslateAnimation(
+                -centerX / 5, centerX / 5, // Di chuyển theo chiều ngang (trái/phải)
+                -centerY / 5, centerY / 5  // Di chuyển theo chiều dọc (lên/xuống)
+        );
+
+        shake.setDuration(100); // Thời gian di chuyển một lần
+        shake.setRepeatCount(5); // Lặp lại 5 lần
+        shake.setRepeatMode(TranslateAnimation.REVERSE); // Lặp lại kiểu đối xứng (di chuyển theo chiều ngược lại)
+
+        // Xoay nút theo chiều kim đồng hồ (clockwise)
+        RotateAnimation rotateClockwise = new RotateAnimation(
+                0, 10,   // Góc ban đầu và góc kết thúc
+                Animation.RELATIVE_TO_SELF, 0.5f, // Trục xoay (giữa nút)
+                Animation.RELATIVE_TO_SELF, 0.5f  // Trục xoay (giữa nút)
+        );
+        rotateClockwise.setDuration(100); // Thời gian xoay một lần
+        rotateClockwise.setRepeatCount(5); // Lặp lại 5 lần
+        rotateClockwise.setRepeatMode(TranslateAnimation.REVERSE); // Lặp lại kiểu đối xứng
+
+        // Kết hợp cả hai hiệu ứng (lắc và xoay)
+        AnimationSet animationSet = new AnimationSet(true);
+        animationSet.addAnimation(shake);      // Thêm hiệu ứng lắc
+        animationSet.addAnimation(rotateClockwise); // Thêm hiệu ứng xoay
+
+        // Áp dụng hiệu ứng
+        view.startAnimation(animationSet);
+    }
+
+
 }
