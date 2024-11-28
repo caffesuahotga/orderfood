@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Hiệu ứng gradient từ màu sáng đến màu nhạt -->
+    <gradient
+        android:angle="45"
+        android:startColor="#FF6F61"
+    android:endColor="#FFD9D9"
+    android:type="linear" />
+
+    <!-- Đặt viền -->
+    <stroke
+        android:width="3dp"
+        android:color="#EF2A39" />
+
+    <!-- Bo góc mềm mại hơn -->
+    <corners android:radius="25dp" />
+
+    <!-- Padding bên trong -->
+    <padding
+        android:left="10dp"
+        android:top="5dp"
+        android:right="10dp"
+        android:bottom="5dp" />
+
+
+    <size
+        android:width="0dp"
+        android:height="0dp" />
+</shape>
