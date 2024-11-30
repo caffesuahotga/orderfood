@@ -37,7 +37,7 @@ public class SeedingDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_seeding_data);
 
 //        addMultipleAccountsToFirestore(db);
-            addProduct();
+          addProduct();
 //        // thêm accoount lên db
 //        addMultipleAccountsToFirestore(db);
           addCategory();

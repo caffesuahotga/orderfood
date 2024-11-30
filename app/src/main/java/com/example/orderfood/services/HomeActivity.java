@@ -61,7 +61,10 @@ public class HomeActivity extends AppCompatActivity {
         HandleData handleData = new HandleData();
         categoryList = handleData.getAllCategories();
         categoryAdapter = new category_adapter(categoryList);
-        recyclerView.setAdapter(categoryAdapter);  // Set adapter cho RecyclerView
+        recyclerView.setAdapter(categoryAdapter);
+        // Set adapter cho RecyclerView
+
+
 
 
 
@@ -70,13 +73,14 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView1 = findViewById(R.id.view_product);
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
         recyclerView1.setLayoutManager(gridLayoutManager1);
-        // Áp dụng LayoutManager
+
         HandleData handleData1 = new HandleData();
         productList = handleData1.getAllProducts();
-
         productAdapter = new product_adapter(productList);
         recyclerView1.setAdapter(productAdapter);
 
 
     };
+
 }
+

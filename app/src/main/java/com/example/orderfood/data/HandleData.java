@@ -43,7 +43,6 @@ public class HandleData {
                 Account account = new Account();
                 account.setId(document.getLong("Id").intValue());
                 account.setName(document.getString("Name"));
-                account.setUsername(document.getString("Username"));
                 account.setPassword(document.getString("Password"));
                 account.setPhone(document.getString("Phone"));
                 account.setRole(document.getLong("Role").intValue());
