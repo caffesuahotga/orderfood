@@ -25,6 +25,7 @@
         android:padding="10dp"
         android:textSize="20dp" />
 
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
         android:text="Đăng Nhập" />
 
     <Button
-        android:id="@+id/btnSigup"
+        android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

@@ -26,6 +26,5 @@ public class TestUtil extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.test_util_activity);
 
-
     }
 }
