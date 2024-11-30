@@ -24,7 +24,7 @@ public class ProductDetailUtil {
             return CompletableFuture.supplyAsync(() -> {
                 try {
                     // Truy vấn sản phẩm
-                    Product product = HandleData.getProductById(1);
+                    Product product = HandleData.getProductById(proID);
 
                     // Tiếp tục truy vấn OrderDetail
                     List<OrderDetail> orderDetails = HandleData.getOrderDetailsByProductID(product.getId());

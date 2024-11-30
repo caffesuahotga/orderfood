@@ -33,10 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends BaseNoBottomActivity {
 
     TextView selectedRating = null;
-    private int ProductID = 1; // giả xử nhận được id là 1
     LinearLayout emptyFeedbackPlaceholder;
     private SwipeRefreshLayout swipeRefreshLayout;
     CartDAO cartDAO = new CartDAO(this);
@@ -44,30 +43,41 @@ public class ProductDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
+        getLayoutInflater().inflate(R.layout.activity_product_detail, findViewById(R.id.content_frame));
+
         emptyFeedbackPlaceholder = findViewById(R.id.product_detail_feedback_empt);
         swipeRefreshLayout = findViewById(R.id.product_detail_refresh);
 
         // get product có id là 1
-        loadProductData(1);
+        int productId = getIntent().getIntExtra("productId", -1);
+        if(productId != -1)
+        {
+            loadProductData(productId);
 
-        // Xử lý refresh
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            // Show loading spinner
-            swipeRefreshLayout.setRefreshing(true);
+            // Xử lý refresh
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                // Show loading spinner
+                swipeRefreshLayout.setRefreshing(true);
 
-            // Call lại API hoặc logic tải dữ liệu trong background thread
-            new Thread(() -> {
-                loadProductData(1); // Load dữ liệu
+                // Call lại API hoặc logic tải dữ liệu trong background thread
+                new Thread(() -> {
+                    loadProductData(productId); // Load dữ liệu
 
-                // Sau khi dữ liệu được tải, thực hiện thao tác trên UI thread
-                runOnUiThread(() -> {
-                    // Kết thúc hiệu ứng refresh
-                    swipeRefreshLayout.setRefreshing(false);
-                });
-            }).start();
+                    // Sau khi dữ liệu được tải, thực hiện thao tác trên UI thread
+                    runOnUiThread(() -> {
+                        // Kết thúc hiệu ứng refresh
+                        swipeRefreshLayout.setRefreshing(false);
+                    });
+                }).start();
 
-        });
+            });
+        }else
+        {
+            Toast.makeText(this,R.string.không_tìm_thấy,Toast.LENGTH_LONG);
+            finish();
+        }
+
+
     }
 
     private void loadProductData(int productID) {
@@ -306,6 +316,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Áp dụng hiệu ứng
         view.startAnimation(animationSet);
     }
+
+    // bấm icon cart bay qua trang giỏ hàng;
 
 
 }

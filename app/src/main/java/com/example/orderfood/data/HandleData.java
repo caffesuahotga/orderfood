@@ -83,6 +83,11 @@ public class HandleData {
         return accountList;
     }
     public static List<Account> getAllAccounts(List<Integer> accId) throws ExecutionException, InterruptedException {
+        if(accId.size() == 0)
+        {
+            return new ArrayList<Account>();
+        }
+
         Task<QuerySnapshot> accountTask = db.collection("account")
                 .whereIn("id", accId)
                 .get();
@@ -251,6 +256,12 @@ public class HandleData {
         return feedbackList;
     }
     public static List<FeedBack> getAllFeedbacksByListOrderDetailID(List<Integer> OrderDetailIDs) throws ExecutionException, InterruptedException {
+
+        if(OrderDetailIDs.size() == 0)
+        {
+            return new ArrayList<FeedBack>();
+        }
+
         Task<QuerySnapshot> feedbackTask = db.collection("feedback")
                 .whereIn("orderDetailId", OrderDetailIDs)
                 .get();
@@ -320,6 +331,11 @@ public class HandleData {
         return orderList; // Trả về danh sách Order
     }
     public static List<Order> getAllOrders(List<Integer> OrderIDs) throws ExecutionException, InterruptedException {
+        if(OrderIDs.size() == 0)
+        {
+            return new ArrayList<Order>();
+        }
+
         Task<QuerySnapshot> orderTask = db.collection("order")
                 .whereIn("id", OrderIDs)
                 .get();
@@ -439,7 +455,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
     }
-    public List<Product> getAllProducts() {
+    public static List<Product> getAllProducts() {
         List<Product> productList = new ArrayList<>();
         try {
             Task<QuerySnapshot> task = db.collection("product").get(); // Thay "products" bằng tên collection của bạn

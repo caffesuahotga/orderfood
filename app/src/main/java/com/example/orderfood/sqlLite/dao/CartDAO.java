@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.orderfood.data.HandleData;
+import com.example.orderfood.models.Product;
+import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.sqlLite.DatabaseHelper;
 import com.example.orderfood.sqlLite.model.Cart;
 
@@ -82,11 +85,13 @@ public class CartDAO {
     }
 
     // Get all products from cart and return as a list of Cart objects
-    public  List<Cart> getAllProducts() {
+    public  ArrayList<CartDTO> getAllProducts() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Product> products = HandleData.getAllProducts(); // keo product từ mạng về để tránh price bị đổi
+
         Cursor cursor = db.query(DatabaseHelper.TABLE_CART, null, null, null, null, null, null);
 
-        List<Cart> cartList = new ArrayList<>();
+        ArrayList<CartDTO> cartList = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             // Get column indices
             int IDIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_ID);
@@ -105,8 +110,18 @@ public class CartDAO {
                     int quantity = cursor.getInt(quantityIndex);
                     String image = cursor.getString(imageIndex);
 
-                    // Tạo đối tượng Cart và thêm vào danh sách
-                    Cart cart = new Cart(ID,productID, name, quantity, image);
+                    Product proItem = products.stream()
+                            .filter(product -> product.getId() == productID)
+                            .findFirst()
+                            .orElse(null);
+
+                    if (proItem == null) {
+                        continue; // Nếu không tìm thấy sản phẩm, bỏ qua
+                    }
+
+                    double price = proItem.getPrice() * quantity;
+
+                    CartDTO cart = new CartDTO(ID,productID, name, quantity, image, price);
                     cartList.add(cart);
                 } while (cursor.moveToNext());
             } else {
@@ -121,12 +136,12 @@ public class CartDAO {
 
     public  void showAllProducts() {
         // Lấy tất cả sản phẩm từ giỏ hàng
-        List<Cart> cartList = getAllProducts();
+        List<CartDTO> cartList = getAllProducts();
 
         // Kiểm tra xem có sản phẩm không
         if (cartList != null && !cartList.isEmpty()) {
             // Nếu có sản phẩm, bạn có thể hiển thị sản phẩm ở đây, ví dụ sử dụng ListView hoặc RecyclerView
-            for (Cart cart : cartList) {
+            for (CartDTO cart : cartList) {
                 // Bạn có thể in thông tin sản phẩm ra Log hoặc hiển thị trong giao diện người dùng
                 Log.d("ProductInfo", "Product ID: " + cart.getProductID() + ", Name: " + cart.getName() + ", Quantity: " + cart.getQuantity());
             }
