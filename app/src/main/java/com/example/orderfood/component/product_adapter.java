@@ -33,6 +33,7 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
         Product product = productList.get(position);
 
         holder.productName.setText(product.getName());
+
         Glide.with(holder.itemView.getContext())
                 .load(product.getImage().get(0)) // URL từ thuộc tính Image
                 .placeholder(R.drawable.image_loading) // Ảnh hiển thị khi đang tải (nên có trong drawable)
@@ -40,10 +41,9 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
                 .into(holder.productImage);
 
         // Thiết lập tên danh mục
-        holder.productPrice.setText(formatVND(( product.getPrice()+"" )));
+        holder.productPrice.setText(formatVND(( product.getPrice() )));
 
-        // Thiết lập mức độ đổ màu cho xếp hạng sao
-        setStarRating(holder.starRating, product.getRate());
+
     }
 
     @Override
@@ -60,18 +60,18 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
             productName = itemView.findViewById(R.id.product_name);
             productPrice = itemView.findViewById(R.id.product_price);
             productImage = itemView.findViewById(R.id.product_image);
-            starRating = itemView.findViewById(R.id.star_filled);
+
         }
     }
 
-    private String formatVND(String price) {
+    private String formatVND(Double price) {
         return price + " VND";
     }
 
-    private void setStarRating(ImageView starRatingView, double rate) {
-        LayerDrawable layerDrawable = (LayerDrawable) starRatingView.getDrawable();
-        ClipDrawable starFilled = (ClipDrawable) layerDrawable.findDrawableByLayerId(R.id.star_filled);
-        int level = (int) (rate / 5.0 * 10000);  // Quy đổi giá trị `rate` thành mức độ đổ màu
-        starFilled.setLevel(level);
-    }
+//    private void setStarRating(ImageView starRatingView, double rate) {
+//        LayerDrawable layerDrawable = (LayerDrawable) starRatingView.getDrawable();
+//        ClipDrawable starFilled = (ClipDrawable) layerDrawable.findDrawableByLayerId(R.id.star_filled);
+//        int level = (int) (rate / 5.0 * 10000);  // Quy đổi giá trị `rate` thành mức độ đổ màu
+//        starFilled.setLevel(level);
+//    }
 }
