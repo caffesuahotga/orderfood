@@ -20,6 +20,7 @@ public class CartDAO {
     private static DatabaseHelper dbHelper = null;
 
     public CartDAO(Context context) {
+
         dbHelper = new DatabaseHelper(context);
     }
 

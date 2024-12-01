@@ -23,6 +23,7 @@
 
     <!-- Content -->
     android:layout_below="@+id/pd_header"
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/cart_page_refresh"
         android:layout_width="match_parent"
@@ -33,8 +34,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp">
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/product_cart_container"
