@@ -12,6 +12,15 @@
         android:layout_height="50dp"
         android:background="#FFE4E1"
         android:layout_gravity="top" />
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#FF0000"
+        android:textStyle="bold"/>
 
     <!-- Nội dung cuộn -->
     <androidx.core.widget.NestedScrollView

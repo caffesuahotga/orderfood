@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText edtusername, edtpassword;
     private Button btnLogin, btnSignUp;
+    CheckBox rememberMeCheckBox;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -124,7 +127,14 @@ public class LoginActivity extends AppCompatActivity {
         edtpassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+        rememberMeCheckBox = findViewById(R.id.checkboxRememberMe);
 
+
+        // Khởi tạo SharedPreferences
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+
+        // Kiểm tra trạng thái lưu đăng nhập
+        checkRememberMe();
 
         //login Bình thường
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -154,6 +164,24 @@ public class LoginActivity extends AppCompatActivity {
                                         // Kiểm tra mật khẩu
                                         if (user != null && user.getPassword().equals(edtpassword.getText().toString())) {
                                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+
+                                            // Lưu trạng thái nếu checkbox được tick
+                                            if (rememberMeCheckBox.isChecked()) {
+                                                saveLoginInfo(inputUsername, inputPassword, true);
+                                            } else {
+                                                // Xóa thông tin khi không đánh dấu "Nhớ tôi"
+                                                editor.remove("username");
+                                                editor.remove("password");
+                                                editor.remove("remember");
+                                                clearLoginInfo();
+                                            }
+
+                                            // Chuyển đến MainActivity
+                                            Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+                                            intent.putExtra("username", inputUsername); // Truyền dữ liệu sang trang chính
+                                            startActivity(intent);
+                                            finish();
+
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu đã nhập sai, vui lòng sửa lại !", Toast.LENGTH_SHORT).show();
                                         }
@@ -253,4 +281,33 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     });
+
+    // Hàm kiểm tra trạng thái đăng nhập
+    private void checkRememberMe() {
+        boolean isRemembered = sharedPreferences.getBoolean("remember", false);
+        if (isRemembered) {
+            String savedUsername = sharedPreferences.getString("username", "");
+            String savedPassword = sharedPreferences.getString("password", "");
+            edtusername.setText(savedUsername);
+            edtpassword.setText(savedPassword);
+            rememberMeCheckBox.setChecked(true);
+        }
+    }
+
+    // Hàm lưu thông tin đăng nhập
+    private void saveLoginInfo(String username, String password, boolean remember) {
+        editor = sharedPreferences.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putBoolean("remember", remember);
+        editor.apply();
+    }
+
+    // Hàm xóa thông tin đăng nhập
+    private void clearLoginInfo() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); // Hoặc chỉ xóa các giá trị cần thiết
+        editor.apply();
+    }
+
 }
