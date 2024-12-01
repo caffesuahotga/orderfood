@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText edtusername, edtpassword;
     private Button btnLogin, btnSignUp;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private CheckBox rememberMeCheckBox;
 
 
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -124,7 +127,20 @@ public class LoginActivity extends AppCompatActivity {
         edtpassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+        rememberMeCheckBox = findViewById(R.id.checkboxRememberMe);
 
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        // Kiểm tra trạng thái nhớ đăng nhập
+        boolean isRemembered = sharedPreferences.getBoolean("remember", false);
+        if (isRemembered) {
+            // Nếu đã nhớ đăng nhập, tự động chuyển sang MainActivity
+            Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+            intent.putExtra("username", sharedPreferences.getString("username", "User"));
+            startActivity(intent);
+            finish();
+        }
 
         //login Bình thường
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -154,6 +170,19 @@ public class LoginActivity extends AppCompatActivity {
                                         // Kiểm tra mật khẩu
                                         if (user != null && user.getPassword().equals(edtpassword.getText().toString())) {
                                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+
+                                            // Lưu thông tin đăng nhập vào SharedPreferences
+                                            if (rememberMeCheckBox.isChecked()) {
+                                                editor.putBoolean("remember", true);
+                                                editor.putString("username", inputUsername);
+                                                editor.apply();
+                                            } else {
+                                                editor.clear();
+                                                editor.apply();
+                                            }
+                                            Intent intent = new Intent(LoginActivity.this,SplashActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu đã nhập sai, vui lòng sửa lại !", Toast.LENGTH_SHORT).show();
                                         }
@@ -179,6 +208,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

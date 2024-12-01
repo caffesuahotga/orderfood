@@ -1,7 +1,9 @@
 package com.example.orderfood.services;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView1;
     private product_adapter productAdapter;
     private List<Product> productList;
+    private TextView wellcome;
 
     private static final String TAG = "FirestoreData";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -38,6 +41,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_home);
+
+
+        //lấy thông tin đã lưu
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", "Quý Khách");
+        wellcome = findViewById(R.id.wellcome);
+        wellcome.setText("Chào mừng, " + username + "!");
 
         // Khởi tạo ImageSlider và thêm các slide hình ảnh
         ImageSlider imageSlider = findViewById(R.id.image_slider);
