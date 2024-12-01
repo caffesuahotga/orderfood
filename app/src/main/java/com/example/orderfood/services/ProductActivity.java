@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.orderfood.R;
 import com.example.orderfood.component.product_adapter;
@@ -25,18 +26,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ProductActivity extends AppCompatActivity {
+public class ProductActivity extends BaseNoBottomActivity {
     private List<Category> categoryList;
     private RecyclerView recyclerView1;
     private product_adapter_nomal productAdapter;
     private List<Product> productList = new HandleData().getAllProducts();
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
-        setContentView(R.layout.activity_product);
+        getLayoutInflater().inflate(R.layout.activity_product, findViewById(R.id.content_frame));
+
+        swipeRefreshLayout = findViewById(R.id.cart_page_refresh);
 
         LinearLayout buttonContainer = findViewById(R.id.category_parent);
         HandleData handleData = new HandleData();
@@ -141,6 +144,8 @@ public class ProductActivity extends AppCompatActivity {
         return filteredProducts; // Trả về danh sách các sản phẩm tìm được
     }
     // tìm  kiếm sản phẩm theo tên
+
+
 
 
 
