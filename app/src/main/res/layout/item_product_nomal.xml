@@ -119,7 +119,7 @@
                 android:layout_alignParentEnd="true"
                 android:contentDescription="Icon End"
                 android:padding="8dp"
-                android:src="@drawable/icon_trash" />
+                android:src="@drawable/icon_cart_2" />
         </RelativeLayout>
 
 

@@ -14,12 +14,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.security.Provider;
 import java.util.Locale;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.services.CartActivity;
+import com.example.orderfood.services.ProductDetailActivity;
 import com.example.orderfood.sqlLite.dao.CartDAO;
 import com.example.orderfood.sqlLite.model.Cart;
 
@@ -27,12 +30,16 @@ import java.text.NumberFormat;
 import java.util.List;
 
 public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_nomal.ProductViewHolder> {
-    private Context context;
-    CartDAO cartDAO = new CartDAO(context);
 
+
+    private Context context;
     private List<Product> productList;
 
     public product_adapter_nomal(List<Product> productList) {
+        this.productList = productList;
+    }
+    public product_adapter_nomal(Context context, List<Product> productList) {
+        this.context = context;
         this.productList = productList;
     }
 
@@ -64,6 +71,15 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
                 .placeholder(R.drawable.image_loading) // Ảnh hiển thị khi đang tải
                 .error(R.drawable.image_error) // Ảnh hiển thị nếu có lỗi
                 .into(holder.productImage);
+        holder.productImage.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+
+            // Truyền dữ liệu productId cho Activity (ở đây là số 5, bạn có thể thay đổi theo nhu cầu)
+            intent.putExtra("productId", product.getId());
+
+            // Mở Activity (chuyển trang)
+            v.getContext().startActivity(intent);
+        });
 
         // Set số lượt đánh giá
         holder.productCountRate.setText(product.getStoreID() + " lượt");
@@ -79,9 +95,11 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         holder.btnAddCart.setOnClickListener(v -> {
             // Thực hiện hành động thêm vào giỏ hàng
             // Ví dụ: Hiển thị thông báo
-            Toast.makeText(v.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
-            cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
 
+            CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
+            cartDAO.deleteAll();
+            cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
+            Toast.makeText(v.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
 
 
 

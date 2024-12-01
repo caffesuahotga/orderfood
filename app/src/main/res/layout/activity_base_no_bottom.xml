@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingRight="10dp">
+
         <Button
             android:id="@+id/product_detail_icon_cart"
             android:layout_width="40dp"
