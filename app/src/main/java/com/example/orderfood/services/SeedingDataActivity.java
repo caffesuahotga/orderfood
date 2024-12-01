@@ -164,45 +164,70 @@ public class SeedingDataActivity extends AppCompatActivity {
 
     // tạo product ( tạo 1 product )
     private void addProduct() {
-        Product pro1 = new Product(
-                1,
-                "Cơm Sườn Sốt Chua Ngọt Mật Ong",
+        List<Product> products = new ArrayList<>();
+        products.add(new Product(
+                6,
+                "Cơm Sườn Cọng Đặc Biệt(Sườn Bì Chả La)",
                 101,
-                new ArrayList<>(Arrays.asList("https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455101/3_cdjfuj.jpg",
-                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455101/2_druuh2.jpg",
-                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732455103/1_ms2fch.png",
-                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457411/download_xqzbxs.jpg",
-                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457418/savsdav_jnlnqm.jpg",
-                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732457546/images_lgzvre.jpg")),
-                100000,
+                new ArrayList<>(Arrays.asList("https://res.cloudinary.com/duf1lmvzu/image/upload/v1732722033/nnq4pcrux8qeu79tnm96.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732721968/yi9gdkbzj0xommg6sbrc.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732722046/uepspkk8wg1lhgdccrc4.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732722192/totyp7cluk6tyv5vkrgi.jpg")),
+                120000,
                 4.5,
                 30,
-                "Cơm sườn sốt mật ong là món ăn đặc biệt, kết hợp giữa sườn heo mềm và nước sốt mật ong đậm đà, tạo nên một trải nghiệm ẩm thực khó quên. Sườn heo được chọn lọc kỹ càng, tẩm ướp với các gia vị truyền thống, sau đó nướng hoặc chiên đến khi thịt săn lại và vàng đều. Sốt mật ong được chế biến từ mật ong nguyên chất, kết hợp cùng các gia vị như tỏi, hành và một chút tiêu, mang lại hương vị ngọt ngào, mặn mà đầy quyến rũ.\\n" +
-                        "\\n" +
-                        "Món ăn được dọn kèm với cơm trắng nóng hổi, tạo nên sự hòa quyện tuyệt vời giữa vị ngọt của mật ong và vị mặn của sườn. Sự kết hợp này khiến cơm sườn sốt mật ong trở thành món ăn được yêu thích trong những bữa ăn gia đình hay những dịp sum vầy.\\n" +
-                        "\\n" +
-                        "Với sự sáng tạo trong cách chế biến và trình bày, cơm sườn sốt mật ong không chỉ hấp dẫn bởi hương vị mà còn bởi vẻ ngoài bắt mắt. Món ăn này chắc chắn sẽ khiến thực khách khó lòng quên, mang lại cảm giác ngon miệng và thỏa mãn.",
-                1,
+                "",
+                3,
+                4
+        ));
+        products.add(new Product(
+                7,
+                "Burger Zinger",
+                101,
+                new ArrayList<>(Arrays.asList("https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806457/u86usskc46t2xegle7ce.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806463/bnd7ylrixlzshronecip.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806447/wzclfwb3xs5kxafrceyz.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806473/uryklqatlewqjearuzu0.jpg")),
+                54000,
+                4.0,
+                20,
+                "",
+                4,
                 1
-        );
+        ));
+        products.add(new Product(
+                8,
+                "Burger Gà Quay Flava",
+                101,
+                new ArrayList<>(Arrays.asList("https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806912/wmy8uc3uixpm98uc3ygb.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806913/cudn99kfck1cdljjkleg.jpg",
+                        "https://res.cloudinary.com/duf1lmvzu/image/upload/v1732806920/xdsbo8tnjb14aj5aoroz.jpg")),
+                54000,
+                4.2,
+                20,
+                "",
+                4,
+                1
+        ));
 
-        Map<String, Object> proMap = new HashMap<>();
+        for (Product pro : products) {
+            Map<String, Object> proMap = new HashMap<>();
+            proMap.put("id", pro.getId());
+            proMap.put("name", pro.getName());
+            proMap.put("image_source", pro.getImage_source());
+            proMap.put("image", pro.getImage());
+            proMap.put("price", pro.getPrice());
+            proMap.put("rate", pro.getRate());
+            proMap.put("minutes", pro.getMinutes());
+            proMap.put("description", pro.getDescription());
+            proMap.put("storeID", pro.getStoreID());
+            proMap.put("categoryID", pro.getCategoryID());
 
-        proMap.put("id", pro1.getId());
-        proMap.put("name", pro1.getName());
-        proMap.put("image_source", pro1.getImage_source());
-        proMap.put("image", pro1.getImage());
-        proMap.put("price", pro1.getPrice());
-        proMap.put("rate", pro1.getRate());
-        proMap.put("minutes", pro1.getMinutes());
-        proMap.put("description", pro1.getDescription());
-        proMap.put("storeID", pro1.getStoreID());
-        proMap.put("categoryID", pro1.getCategoryID());
-
-        db.collection("product")
-                .document("1")
-                .set(proMap)
-                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm pro", e));
+            db.collection("product")
+                    .document(String.valueOf(pro.getId()))
+                    .set(proMap)
+                    .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm pro", e));
+        }
     }
 
     // tạo order ( tạo 1 đơn )
