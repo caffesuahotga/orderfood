@@ -2,11 +2,13 @@ package com.example.orderfood.services;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -55,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton loginButton; // Đổi tên biến để tuân thủ quy tắc đặt tên
     private FirebaseAuth mAuth;
     private EditText edtusername, edtpassword;
-    private Button btnLogin;
+    private Button btnLogin, btnSignUp;
+
 
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
@@ -120,7 +123,10 @@ public class LoginActivity extends AppCompatActivity {
         edtusername = findViewById(R.id.username);
         edtpassword = findViewById(R.id.password);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSignUp = findViewById(R.id.btnSignUp);
 
+
+        //login Bình thường
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
         final CollectionReference table_user = database.collection("account");
 
@@ -144,7 +150,6 @@ public class LoginActivity extends AppCompatActivity {
                                         // Lấy thông tin người dùng từ Firestore
                                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                                         Account user = document.toObject(Account.class);
-
                                         mDialog.dismiss();
                                         // Kiểm tra mật khẩu
                                         if (user != null && user.getPassword().equals(edtpassword.getText().toString())) {
@@ -165,6 +170,15 @@ public class LoginActivity extends AppCompatActivity {
                     mDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        //signup
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
