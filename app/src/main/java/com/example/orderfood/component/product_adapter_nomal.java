@@ -107,6 +107,9 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
 
         // Sự kiện onClick cho btnAddFavorite
         holder.btnAddFavorite.setOnClickListener(v -> {
+
+
+            
             // Thực hiện hành động thêm vào yêu thích
             Toast.makeText(v.getContext(), "Thêm vào yêu thích: " + product.getName(), Toast.LENGTH_SHORT).show();
         });
