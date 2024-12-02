@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.orderfood.R;
 import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Address;
 import com.example.orderfood.models.Category;
@@ -14,12 +15,14 @@ import com.example.orderfood.models.Product;
 import com.example.orderfood.models.Store;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class HandleData {
@@ -102,6 +105,64 @@ public class HandleData {
 
         return AccountList;
     }
+    public static Account createAccount(String name ,String userName, String password) throws ExecutionException, InterruptedException {
+        // Tạo ID ngẫu nhiên
+        int id = generateRandomId();
+
+        // Tạo đối tượng Account mới
+        Account newAccount = new Account();
+        newAccount.setId(id);
+        newAccount.setStoreId(1);
+        newAccount.setName(name); // Giá trị mặc định, bạn có thể tùy chỉnh theo yêu cầu
+        newAccount.setUsername(userName);
+        newAccount.setPassword(password);
+        newAccount.setPhone(""); // Giá trị mặc định
+        newAccount.setRole(2); // Giá trị mặc định, có thể tùy chỉnh (0 admin, 1 shipper, 2 customer)
+        newAccount.setImage("https://res.cloudinary.com/duf1lmvzu/image/upload/v1733065510/profile-default-icon-2048x2045-u3j7s5nj_zspsqa.png"); // Giá trị mặc định
+
+        // Thêm account mới vào Firestore
+        Task<Void> addTask = db.collection("account")
+                .document(String.valueOf(id))
+                .set(newAccount);
+
+        // Đợi task hoàn thành
+        Tasks.await(addTask);
+
+        // Trả về account đã tạo
+        return newAccount;
+    }
+    public static boolean checkAccount(String userName) throws ExecutionException, InterruptedException {
+        // Tạo task kiểm tra username trong Firestore
+        Task<QuerySnapshot> userNameTask = db.collection("account")
+                .whereEqualTo("username", userName)
+                .get();
+
+        // Đợi task hoàn thành
+        QuerySnapshot userNameSnapshot = Tasks.await(userNameTask);
+
+        // Kiểm tra nếu có ít nhất một tài liệu được tìm thấy
+        return !userNameSnapshot.isEmpty();
+    }
+    public static Account getAccountByUsername(String username) {
+        try {
+            // Thực hiện truy vấn Firestore để tìm account theo username
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("username", username)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                QueryDocumentSnapshot accountDoc = (QueryDocumentSnapshot) accountSnapshot.getDocuments().get(0);
+                return accountDoc.toObject(Account.class); // Trả về đối tượng Account
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error getting account by username", e);
+        }
+        return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
+
 
     public Address getAddressByID(int id) {
         try {
@@ -535,5 +596,15 @@ public class HandleData {
         return storeList;
     }
 
+
+
+    //////////////// HELPER
+
+
+    private static int generateRandomId() {
+        // Phương pháp tạo ID ngẫu nhiên (ví dụ sử dụng Random)
+        Random random = new Random();
+        return random.nextInt(100000); // Bạn có thể tùy chỉnh phạm vi ID
+    }
 
 }
