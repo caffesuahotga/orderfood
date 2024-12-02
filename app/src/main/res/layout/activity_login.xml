@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f007ae"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/pxfuel">
+
 
     <EditText
         android:id="@+id/username"
@@ -12,8 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Use name"
+        android:background="@drawable/rounded_corner"
         android:padding="10dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:drawableLeft="@drawable/male_icon"
+        android:drawablePadding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="100dp"/>
 
     <EditText
         android:id="@+id/password"
@@ -22,7 +29,13 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
+        android:background="@drawable/rounded_corner"
+        android:drawableLeft="@drawable/key_icon"
+        android:drawablePadding="5dp"
         android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:textSize="20dp" />
 
 
@@ -30,25 +43,28 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/rounded_corner"
         android:text="Đăng Nhập" />
 
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_corner"
         android:text="Đăng Ký" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="20dp">
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
@@ -57,7 +73,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp" />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/login_gg"
             android:layout_width="wrap_content"
