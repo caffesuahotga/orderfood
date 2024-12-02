@@ -320,8 +320,8 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         // Cập nhật giao diện người dùng sau khi đăng nhập
         if (user != null) {
-            // Hiển thị thông tin người dùng hoặc chuyển hướng đến màn hình chính
-            // Ví dụ: startActivity(new Intent(this, MainActivity.class));
+           Intent intent = new Intent(LoginActivity.this,SplashActivity.class);
+           startActivity(intent);
         } else {
             // Xử lý khi người dùng không đăng nhập
         }
