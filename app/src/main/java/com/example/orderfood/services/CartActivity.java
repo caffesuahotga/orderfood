@@ -65,7 +65,6 @@ public class CartActivity extends BaseNoBottomActivity {
                     swipeRefreshLayout.setRefreshing(false);
                 });
             }).start();
-
         });
     }
 
