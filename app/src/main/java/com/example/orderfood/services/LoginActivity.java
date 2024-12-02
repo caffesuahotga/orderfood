@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.orderfood.R;
+import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.data.LoginUtil;
 import com.example.orderfood.models.Account;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -50,6 +53,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.concurrent.ExecutionException;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "login"; // Thêm TAG cho log
@@ -58,24 +63,217 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText edtusername, edtpassword;
     private Button btnLogin, btnSignUp;
-
+    FirebaseAuth auth;
+    GoogleSignInClient googleSignInClient;
+    Shape shape;
 
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        LoginGG();
+        LoginFB();
+        LoginUsernamePassword();
+        SignUp();
+    }
+
+    // Google
+    private ProgressDialog progressDialog;
+
+    private void LoginGG() {
+        // Khởi tạo FirebaseApp
+        FirebaseApp.initializeApp(this);
+
+        // Thiết lập GoogleSignInOptions
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
+
+        auth = FirebaseAuth.getInstance();
+        googleSignInClient.signOut();
+
+        // Khởi tạo ProgressDialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang đăng nhập...");
+        progressDialog.setCancelable(false);
+
+        SignInButton signInButton = findViewById(R.id.login_gg);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("GoogleSignIn", "hello");
+                // Hiển thị ProgressDialog khi bắt đầu đăng nhập
+                progressDialog.show();
+
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+            }
+        });
+    }
+
+
+    // hàm nhận token từ google => firebase nhận token => xác thực => có được thông tin
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK) {
+                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                try {
+                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+
+                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            // Ẩn ProgressDialog khi hoàn tất đăng nhập
+                            progressDialog.dismiss();
+
+                            try {
+                                if (task.isSuccessful()) {
+                                    auth = FirebaseAuth.getInstance();
+
+                                    try {
+                                        String userName = auth.getCurrentUser().getEmail();
+                                        handleLoginGG(userName);
+
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                } else {
+                                    Exception exception = task.getException();
+                                    Log.d("login that bai", "Lỗi: " + (exception != null ? exception.getMessage() : "Không rõ nguyên nhân"));
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                } catch (ApiException e) {
+                    progressDialog.dismiss();
+                    e.printStackTrace();
+                }
+            } else {
+                progressDialog.dismiss();
+            }
+        }
+    });
+
+    private void handleLoginGG(String userName) {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang kiểm tra tài khoản...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new Thread(() -> {
+            try {
+                // kiểm tra account tồn tại chưa
+                boolean ck = LoginUtil.checkAccount(userName);
+
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    if (ck) {
+                        // Hiển thị dialog loading
+                        ProgressDialog loadingDialog = new ProgressDialog(LoginActivity.this);
+                        loadingDialog.setMessage("Đang chuyển trang...");
+                        loadingDialog.setCancelable(false);
+                        loadingDialog.show();
+
+                        // Lấy account bởi userName
+                        Account ac = LoginUtil.getAccountByUsername(userName);
+
+                        // Lưu lại trong current user
+                        CurrentUser.init(this); // Nhớ truyền context vào init mới dùng được CurrentUser
+                        CurrentUser.saveCurrentUser(ac);
+                        CurrentUser.showCurrentUserInfo();
+
+                        Toast.makeText(LoginActivity.this, "Đăng nhập tài khoản thành công", Toast.LENGTH_LONG).show();
+
+                        // Tạo Intent chuyển trang
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                        // Trì hoãn một chút để hiển thị loading dialog
+                        new Handler().postDelayed(() -> {
+                            loadingDialog.dismiss();
+                            startActivity(intent);
+                            finish();
+                        }, 2000); // Chuyển trang sau 2 giây
+
+                    } else {
+                        // Hiển thị tiến trình tạo tài khoản
+                        ProgressDialog createProgressDialog = new ProgressDialog(LoginActivity.this);
+                        createProgressDialog.setMessage("Đang tạo tài khoản...");
+                        createProgressDialog.setCancelable(false);
+                        createProgressDialog.show();
+
+                        new Thread(() -> {
+                            try {
+                                // Tạo account khi đăng nhập thành công
+                                Account acc = LoginUtil.createAccount(auth.getCurrentUser().getDisplayName(), auth.getCurrentUser().getEmail(), "");
+
+                                // Lưu lại trong current user
+                                CurrentUser.init(this); // Nhớ truyền context vào init mới dùng được CurrentUser
+                                CurrentUser.saveCurrentUser(acc);
+                                CurrentUser.showCurrentUserInfo();
+
+                                runOnUiThread(() -> {
+                                    createProgressDialog.dismiss();
+                                    Toast.makeText(LoginActivity.this, "Tạo tài khoản thành công", Toast.LENGTH_LONG).show();
+
+                                    // Hiển thị dialog loading
+                                    ProgressDialog loadingDialog = new ProgressDialog(LoginActivity.this);
+                                    loadingDialog.setMessage("Đang chuyển trang...");
+                                    loadingDialog.setCancelable(false);
+                                    loadingDialog.show();
+
+                                    // Tạo Intent chuyển trang
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                                    // Trì hoãn một chút để hiển thị loading dialog
+                                    new Handler().postDelayed(() -> {
+                                        loadingDialog.dismiss();
+                                        startActivity(intent);
+                                        finish();
+                                    }, 2000); // Chuyển trang sau 2 giây
+                                });
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                runOnUiThread(() -> {
+                                    createProgressDialog.dismiss();
+                                    Toast.makeText(LoginActivity.this, "Tạo tài khoản thất bại", Toast.LENGTH_LONG).show();
+                                });
+                            }
+                        }).start();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_LONG).show();
+                });
+            }
+        }).start();
+    }
+
+
+    // FB
+    private void LoginFB() {
         // fb
         FacebookSdk.sdkInitialize(getApplicationContext()); // Sử dụng getApplicationContext()
-
         mAuth = FirebaseAuth.getInstance();
-
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton = findViewById(R.id.login_button); // Sử dụng ID chính xác trong layout
+        loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -94,30 +292,43 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "facebook:onError", error);
             }
         });
+    }
 
+    private void handleFacebookAccessToken(com.facebook.AccessToken token) { // Sử dụng đúng kiểu AccessToken
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
 
-        //gg
-        FirebaseApp.initializeApp(this);
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Đăng nhập thành công, cập nhật UI với thông tin người dùng đã đăng nhập
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // Nếu đăng nhập thất bại, hiển thị thông báo cho người dùng
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+    }
 
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.client_id))
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
+    private void updateUI(FirebaseUser user) {
+        // Cập nhật giao diện người dùng sau khi đăng nhập
+        if (user != null) {
+           Intent intent = new Intent(LoginActivity.this,SplashActivity.class);
+           startActivity(intent);
+        } else {
+            // Xử lý khi người dùng không đăng nhập
+        }
+    }
 
-        auth = FirebaseAuth.getInstance();
-
-        SignInButton signInButton = findViewById(R.id.login_gg);
-
-        // set cho button login google call giao diện đăng nhập.
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("GoogleSignIn", "hello");
-                Intent intent = googleSignInClient.getSignInIntent();
-                activityResultLauncher.launch(intent);
-            }
-        });
+    // username & pass
+    private void LoginUsernamePassword() {
 
         //cơ bản
         edtusername = findViewById(R.id.username);
@@ -151,9 +362,33 @@ public class LoginActivity extends AppCompatActivity {
                                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                                         Account user = document.toObject(Account.class);
                                         mDialog.dismiss();
+
                                         // Kiểm tra mật khẩu
                                         if (user != null && user.getPassword().equals(edtpassword.getText().toString())) {
+
                                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+
+                                            // lưu user => qua home
+                                            CurrentUser.init(LoginActivity.this); // Nhớ truyền context vào init mới dùng được CurrentUser
+                                            CurrentUser.saveCurrentUser(user);
+                                            CurrentUser.showCurrentUserInfo();
+
+                                            // Hiển thị dialog loading
+                                            ProgressDialog loadingDialog = new ProgressDialog(LoginActivity.this);
+                                            loadingDialog.setMessage("Đang chuyển trang...");
+                                            loadingDialog.setCancelable(false);
+                                            loadingDialog.show();
+
+                                            // Tạo Intent chuyển trang
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                                            // Trì hoãn một chút để hiển thị loading dialog
+                                            new Handler().postDelayed(() -> {
+                                                loadingDialog.dismiss();
+                                                startActivity(intent);
+                                                finish();
+                                            }, 1000);
+
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu đã nhập sai, vui lòng sửa lại !", Toast.LENGTH_SHORT).show();
                                         }
@@ -166,13 +401,16 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "Lỗi truy xuất dữ liệu!", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                }else{
+                } else {
                     mDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
 
+    // Sign up
+    private void SignUp() {
         //signup
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,75 +420,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void handleFacebookAccessToken(com.facebook.AccessToken token) { // Sử dụng đúng kiểu AccessToken
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Đăng nhập thành công, cập nhật UI với thông tin người dùng đã đăng nhập
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // Nếu đăng nhập thất bại, hiển thị thông báo cho người dùng
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
-    private void updateUI(FirebaseUser user) {
-        // Cập nhật giao diện người dùng sau khi đăng nhập
-        if (user != null) {
-            // Hiển thị thông tin người dùng hoặc chuyển hướng đến màn hình chính
-            // Ví dụ: startActivity(new Intent(this, MainActivity.class));
-        } else {
-            // Xử lý khi người dùng không đăng nhập
-        }
-    }
-
-
-    FirebaseAuth auth;
-    GoogleSignInClient googleSignInClient;
-    Shape shape;
-
-    // hàm nhận token từ google => firebase nhận token => xác thực => có được thông tin
-    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == RESULT_OK) {
-                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                try {
-                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
-                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
-                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                auth = FirebaseAuth.getInstance();
-                                Log.d("login thanh cong", "Tên người dùng: "
-                                        + auth.getCurrentUser().getDisplayName() +
-                                        ", Email: " + auth.getCurrentUser().getEmail());
-                            } else {
-                                Exception exception = task.getException();  // Lấy lỗi chi tiết
-                                Log.d("login thất bại", "Lỗi: " + (exception != null ? exception.getMessage() : "Không rõ nguyên nhân"));
-
-                            }
-                        }
-                    });
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    });
 }
