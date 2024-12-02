@@ -4,23 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/xám_nhạt">
 
-    <!-- Header -->
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/pd_header"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/white"-->
-<!--        android:paddingRight="10dp">-->
-
-<!--        <Button-->
-<!--            android:id="@+id/product_detail_icon_cart"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:background="@drawable/icon_cart_2"-->
-<!--            android:padding="10dp" />-->
-<!--    </RelativeLayout>-->
-
     <!-- Content -->
     android:layout_below="@+id/pd_header"
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

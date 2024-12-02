@@ -92,7 +92,11 @@ public class SignUpActivity extends AppCompatActivity {
                                                         userData.put("id", newId); // Lưu ID số tự động
                                                         userData.put("username", inputUsername);
                                                         userData.put("password", inputPassword);
-                                                        userData.put("role","2");
+                                                        userData.put("role", 2);
+                                                        userData.put("name", inputUsername);
+                                                        userData.put("phone", "");
+                                                        userData.put("storeId", 1);
+                                                        userData.put("image", "https://res.cloudinary.com/duf1lmvzu/image/upload/v1733065510/profile-default-icon-2048x2045-u3j7s5nj_zspsqa.png");
 
                                                         // Lưu thông tin vào Firestore
                                                         table_user.add(userData)
@@ -116,7 +120,11 @@ public class SignUpActivity extends AppCompatActivity {
                                                         userData.put("id", newId); // Lưu ID số tự động
                                                         userData.put("username", inputUsername);
                                                         userData.put("password", inputPassword);
-                                                        userData.put("role","2");
+                                                        userData.put("role", 2);
+                                                        userData.put("name", inputUsername);
+                                                        userData.put("phone", "");
+                                                        userData.put("storeId", 1);
+                                                        userData.put("image", "https://res.cloudinary.com/duf1lmvzu/image/upload/v1733065510/profile-default-icon-2048x2045-u3j7s5nj_zspsqa.png");
 
                                                         mDialog.dismiss();
                                                         // Lưu thông tin vào Firestore
