@@ -37,10 +37,12 @@ public class SeedingDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_seeding_data);
 
 //        addMultipleAccountsToFirestore(db);
-          addProduct();
+          //addProduct();
 //        // thêm accoount lên db
 //        addMultipleAccountsToFirestore(db);
-          addCategory();
+          //addCategory();
+          addOrderDetail();
+          addFeedBack();
 //        addStore();
 
 //        FirebaseMessaging.getInstance().getToken()
@@ -227,35 +229,54 @@ public class SeedingDataActivity extends AppCompatActivity {
 
     private void addOrderDetail()
     {
-        OrderDetail orDetail = new OrderDetail(1,1,1,20000,1);
-        Map<String, Object> orDetailMap = new HashMap<>();
-        orDetailMap.put("id", orDetail.getId());
-        orDetailMap.put("orderId", orDetail.getOrderId());
-        orDetailMap.put("productId", orDetail.getProductId());
-        orDetailMap.put("price", orDetail.getPrice());
-        orDetailMap.put("amount", orDetail.getAmount());
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        orderDetails.add(new OrderDetail(2,2,3,300000,2));
+        orderDetails.add(new OrderDetail(3,3,14,180000,3));
+        orderDetails.add(new OrderDetail(4,4,11,21000,1));
+        orderDetails.add(new OrderDetail(5,5,4,300000,4));
+        orderDetails.add(new OrderDetail(6,6,16,200000,10));
+        orderDetails.add(new OrderDetail(7,7,6,120000,1));
+        orderDetails.add(new OrderDetail(8,2,10,40000,2));
+        orderDetails.add(new OrderDetail(9,9,17,250000,10));
 
-        db.collection("orderDetail")
-                .document("1")
-                .set(orDetailMap)
-                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm order", e));
+        for (OrderDetail orderDetail : orderDetails) {
+            Map<String, Object> orDetailMap = new HashMap<>();
+            orDetailMap.put("id", orderDetail.getId());
+            orDetailMap.put("orderId", orderDetail.getOrderId());
+            orDetailMap.put("productId", orderDetail.getProductId());
+            orDetailMap.put("price", orderDetail.getPrice());
+            orDetailMap.put("amount", orderDetail.getAmount());
+
+            db.collection("orderDetail")
+                    .document(String.valueOf(orderDetail.getId()))
+                    .set(orDetailMap)
+                    .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm order", e));
+        }
 
     }
 
     private void addFeedBack()
     {
-        FeedBack fb = new FeedBack(1,1,"Bình luân của siêu cấp khách hàng",5);
-        Map<String, Object> fbMap = new HashMap<>();
+        List<FeedBack> feedBacks = new ArrayList<>();
+        feedBacks.add(new FeedBack(2,3,"Thức uống rất ngon nhưng hơi mắc",4));
+        feedBacks.add(new FeedBack(3,9,"Rau câu ăn ngon tiếc bánh plan trong nhân hơi dở",3));
+        feedBacks.add(new FeedBack(4,7,"Một món ăn tuyệt vời",5));
+        feedBacks.add(new FeedBack(5,4,"",4));
+        feedBacks.add(new FeedBack(6,2,"Gà bị nguội mềm kh giòn",2));
+        feedBacks.add(new FeedBack(7,5,"Cọng phở rất nát nước thì lạt không cảm thấy có vị bò, giao qua tới thì nước đã bị nguội và rất mắc",1));
 
-        fbMap.put("id", fb.getId());
-        fbMap.put("orderDetailId", fb.getOrderDetailId());
-        fbMap.put("content", fb.getContent());
-        fbMap.put("star", fb.getStar());
+        for (FeedBack feedBack : feedBacks) {
+            Map<String, Object> fbMap = new HashMap<>();
+            fbMap.put("id", feedBack.getId());
+            fbMap.put("orderDetailId", feedBack.getOrderDetailId());
+            fbMap.put("content", feedBack.getContent());
+            fbMap.put("star", feedBack.getStar());
 
-        db.collection("feedback")
-                .document("1")
-                .set(fbMap)
-                .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm feedback", e));
+            db.collection("feedback")
+                    .document(String.valueOf(feedBack.getId()))
+                    .set(fbMap)
+                    .addOnFailureListener(e -> Log.e(TAG, "Lỗi khi thêm feedback", e));
+        }
     }
     private void addCategory()
     {
