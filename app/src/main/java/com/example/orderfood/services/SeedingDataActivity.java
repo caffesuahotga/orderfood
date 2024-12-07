@@ -208,7 +208,7 @@ public class SeedingDataActivity extends AppCompatActivity {
     // tạo order ( tạo 1 đơn )
     private void addOrder()
     {
-        Order or = new Order(1,1,4,2,10,10);
+        Order or = new Order(1,"",4,2,10,10);
 
         Map<String, Object> orMap = new HashMap<>();
         orMap.put("id", or.getId());
