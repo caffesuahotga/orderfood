@@ -4,11 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/xám_nhạt">
 
-    <!-- Content -->
-    android:layout_below="@+id/pd_header"
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/cart_page_refresh"
+        android:id="@+id/history_order_page_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

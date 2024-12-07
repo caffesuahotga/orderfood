@@ -11,6 +11,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.orderfood.R;
 
+import java.util.Locale;
+
 public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
     private ImageView buttonHome, buttonFavorite, notice, buttonHistory, buttonSelfMe;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -29,7 +31,6 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
         buttonHistory = findViewById(R.id.button_history);
         buttonSelfMe = findViewById(R.id.button_self_me);
 
-        // Khôi phục trạng thái các biểu tượng
         SharedPreferences preferences = getSharedPreferences("icon_state", MODE_PRIVATE);
         String activeIcon = preferences.getString("active_icon", "Home");
         switch (activeIcon) {
@@ -59,12 +60,25 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
         notice.setOnClickListener(v -> navigateTo("Notice"));
         buttonHistory.setOnClickListener(v -> navigateTo("History"));
         buttonSelfMe.setOnClickListener(v -> navigateTo("Profile"));
+
+        // Mặc định hiển thị Home
+        if (savedInstanceState == null) {
+            String currentDestination = preferences.getString("current_destination", "Home");
+            navigateTo(currentDestination);
+        }
     }
 
     // Phương thức điều hướng (hoặc xử lý logic)
     private void navigateTo(String destination) {
-        reload_image();
         SharedPreferences preferences = getSharedPreferences("icon_state", MODE_PRIVATE);
+        String currentDestination = preferences.getString("current_destination", "");
+
+        // Kiểm tra nếu trang hiện tại đang được hiển thị, không chuyển trang
+        if (destination.equals(currentDestination)) {
+            return;
+        }
+
+        reload_image();
         SharedPreferences.Editor editor = preferences.edit();
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang chuyển trang, vui lòng chờ...");
@@ -78,8 +92,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến HomeActivity
                     buttonHome.setImageResource(R.drawable.ic_baseline_home_click_24);
                     editor.putString("active_icon", "Home");
-                    Intent home = new Intent(this, HomeActivity.class);
-                    this.startActivity(home);
+                    intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
                     break;
                 case "Favorite":
                     // Điều hướng đến FavoriteActivity
@@ -95,8 +109,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến HistoryActivity
                     buttonHistory.setImageResource(R.drawable.ic_baseline_history_click_24);
                     editor.putString("active_icon", "History");
-                    Intent historyOrder = new Intent(this, HistoryOrderActivity.class);
-                    this.startActivity(historyOrder);
+                    intent = new Intent(this, HistoryOrderActivity.class);
+                    startActivity(intent);
                     break;
                 case "Profile":
                     // Điều hướng đến ProfileActivity
@@ -106,6 +120,7 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                 default:
                     break;
             }
+            editor.putString("current_destination", destination);
             editor.apply();
             progressDialog.dismiss();
         }, 500);

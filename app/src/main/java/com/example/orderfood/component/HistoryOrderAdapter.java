@@ -8,15 +8,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.orderfood.R;
 import com.example.orderfood.models.Order;
 import com.example.orderfood.models.dto.CartDTO;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapter.HistoryOrderViewHolder> {
     private Context context;
@@ -39,8 +42,18 @@ public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapte
         Order item = orders.get(position);
 
         holder.orderCode.setText(" Mã Đơn Hàng: #" + item.getId());
-        holder.orderPrice.setText(item.getTotalPrice() + "");
-        holder.orderStatus.setText(item.getStatus() + "");
+        holder.orderPrice.setText("Tổng giá: " + NumberFormat.getInstance(Locale.getDefault()).format(item.getTotalPrice()) + " VNĐ");
+
+        switch (item.getStatus())
+        {
+            case 1:
+            {
+                holder.orderStatus.setText("Chờ xác nhận");
+                holder.orderStatus.setBackgroundResource(R.color.yellow);
+                holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.black));
+                break;
+            }
+        }
 
         Date date = item.getDate();
         String formattedDate = "";
