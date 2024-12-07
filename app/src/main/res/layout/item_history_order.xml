@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mã Đơn Hàng : #11"
-                android:textColor="@color/tieu_de_mon_an"
+                android:textColor="@color/teal_700"
                 android:textSize="17dp"
                 android:textStyle="bold"></TextView>
 
@@ -83,15 +83,25 @@
             android:gravity="top|center"
             android:paddingLeft="10dp">
 
-            <TextView
-                android:id="@+id/order_status"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/yellow"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="Chờ Xác Nhận"
-                android:textAlignment="center"></TextView>
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="10dp">
+
+                <TextView
+                    android:id="@+id/order_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/yellow"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Chờ Xác Nhận"
+                    android:textAlignment="center"></TextView>
+            </androidx.cardview.widget.CardView>
+
+
 
             <TextView
                 android:id="@+id/order_date"
