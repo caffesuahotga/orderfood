@@ -65,21 +65,23 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         holder.productPrice.setText(formatVND(product.getPrice()));
 
 
-        // Set hình ảnh sản phẩm
         Glide.with(holder.itemView.getContext())
-                .load(product.getImage().get(0)) // URL hình ảnh từ thuộc tính Image
-                .placeholder(R.drawable.image_loading) // Ảnh hiển thị khi đang tải
-                .error(R.drawable.image_error) // Ảnh hiển thị nếu có lỗi
+                .load(product.getImage().get(0))
+                .placeholder(R.drawable.image_loading)
+                .error(R.drawable.image_error)
                 .into(holder.productImage);
+        // sử dụng Glide để set ảnh lên giao diện
+
         holder.productImage.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-
-            // Truyền dữ liệu productId cho Activity (ở đây là số 5, bạn có thể thay đổi theo nhu cầu)
             intent.putExtra("productId", product.getId());
-
-            // Mở Activity (chuyển trang)
             v.getContext().startActivity(intent);
         });
+        //  gửi id  cho trang product detail
+
+
+        holder.productPrice.setText(formatVND((product.getPrice())));
+
 
         // Set số lượt đánh giá
         holder.productCountRate.setText(product.getStoreID() + " lượt");
@@ -100,9 +102,6 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
             cartDAO.deleteAll();
             cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
             Toast.makeText(v.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
-
-
-
         });
 
         // Sự kiện onClick cho btnAddFavorite
@@ -148,4 +147,4 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatter.format(price) + " VND";
     }
-    }
+}
