@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -504,7 +505,26 @@ public class HandleData {
         }
         return null;
     }
+    public static ArrayList<Order> getAllOrdersByAccountId(int accId) throws ExecutionException, InterruptedException {
+        if(accId == 0)
+        {
+            return new ArrayList<Order>();
+        }
 
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereIn("customerId", Collections.singletonList(accId))
+                .get();
+
+        QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+        ArrayList<Order> orderList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
+            Order or = orderDoc.toObject(Order.class);
+            orderList.add(or);
+        }
+
+        return orderList;
+    }
 
     public static int getLastOrderDetailId() {
         int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
