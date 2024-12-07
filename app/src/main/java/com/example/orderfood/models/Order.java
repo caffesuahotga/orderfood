@@ -1,5 +1,7 @@
 package com.example.orderfood.models;
 
+import java.util.Date;
+
 public class Order {
     private int Id;
     private String NameUserOrder; // tên nhận hàng
@@ -8,6 +10,8 @@ public class Order {
     private String Note;
     private double TotalPrice;
     private int PaymentType; // 1 tiền mặt
+    private int Status;// 1 chờ xác nhận
+    private Date Date;
 
     private int AddressId; // id dia chi acc
     private int ShipperId;
@@ -23,6 +27,22 @@ public class Order {
         CustomerId = customerId;
         ShipLatitude = shipLatitude;
         ShipLongtitude = shipLongtitude;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
+    }
+
+    public java.util.Date getDate() {
+        return Date;
+    }
+
+    public void setDate(java.util.Date date) {
+        Date = date;
     }
 
     public double getTotalPrice() {
