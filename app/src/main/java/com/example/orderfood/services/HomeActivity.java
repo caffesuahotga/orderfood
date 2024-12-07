@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseTopBottomViewActivity {
 
     private RecyclerView recyclerView;
     private category_adapter categoryAdapter;
@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_home);
+        getLayoutInflater().inflate(R.layout.activity_home, findViewById(R.id.content_frame));
 
         // Khởi tạo ImageSlider và thêm các slide hình ảnh
         ImageSlider imageSlider = findViewById(R.id.image_slider);

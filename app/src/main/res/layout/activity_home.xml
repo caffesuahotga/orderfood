@@ -5,19 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Phần tử 1 (Gắn ở trên cùng) -->
-    <View
-        android:id="@+id/top_view"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#FFE4E1"
-        android:layout_gravity="top" />
-
     <!-- Nội dung cuộn -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp">
 
         <LinearLayout
@@ -53,63 +44,4 @@
                 android:background="#FFFFFF" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
-    <!-- Phần tử 4 (Gắn ở dưới cùng với các icon nằm ngang) -->
-    <LinearLayout
-        android:id="@+id/bottom_view"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#FFFFFF"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-
-
-        <!-- Icon 2 -->
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="40dp"
-            android:contentDescription="Icon 1"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_home_24" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_favorite_24"
-            android:contentDescription="Icon 2"
-            android:padding="8dp" />
-
-        <!-- Icon 3 -->
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_notifications_24"
-            android:contentDescription="Icon 3"
-            android:padding="8dp" />
-
-        <!-- Icon 4 -->
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_history_24"
-            android:contentDescription="Icon 4"
-            android:padding="8dp" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_baseline_account_circle_24"
-            android:contentDescription="Icon 4"
-            android:padding="8dp" />
-    </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
