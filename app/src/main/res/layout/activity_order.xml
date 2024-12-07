@@ -1,9 +1,170 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".services.OrderActivity">
+    android:background="@color/xám_nhạt">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/order_page_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_layout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+<!--                thông tin món ăn-->
+                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/order_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:layout_marginTop="5dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="💓 THÔNG TIN ĐẶT HÀNG 👄 "
+                            android:paddingBottom="10dp"
+                            android:textColor="@color/tieu_de_mon_an"
+                            android:textSize="15dp"
+                            android:textStyle="bold|italic"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🧒 Tên nhận hàng"
+                            android:textStyle="bold|italic">
+
+                        </TextView>
+
+                        <EditText
+                            android:id="@+id/order_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:hint="Tên"></EditText>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="☎️ Số điện thoại nhận hàng"
+
+                            android:textStyle="bold|italic"></TextView>
+
+                        <EditText
+                            android:id="@+id/order_user_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:hint="SĐT"></EditText>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🐦 Địa chỉ nhận hàng"
+                            android:textStyle="bold|italic"></TextView>
+
+                        <EditText
+                            android:id="@+id/order_user_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:hint="Địa chỉ"
+                            android:inputType="textMultiLine"
+                            android:minLines="2"></EditText>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✍️ Lời nhắn cho shop"
+                            android:textStyle="bold|italic"></TextView>
+
+                        <EditText
+                            android:id="@+id/order_note"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:hint="Lời nhắn cho shop"
+                            android:inputType="textMultiLine"
+                            android:minLines="2"></EditText>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="Phương thức thanh toán : 💵 Tiền mặt"
+                            android:textColor="@color/dark_orange"
+                            android:textSize="15dp"
+                            android:textStyle="bold|italic"></TextView>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!--                 danh sách món ăn đặt -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_order_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Bottom -->
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="12">
+
+        <TextView
+            android:id="@+id/order_total_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:text="Tổng: 133000 VNĐ"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_order"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="@color/đỏ_button"
+            android:gravity="center"
+            android:text="Đặt Hàng"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

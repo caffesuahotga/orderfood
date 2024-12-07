@@ -1,13 +1,12 @@
-package com.example.orderfood.models;
+package com.example.orderfood.models.dto;
 
-public class Order {
-    private int Id;
+import java.util.ArrayList;
+
+public class OrderDTO {
     private String NameUserOrder; // tên nhận hàng
     private String Address; // dia chi giao hang
     private String Phone; // số điện thoại nhận hàng
     private String Note;
-    private double TotalPrice;
-    private int PaymentType; // 1 tiền mặt
 
     private int AddressId; // id dia chi acc
     private int ShipperId;
@@ -16,36 +15,10 @@ public class Order {
     private double ShipLatitude; // tọa đọ shiper
     private double ShipLongtitude; // tọa đọ shiper
 
-    public Order(int id, String address, int shipperId, int customerId, double shipLatitude, double shipLongtitude) {
-        Id = id;
-        Address = address;
-        ShipperId = shipperId;
-        CustomerId = customerId;
-        ShipLatitude = shipLatitude;
-        ShipLongtitude = shipLongtitude;
-    }
+    // danh sách món ăn
+    ArrayList<OrderProductDTO> Products = new ArrayList<OrderProductDTO>();
 
-    public double getTotalPrice() {
-        return TotalPrice;
-    }
-
-    public int getPaymentType() {
-        return PaymentType;
-    }
-
-    public void setPaymentType(int paymentType) {
-        PaymentType = paymentType;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        TotalPrice = totalPrice;
-    }
-
-    public Order() {
-    }
-
-    public Order(int id, String nameUserOrder, String address, String phone, String note, int addressId, int shipperId, int customerId, double shipLatitude, double shipLongtitude) {
-        Id = id;
+    public OrderDTO(String nameUserOrder, String address, String phone, String note, int addressId, int shipperId, int customerId, double shipLatitude, double shipLongtitude, ArrayList<OrderProductDTO> products) {
         NameUserOrder = nameUserOrder;
         Address = address;
         Phone = phone;
@@ -55,18 +28,10 @@ public class Order {
         CustomerId = customerId;
         ShipLatitude = shipLatitude;
         ShipLongtitude = shipLongtitude;
+        Products = products;
     }
 
-    public Order(int id, String nameUserOrder, String address, String phone, String note, int shipperId, int customerId, double shipLatitude, double shipLongtitude) {
-        Id = id;
-        NameUserOrder = nameUserOrder;
-        Address = address;
-        Phone = phone;
-        Note = note;
-        ShipperId = shipperId;
-        CustomerId = customerId;
-        ShipLatitude = shipLatitude;
-        ShipLongtitude = shipLongtitude;
+    public OrderDTO() {
     }
 
     public String getNameUserOrder() {
@@ -77,6 +42,13 @@ public class Order {
         NameUserOrder = nameUserOrder;
     }
 
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
 
     public String getPhone() {
         return Phone;
@@ -94,12 +66,12 @@ public class Order {
         Note = note;
     }
 
-    public int getId() {
-        return Id;
+    public int getAddressId() {
+        return AddressId;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setAddressId(int addressId) {
+        AddressId = addressId;
     }
 
     public int getShipperId() {
@@ -134,19 +106,11 @@ public class Order {
         ShipLongtitude = shipLongtitude;
     }
 
-    public String getAddress() {
-        return Address;
+    public ArrayList<OrderProductDTO> getProducts() {
+        return Products;
     }
 
-    public void setAddress(String address) {
-        Address = address;
-    }
-
-    public int getAddressId() {
-        return AddressId;
-    }
-
-    public void setAddressId(int addressId) {
-        AddressId = addressId;
+    public void setProducts(ArrayList<OrderProductDTO> products) {
+        Products = products;
     }
 }

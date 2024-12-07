@@ -13,10 +13,14 @@ import com.example.orderfood.models.Order;
 import com.example.orderfood.models.OrderDetail;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.Store;
+import com.example.orderfood.models.dto.OrderDTO;
+import com.example.orderfood.models.dto.OrderProductDTO;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -364,6 +368,30 @@ public class HandleData {
         }
         return null;
     }
+    public static int getLastOrderId() {
+        int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
+        try {
+            Query query = db.collection("order")
+                    .orderBy("id", Query.Direction.DESCENDING)
+                    .limit(1);
+
+            Task<QuerySnapshot> queryTask = query.get();
+            Tasks.await(queryTask);
+
+            if (queryTask.isSuccessful() && !queryTask.getResult().isEmpty()) {
+                for (DocumentSnapshot document : queryTask.getResult().getDocuments()) {
+                    lastOrderId = Integer.parseInt(document.getId());
+                }
+            } else if (!queryTask.isSuccessful()) {
+                throw new Exception("Error getting last order ID: " + queryTask.getException().getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting last order ID: " + e.getMessage());
+        }
+
+        return lastOrderId;
+    }
+
     public List<Order> getAllOrders() {
         List<Order> orderList = new ArrayList<>();
         try {
@@ -411,7 +439,96 @@ public class HandleData {
 
         return orderList;
     }
+    public static Order createOrder(OrderDTO dto) {
+        try {
+            int id = getLastOrderId() + 1;
+            Order order = new Order();
 
+            order.setId(id);
+            order.setNameUserOrder(dto.getNameUserOrder());
+            order.setAddress(dto.getAddress());
+            order.setPhone(dto.getPhone());
+            order.setNote(dto.getNote());
+            order.setAddressId(dto.getAddressId());
+            order.setShipperId(dto.getShipperId());
+            order.setCustomerId(dto.getCustomerId());
+            order.setShipLatitude(dto.getShipLatitude());
+            order.setShipLongtitude(dto.getShipLongtitude());
+            order.setTotalPrice(dto.getProducts().stream().mapToDouble(product -> product.getPrice() * product.getQuantity()).sum());
+            order.setPaymentType(1);
+
+            Task<Void> task = db.collection("order")
+                    .document(String.valueOf(order.getId()))
+                    .set(order);
+
+            Tasks.await(task);
+
+            if (task.isSuccessful()) {
+                // tạo chi tiết đơn hàng
+                ArrayList<OrderDetail> ods = new ArrayList<OrderDetail>();
+                int curId = getLastOrderDetailId();
+                for (OrderProductDTO odetail: dto.getProducts()) {
+                    curId++;
+                    OrderDetail ode = new OrderDetail();
+
+                    ode.setId(curId);
+                    ode.setOrderId(order.getId());
+                    ode.setProductId(odetail.getProductId());
+                    ode.setPrice(odetail.getPrice());
+                    ode.setAmount(odetail.getQuantity());
+
+                    ods.add(ode);
+                }
+
+                for (OrderDetail ode : ods) {
+                    Task<Void> taskAddOrdetail = db.collection("orderDetail")
+                            .document(String.valueOf(ode.getId()))
+                            .set(ode);
+
+                    Tasks.await(taskAddOrdetail);
+
+                    if (taskAddOrdetail.isSuccessful()) {
+                        System.out.println("OrderDetail created successfully for Order ID: " + order.getId());
+                    } else {
+                        throw new Exception("Error creating order detail: " + task.getException().getMessage());
+                    }
+                }
+
+            } else {
+                System.err.println("Error creating order: " + task.getException().getMessage());
+            }
+
+            return order;
+        } catch (Exception e) {
+            System.err.println("Error creating order: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+    public static int getLastOrderDetailId() {
+        int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
+        try {
+            Query query = db.collection("orderDetail")
+                    .orderBy("id", Query.Direction.DESCENDING)
+                    .limit(1);
+
+            Task<QuerySnapshot> queryTask = query.get();
+            Tasks.await(queryTask);
+
+            if (queryTask.isSuccessful() && !queryTask.getResult().isEmpty()) {
+                for (DocumentSnapshot document : queryTask.getResult().getDocuments()) {
+                    lastOrderId = Integer.parseInt(document.getId());
+                }
+            } else if (!queryTask.isSuccessful()) {
+                throw new Exception("Error getting last order ID: " + queryTask.getException().getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting last order ID: " + e.getMessage());
+        }
+
+        return lastOrderId;
+    }
     public OrderDetail getOrderDetailById(int id) {
         try {
             Task<QuerySnapshot> task = db.collection("order_details") // Thay "order_details" bằng tên collection của bạn
@@ -481,6 +598,7 @@ public class HandleData {
 
         return orderDetails;
     }
+//    public OrderDetail CreateOrderDetail(){};
 
     public static Product getProductById(int id) throws ExecutionException, InterruptedException {
         try {

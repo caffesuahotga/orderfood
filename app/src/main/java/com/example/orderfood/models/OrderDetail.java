@@ -5,7 +5,7 @@ public class OrderDetail {
     private int OrderId;
     private int ProductId;
 
-    private int Price;
+    private double Price;
     private int Amount;
 
     public OrderDetail(int id, int orderId, int productId, int price, int amount) {
@@ -43,11 +43,11 @@ public class OrderDetail {
         ProductId = productId;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return Price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         Price = price;
     }
 
