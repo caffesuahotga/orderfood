@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Ảnh đại diện -->
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_default_avatar"
+        android:scaleType="centerCrop"
+        android:background="@drawable/avatar_circle_border" />
+
+    <!-- Thông tin người dùng -->
+    <EditText
+        android:id="@+id/edtUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:enabled="false"/>
+
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:enabled="false"/>
+
+    <!-- Nút sửa thông tin -->
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sửa thông tin"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"/>
+
+    <!-- Nút Lưu thông tin -->
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lưu"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+</LinearLayout>
