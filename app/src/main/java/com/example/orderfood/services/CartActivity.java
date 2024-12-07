@@ -43,13 +43,13 @@ public class CartActivity extends BaseNoBottomActivity {
 
         swipeRefreshLayout = findViewById(R.id.cart_page_refresh);
 
-        // thêm tạm sản phẩm
-        CartDAO cartDAO2 = new CartDAO(this);
-        cartDAO2.deleteAll();
-        List<Product> products = HandleData.getAllProducts();
-        for (Product product : products) {
-            cartDAO2.addProduct(product.getId(), product.getName(), 1, product.getImage().get(0));
-        }
+//        // thêm tạm sản phẩm
+//        CartDAO cartDAO2 = new CartDAO(this);
+//        cartDAO2.deleteAll();
+//        List<Product> products = HandleData.getAllProducts();
+//        for (Product product : products) {
+//            cartDAO2.addProduct(product.getId(), product.getName(), 1, product.getImage().get(0));
+//        }
 
         //////////////////// -- code
         BindData();
