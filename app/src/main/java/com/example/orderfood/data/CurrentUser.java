@@ -18,6 +18,7 @@ public class CurrentUser {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_ROLE = "role";
     private static final String KEY_IMAGE = "image";
+    private static final String KEY_STORE_ID = "storeId";
 
     // Khởi tạo SharedPreferences
     public static void init(Context context) {
@@ -131,4 +132,11 @@ public class CurrentUser {
     public static String getImage() {
         return sharedPreferences.getString(KEY_IMAGE, "No Image");
     }
+
+    public static void setStoreId(String storeId) {
+        editor.putString(KEY_STORE_ID, storeId);
+        editor.apply();
+    }
+
+    public static String getStoreId() {return sharedPreferences.getString(KEY_STORE_ID, "No Store"); }
 }

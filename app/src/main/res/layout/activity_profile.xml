@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".services.ProfileActivity"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/pxfuel">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="THÔNG TIN"
+        android:gravity="center"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:textColor="#FFFF"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Ảnh đại diện -->
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_default_avatar"
+        android:background="@drawable/avatar_circle_border"
+        android:contentDescription="Avatar"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="55dp"/>
+
+    <!-- Các EditText -->
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:listSeparatorTextViewStyle"
+        android:padding="10dp"
+        android:textSize="20dp"
+        android:hint="Username"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:enabled="false" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="?android:listSeparatorTextViewStyle"
+        android:textSize="20dp"
+        android:hint="Name"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="10dp"
+        android:enabled="false" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="?android:listSeparatorTextViewStyle"
+        android:textSize="20dp"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="10dp"
+        android:enabled="false" />
+
+    <EditText
+        android:id="@+id/etPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="?android:listSeparatorTextViewStyle"
+        android:textSize="20dp"
+        android:hint="Phone"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="10dp"
+        android:enabled="false" />
+
+    <EditText
+        android:id="@+id/etStore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="?android:listSeparatorTextViewStyle"
+        android:textSize="20dp"
+        android:hint="Store"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="10dp"
+        android:enabled="false" />
+
+    <!-- Nút sửa và lưu -->
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lưu"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Sửa thông tin" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:text="ĐĂNG XUẤT" />
+
+</LinearLayout>

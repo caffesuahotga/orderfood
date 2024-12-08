@@ -380,7 +380,7 @@ public class LoginActivity extends AppCompatActivity {
                                             loadingDialog.show();
 
                                             // Tạo Intent chuyển trang
-                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
 
                                             // Trì hoãn một chút để hiển thị loading dialog
                                             new Handler().postDelayed(() -> {

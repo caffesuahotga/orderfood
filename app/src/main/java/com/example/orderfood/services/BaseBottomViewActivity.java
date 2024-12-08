@@ -3,6 +3,7 @@ package com.example.orderfood.services;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.orderfood.R;
@@ -39,7 +40,7 @@ public class BaseBottomViewActivity extends AppCompatActivity {
     // Phương thức điều hướng (hoặc xử lý logic)
     private void navigateTo(String destination) {
         reload_image();
-        Intent intent;
+        Intent intent = null ;
         switch (destination) {
             case "Home":
                 // Điều hướng đến HomeActivity
@@ -61,6 +62,8 @@ public class BaseBottomViewActivity extends AppCompatActivity {
             case "Profile":
                 // Điều hướng đến ProfileActivity
                 buttonSelfMe.setImageResource(R.drawable.ic_baseline_account_circle_click_24);
+                intent = new Intent(BaseBottomViewActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
