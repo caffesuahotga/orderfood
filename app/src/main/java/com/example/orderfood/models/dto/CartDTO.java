@@ -27,6 +27,14 @@ public class CartDTO  implements Serializable {
     public CartDTO() {
     }
 
+    public CartDTO(int productID, String name, int quantity, String image, double price) {
+        this.productID = productID;
+        this.name = name;
+        this.quantity = quantity;
+        this.image = image;
+        Price = price;
+    }
+
     public boolean isSelected() {
         return isSelected;
     }

@@ -3,6 +3,7 @@ package com.example.orderfood.services;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,18 +26,50 @@ import com.example.orderfood.models.dto.OrderProductDTO;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class OrderActivity extends BaseNoBottomActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_order, findViewById(R.id.content_frame));
         CurrentUser.init(OrderActivity.this);
 
-        ArrayList<CartDTO> productList = (ArrayList<CartDTO>) getIntent().getSerializableExtra("product_list");
+        Intent intent = getIntent();
+        int orderId = intent.getIntExtra("orderId", 0); // 0 là giá trị mặc định nếu không có `orderId`
 
-        bindData(productList);
+        if (orderId == 0) // => có nghĩa là đặt hàng
+        {
+            ArrayList<CartDTO> productList = (ArrayList<CartDTO>) getIntent().getSerializableExtra("product_list");
+            bindData(productList);
+
+        } else // có nghĩa là xem lại dơn hàng
+        {
+            GetInfoOrder(orderId);
+        }
+
+        // load kéo
+        swipeRefreshLayout = findViewById(R.id.order_page_refresh);
+
+        // Xử lý refresh
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Show loading spinner
+            swipeRefreshLayout.setRefreshing(true);
+
+            new Thread(() -> {
+
+                loadOrder(orderId);
+
+                runOnUiThread(() -> {
+                    // Kết thúc hiệu ứng refresh
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }).start();
+        });
+
     }
 
     private void bindData(ArrayList<CartDTO> productList) {
@@ -157,5 +190,65 @@ public class OrderActivity extends BaseNoBottomActivity {
         orderDTO.setProducts(proList);
 
         return orderDTO;
+    }
+
+    // cập nhật data khi kéo
+    private void loadOrder(int odId) {
+        runOnUiThread(() -> {
+
+            if (odId == 0) {
+                ArrayList<CartDTO> productList = (ArrayList<CartDTO>) getIntent().getSerializableExtra("product_list");
+                bindData(productList);
+            } else {
+                GetInfoOrder(odId);
+            }
+        });
+    }
+
+    /////////// xem thông tin đơn hàng
+    private void GetInfoOrder(int od) {
+        OrderDTO data = OrderUtil.GetOrderInfo(od);
+
+        bindDataOrderInfo(data);
+    }
+
+    private void bindDataOrderInfo(OrderDTO orderDTO) {
+        // convert qua CartDTO
+        ArrayList<CartDTO> cartDTOList = new ArrayList<>();
+
+        for (OrderProductDTO product : orderDTO.getProducts()) {
+            CartDTO cartDTO = new CartDTO(
+                    product.getProductId(),
+                    product.getName(),
+                    product.getQuantity(),
+                    product.getImage(),
+                    product.getPrice()
+            );
+            cartDTOList.add(cartDTO);
+        }
+
+        RecyclerView order_product_view = findViewById(R.id.product_order_container);
+        order_product_view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
+        ProductOrderAdapter productCartAdapter = new ProductOrderAdapter(this, cartDTOList);
+        order_product_view.setAdapter(productCartAdapter);
+
+
+        EditText name = findViewById(R.id.order_user_name);
+        EditText phone = findViewById(R.id.order_user_phone);
+        EditText Address = findViewById(R.id.order_user_address);
+        EditText Note = findViewById(R.id.order_note);
+
+        name.setText(orderDTO.getNameUserOrder());
+        phone.setText(orderDTO.getPhone());
+        Address.setText(orderDTO.getAddress());
+        Note.setText(orderDTO.getNote());
+        TextView totalPay = findViewById(R.id.order_total_pay);
+
+        double total = cartDTOList.stream().mapToDouble(product -> product.getPrice() * product.getQuantity()).sum();
+        totalPay.setText("Tổng: " + NumberFormat.getInstance(Locale.getDefault()).format(total) + " VNĐ");
+
+        TextView order = findViewById(R.id.btn_order);
+        order.setVisibility(View.GONE);
     }
 }

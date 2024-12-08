@@ -53,4 +53,23 @@ public class OrderUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static OrderDTO GetOrderInfo(int odId)
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    OrderDTO data = HandleData.GetOrderInfo(odId);
+
+                    return data;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

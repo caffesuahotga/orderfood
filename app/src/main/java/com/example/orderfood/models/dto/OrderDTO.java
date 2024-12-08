@@ -7,6 +7,7 @@ public class OrderDTO {
     private String Address; // dia chi giao hang
     private String Phone; // số điện thoại nhận hàng
     private String Note;
+    private double TotalPrice;
 
     private int AddressId; // id dia chi acc
     private int ShipperId;
@@ -32,6 +33,14 @@ public class OrderDTO {
     }
 
     public OrderDTO() {
+    }
+
+    public double getTotalPrice() {
+        return TotalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        TotalPrice = totalPrice;
     }
 
     public String getNameUserOrder() {
