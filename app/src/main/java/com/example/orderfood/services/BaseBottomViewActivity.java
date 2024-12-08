@@ -43,6 +43,8 @@ public class BaseBottomViewActivity extends AppCompatActivity {
         switch (destination) {
             case "Home":
                 // Điều hướng đến HomeActivity
+                intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
 
                 buttonHome.setImageResource(R.drawable.ic_baseline_home_click_24);
                 break;

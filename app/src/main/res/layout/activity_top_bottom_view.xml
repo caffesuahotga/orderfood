@@ -8,16 +8,14 @@
     android:layout_height="match_parent">
 
 
-
-
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_alignParentBottom="true">
+        android:orientation="horizontal">
 
         <!-- Icon 1 -->
         <ImageView
@@ -35,9 +33,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_favorite_24"
             android:contentDescription="Icon 2"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_favorite_24" />
 
         <!-- Icon 3 -->
         <ImageView
@@ -45,9 +43,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_notifications_24"
             android:contentDescription="Icon 3"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_notifications_24" />
 
         <!-- Icon 4 -->
         <ImageView
@@ -55,9 +53,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="40dp"
-            android:src="@drawable/ic_baseline_history_24"
             android:contentDescription="Icon 4"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_history_24" />
 
         <!-- Icon 5 -->
         <ImageView
@@ -65,8 +63,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="20dp"
-            android:src="@drawable/ic_baseline_account_circle_24"
             android:contentDescription="Icon 5"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_account_circle_24" />
     </LinearLayout>
 </RelativeLayout>

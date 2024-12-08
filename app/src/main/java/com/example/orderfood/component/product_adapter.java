@@ -116,8 +116,6 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
                 Toast.makeText(view.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
                 animatorSet.start();
             }
-
-
         });
     }
 

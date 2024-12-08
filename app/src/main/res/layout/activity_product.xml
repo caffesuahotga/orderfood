@@ -12,53 +12,39 @@
         android:id="@+id/header_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="top">
+        android:orientation="horizontal">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_arrow_left_short"
-            android:gravity="center" />
 
         <EditText
             android:id="@+id/editText"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:gravity="center"
             android:hint="Tìm món ăn"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:background="@drawable/edittext_background"
             android:inputType="text"
-            android:background="@null"
-            android:textSize="30dp"
-            android:padding="5dp" />
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_search_heart"
-            android:gravity="center"
-            android:padding="10dp" />
+            android:textColor="@color/text_color" />
+
+
+
     </LinearLayout>
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:scrollbars="none">
 
-        <!-- LinearLayout chứa các thành phần cuộn ngang -->
-        <LinearLayout
-            android:id="@+id/category_parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        </LinearLayout>
-    </HorizontalScrollView>
+
+
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:layout_marginBottom="50dp">
 
         <LinearLayout
@@ -67,16 +53,28 @@
             android:orientation="vertical">
 
 
-
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/view_product"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFF" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_product"
+        android:layout_marginTop="120dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:layout_anchor="@+id/categorytest"
+        app:layout_anchorGravity="top|center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categorytest"
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:background="#FFFFFF"
+        android:scrollbars="horizontal"
+        app:layout_anchor="@+id/nestedScrollView"
+        app:layout_anchorGravity="top|center" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
