@@ -39,7 +39,7 @@ public class ProductActivity extends BaseTopBottomViewActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_product, findViewById(R.id.content_frame));
+        getLayoutInflater().inflate(R.layout.activity_product, findViewById(R.id.content_frame_top_bot));
         HandleData handleData = new HandleData();
         categoryList = handleData.getAllCategories();
         recyclerView2 = findViewById(R.id.categorytest);

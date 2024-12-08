@@ -1,7 +1,12 @@
 package com.example.orderfood.models.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 // dùng cho nạp data lên giao diện
-public class CartDTO {
+public class CartDTO  implements Serializable {
     private int ID ;
     private int productID;
     private String name;
@@ -20,6 +25,14 @@ public class CartDTO {
     }
 
     public CartDTO() {
+    }
+
+    public CartDTO(int productID, String name, int quantity, String image, double price) {
+        this.productID = productID;
+        this.name = name;
+        this.quantity = quantity;
+        this.image = image;
+        Price = price;
     }
 
     public boolean isSelected() {
@@ -77,4 +90,5 @@ public class CartDTO {
     public void setPrice(double price) {
         Price = price;
     }
+
 }

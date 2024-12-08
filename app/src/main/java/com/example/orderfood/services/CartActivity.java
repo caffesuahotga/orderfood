@@ -9,11 +9,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.orderfood.R;
 import com.example.orderfood.component.ProductCartAdapter;
@@ -26,6 +30,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class CartActivity extends BaseNoBottomActivity {
     CartDAO cartDAO = new CartDAO(this);
@@ -38,15 +43,6 @@ public class CartActivity extends BaseNoBottomActivity {
 
         swipeRefreshLayout = findViewById(R.id.cart_page_refresh);
 
-        // thêm tạm sản phẩm
-        CartDAO cartDAO2 = new CartDAO(this);
-        cartDAO2.deleteAll();
-        List<Product> products = HandleData.getAllProducts();
-        for (Product product : products) {
-            cartDAO2.addProduct(product.getId(), product.getName(), 1, product.getImage().get(0));
-        }
-
-        //////////////////// -- code
         BindData();
 
         // Xử lý refresh
@@ -89,6 +85,7 @@ public class CartActivity extends BaseNoBottomActivity {
     private void BindBottom(ArrayList<CartDTO> carts, ProductCartAdapter productCartAdapter) {
         updateTotalPrice(carts);
         checkAll(carts, productCartAdapter);
+        order(carts);
     }
 
     public void updateTotalPrice(ArrayList<CartDTO> carts) {
@@ -121,6 +118,40 @@ public class CartActivity extends BaseNoBottomActivity {
         }
     }
 
+    public void order(ArrayList<CartDTO> carts) {
+        TextView order = findViewById(R.id.cart_order);
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ProgressDialog progressDialog = new ProgressDialog(CartActivity.this);
+                progressDialog.setMessage(CartActivity.this.getString(R.string.loading_message)); // Đặt thông điệp loading từ strings.xml
+                progressDialog.setCancelable(false); // Không cho phép hủy bằng cách chạm ra ngoài
+                progressDialog.show();
+
+                ArrayList<CartDTO> productSelect = (ArrayList<CartDTO>) carts.stream()
+                        .filter(CartDTO::isSelected)
+                        .collect(Collectors.toList());
+
+                if (productSelect.isEmpty()) {
+
+                    Toast.makeText(CartActivity.this, "Bạn chưa chọn sản phẩm nào!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                } else {
+
+                    Intent intent = new Intent(CartActivity.this, OrderActivity.class);
+                    intent.putExtra("product_list", productSelect);
+                    startActivity(intent);
+
+                    new Handler().postDelayed(() -> {
+                        progressDialog.dismiss();
+                    }, 1000);
+                }
+
+
+            }
+        });
+    }
 
     // cập nhật data khi kéo
     private void loadCart() {
