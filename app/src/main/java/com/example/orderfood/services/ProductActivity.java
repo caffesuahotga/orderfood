@@ -1,5 +1,7 @@
 package com.example.orderfood.services;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,13 +12,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.orderfood.R;
-import com.example.orderfood.component.product_adapter;
+import com.example.orderfood.component.CategoryNomalAdapter;
+import com.example.orderfood.component.category_adapter;
 import com.example.orderfood.component.product_adapter_nomal;
 import com.example.orderfood.data.HandleData;
 import com.example.orderfood.models.Category;
@@ -26,127 +27,94 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ProductActivity extends BaseNoBottomActivity {
+public class ProductActivity extends BaseTopBottomViewActivity {
     private List<Category> categoryList;
     private RecyclerView recyclerView1;
     private product_adapter_nomal productAdapter;
     private List<Product> productList = new HandleData().getAllProducts();
-    private SwipeRefreshLayout swipeRefreshLayout;
-
+    private RecyclerView recyclerView2;
+    private CategoryNomalAdapter categoryNomalAdapter;
+    private Context context;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_product, findViewById(R.id.content_frame));
-
-        swipeRefreshLayout = findViewById(R.id.cart_page_refresh);
-
-        LinearLayout buttonContainer = findViewById(R.id.category_parent);
+        getLayoutInflater().inflate(R.layout.activity_product, findViewById(R.id.content_frame_top_bot));
         HandleData handleData = new HandleData();
         categoryList = handleData.getAllCategories();
+        recyclerView2 = findViewById(R.id.categorytest);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView2.setLayoutManager(layoutManager);
+        categoryNomalAdapter = new CategoryNomalAdapter(categoryList);
+        recyclerView2.setAdapter(categoryNomalAdapter);
+        int categoryID = getIntent().getIntExtra("categoryID", -1);
 
-// Chuyển đổi 30dp sang pixel
-        int heightInPx = (int) (35 * getResources().getDisplayMetrics().density);
-        int textInPx = (int) (5 * getResources().getDisplayMetrics().density);
 
-        for (Category item : categoryList) {
-            Button button = new Button(this);
-            button.setId(item.getId());
-
-            // Đặt chiều cao 30dp
-            button.setHeight(heightInPx);
-            button.setTextSize(textInPx);
-
-            button.setText(item.getName());
-            button.setBackgroundResource(R.drawable.button_product_category);
-
-            // Thiết lập LayoutParams cho khoảng cách giữa các button
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    heightInPx // Đặt chiều cao từ giá trị đã chuyển đổi
-            );
-            params.setMargins(20, 0, 0, 0); // Khoảng cách phải
-            button.setLayoutParams(params);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Toast.makeText(getApplicationContext(), "Clicked: " + item.getName(), Toast.LENGTH_SHORT).show();
-                    List<Product> filteredProducts = getProductByCategory(item.getId());
-                    renderFood(filteredProducts);
+        if (categoryID != -1) {
+            // Tìm vị trí của danh mục có ID tương ứng
+            for (int i = 0; i < categoryList.size(); i++) {
+                if (categoryList.get(i).getId() == categoryID) {
+                    categoryNomalAdapter.setSelectedPosition(i);
+                    break;
                 }
-            });
-
-
-            buttonContainer.addView(button);
+            }
+            renderFood(searchProductByIDCategory(categoryID));
+        } else {
+            renderFood(productList);
+            Toast.makeText(this, "Invalid category ID", Toast.LENGTH_SHORT).show();
         }
-        renderFood(productList);
+
+
+
         EditText editText = findViewById(R.id.editText);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.length()>0){
                     List<Product> filteredProducts = searchProduct(charSequence.toString());
                     renderFood(filteredProducts);
                 }
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
-
-
-
-
-
     }
+
+
     public void renderFood(List<Product> filteredProducts){
         recyclerView1 = findViewById(R.id.view_product);
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
         recyclerView1.setLayoutManager(gridLayoutManager1);
         productAdapter = new product_adapter_nomal(filteredProducts);
         recyclerView1.setAdapter(productAdapter);
+
     }
-    // viết vào hàm reder để xử lý có nhiều sự thay đổi data render
-    public List<Product> getProductByCategory(int  categoryID){
+
+    public List<Product> searchProduct(String ex) {
         List<Product> filteredProducts = new ArrayList<>();
-        for (Product item : productList){
-            if(item.getCategoryID()==categoryID)
-                filteredProducts.add(item);
+        if (ex != null && !ex.trim().isEmpty()) {
+            for (Product item : productList) {
+                if (item.getName().toLowerCase().contains(ex.toLowerCase())) {
+                    filteredProducts.add(item);
+                }
+            }
+            Toast.makeText(this, "Category ID: " + 566, Toast.LENGTH_SHORT).show();
 
         }
         return filteredProducts;
     }
-    // xử lý tìm product theo categoryID với productList có sẵn
 
-    public List<Product> searchProduct(String ex) {
-        List<Product> filteredProducts = new ArrayList<>();
-
-        // Kiểm tra nếu chuỗi tìm kiếm không rỗng hoặc null
-        if (ex != null && !ex.trim().isEmpty()) {
-            // Duyệt qua tất cả sản phẩm trong danh sách
-            for (Product item : productList) {
-                // Kiểm tra xem tên sản phẩm có chứa chuỗi tìm kiếm
-                if (item.getName().toLowerCase().contains(ex.toLowerCase())) {
-                    filteredProducts.add(item); // Thêm sản phẩm vào danh sách nếu tìm thấy
-                }
-            }
+    public List<Product> searchProductByIDCategory(int id) {
+        List<Product> products = new ArrayList<>();
+        for (Product item : productList) {
+            if (item.getCategoryID() == id)
+                products.add(item);
         }
-
-        return filteredProducts; // Trả về danh sách các sản phẩm tìm được
+        return products;
     }
-    // tìm  kiếm sản phẩm theo tên
-
-
-
-
-
 }
