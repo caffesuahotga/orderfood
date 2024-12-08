@@ -26,14 +26,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class HandleData {
 
     private static final String TAG = "FirestoreData";
-    public  static  final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public Account getAccountByID(int id) {
         try {
@@ -62,6 +64,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public List<Account> getAllAccounts() {
         List<Account> accountList = new ArrayList<>();
         try {
@@ -90,9 +93,9 @@ public class HandleData {
         }
         return accountList;
     }
+
     public static List<Account> getAllAccounts(List<Integer> accId) throws ExecutionException, InterruptedException {
-        if(accId.size() == 0)
-        {
+        if (accId.size() == 0) {
             return new ArrayList<Account>();
         }
 
@@ -110,7 +113,8 @@ public class HandleData {
 
         return AccountList;
     }
-    public static Account createAccount(String name ,String userName, String password) throws ExecutionException, InterruptedException {
+
+    public static Account createAccount(String name, String userName, String password) throws ExecutionException, InterruptedException {
         // Tạo ID ngẫu nhiên
         int id = generateRandomId();
 
@@ -136,6 +140,7 @@ public class HandleData {
         // Trả về account đã tạo
         return newAccount;
     }
+
     public static boolean checkAccount(String userName) throws ExecutionException, InterruptedException {
         // Tạo task kiểm tra username trong Firestore
         Task<QuerySnapshot> userNameTask = db.collection("account")
@@ -148,6 +153,7 @@ public class HandleData {
         // Kiểm tra nếu có ít nhất một tài liệu được tìm thấy
         return !userNameSnapshot.isEmpty();
     }
+
     public static Account getAccountByUsername(String username) {
         try {
             // Thực hiện truy vấn Firestore để tìm account theo username
@@ -195,6 +201,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public List<Address> getAllAddresses() {
         List<Address> addressList = new ArrayList<>();
         try {
@@ -246,6 +253,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public List<Category> getAllCategories() {
         List<Category> categoryList = new ArrayList<>();
         try {
@@ -296,6 +304,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public List<FeedBack> getAllFeedbacks() {
         List<FeedBack> feedbackList = new ArrayList<>();
         try {
@@ -321,10 +330,10 @@ public class HandleData {
         }
         return feedbackList;
     }
+
     public static List<FeedBack> getAllFeedbacksByListOrderDetailID(List<Integer> OrderDetailIDs) throws ExecutionException, InterruptedException {
 
-        if(OrderDetailIDs.size() == 0)
-        {
+        if (OrderDetailIDs.size() == 0) {
             return new ArrayList<FeedBack>();
         }
 
@@ -339,7 +348,7 @@ public class HandleData {
             FeedBack feedBack = feedbackDoc.toObject(FeedBack.class);
             feedBackS.add(feedBack);
         }
-        return  feedBackS;
+        return feedBackS;
     }
 
     public Order getOrderById(int id) {
@@ -369,6 +378,7 @@ public class HandleData {
         }
         return null;
     }
+
     public static int getLastOrderId() {
         int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
         try {
@@ -420,9 +430,9 @@ public class HandleData {
         }
         return orderList; // Trả về danh sách Order
     }
+
     public static List<Order> getAllOrders(List<Integer> OrderIDs) throws ExecutionException, InterruptedException {
-        if(OrderIDs.size() == 0)
-        {
+        if (OrderIDs.size() == 0) {
             return new ArrayList<Order>();
         }
 
@@ -440,6 +450,7 @@ public class HandleData {
 
         return orderList;
     }
+
     public static Order createOrder(OrderDTO dto) {
         try {
             int id = getLastOrderId() + 1;
@@ -457,6 +468,8 @@ public class HandleData {
             order.setShipLongtitude(dto.getShipLongtitude());
             order.setTotalPrice(dto.getProducts().stream().mapToDouble(product -> product.getPrice() * product.getQuantity()).sum());
             order.setPaymentType(1);
+            order.setStatus(1);
+            order.setDate(new Date());
 
             Task<Void> task = db.collection("order")
                     .document(String.valueOf(order.getId()))
@@ -468,7 +481,7 @@ public class HandleData {
                 // tạo chi tiết đơn hàng
                 ArrayList<OrderDetail> ods = new ArrayList<OrderDetail>();
                 int curId = getLastOrderDetailId();
-                for (OrderProductDTO odetail: dto.getProducts()) {
+                for (OrderProductDTO odetail : dto.getProducts()) {
                     curId++;
                     OrderDetail ode = new OrderDetail();
 
@@ -505,9 +518,9 @@ public class HandleData {
         }
         return null;
     }
+
     public static ArrayList<Order> getAllOrdersByAccountId(int accId) throws ExecutionException, InterruptedException {
-        if(accId == 0)
-        {
+        if (accId == 0) {
             return new ArrayList<Order>();
         }
 
@@ -525,6 +538,68 @@ public class HandleData {
 
         return orderList;
     }
+
+    public static OrderDTO GetOrderInfo(int odId) throws ExecutionException, InterruptedException {
+
+        if (odId == 0) {
+            return new OrderDTO();
+        }
+
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereEqualTo("id", odId)
+                .get();
+
+        QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+
+
+        if (!orderSnapshot.isEmpty()) {
+
+            OrderDTO data = new OrderDTO();
+
+            DocumentSnapshot document = orderSnapshot.getDocuments().get(0);
+            Order order = document.toObject(Order.class);
+
+            data.setNameUserOrder(order.getNameUserOrder());
+            data.setAddress(order.getAddress());
+            data.setPhone(order.getPhone());
+            data.setNote(order.getNote());
+            data.setTotalPrice(order.getTotalPrice());
+
+            // lấy tiếp danh sách sản phẩm
+
+            List<OrderDetail> listOD = getOrderDetailsByOrderID(order.getId());
+            List<Product> proList = getAllProductByListOrderDetailId(
+                    listOD.stream()
+                            .map(OrderDetail::getProductId)
+                            .collect(Collectors.toList())
+            );
+
+            ArrayList<OrderProductDTO> odPro = new ArrayList<>();
+
+            for (OrderDetail pro: listOD) {
+                OrderProductDTO item = new OrderProductDTO();
+
+                item.setProductId(pro.getProductId());
+                item.setQuantity(pro.getAmount());
+                item.setPrice(pro.getPrice());
+
+                // lấy trên và image
+                Product proItem = proList.stream().filter(product -> product.getId() == item.getProductId()).findFirst().orElse(new Product());
+                item.setName(proItem.getName());
+                item.setImage(proItem.getImage().get(0));
+
+                odPro.add(item);
+            }
+
+            data.setProducts(odPro);
+
+            return data;
+        }
+
+        // Nếu không tìm thấy đơn hàng, trả về null hoặc một đối tượng OrderDTO mới
+        return new OrderDTO();
+    }
+
 
     public static int getLastOrderDetailId() {
         int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
@@ -549,6 +624,7 @@ public class HandleData {
 
         return lastOrderId;
     }
+
     public OrderDetail getOrderDetailById(int id) {
         try {
             Task<QuerySnapshot> task = db.collection("order_details") // Thay "order_details" bằng tên collection của bạn
@@ -575,6 +651,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu không tìm thấy hoặc có lỗi
     }
+
     public List<OrderDetail> getAllOrderDetails() {
         List<OrderDetail> orderDetailList = new ArrayList<>();
         try {
@@ -601,6 +678,7 @@ public class HandleData {
         }
         return orderDetailList; // Trả về danh sách OrderDetail
     }
+
     public static List<OrderDetail> getOrderDetailsByProductID(int productID) throws ExecutionException, InterruptedException {
         // Tiếp tục truy vấn OrderDetail
         Task<QuerySnapshot> orderDetailTask = db.collection("orderDetail")
@@ -618,7 +696,24 @@ public class HandleData {
 
         return orderDetails;
     }
-//    public OrderDetail CreateOrderDetail(){};
+
+    public static List<OrderDetail> getOrderDetailsByOrderID(int orderId) throws ExecutionException, InterruptedException {
+        // Tiếp tục truy vấn OrderDetail
+        Task<QuerySnapshot> orderDetailTask = db.collection("orderDetail")
+                .whereEqualTo("orderId", orderId)
+                .get();
+
+        // Chờ đợi kết quả trả về từ Firestore
+        QuerySnapshot orderDetailSnapshot = Tasks.await(orderDetailTask);
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        for (QueryDocumentSnapshot orderDoc : orderDetailSnapshot) {
+            OrderDetail orderDetail = orderDoc.toObject(OrderDetail.class);
+            orderDetails.add(orderDetail);
+        }
+
+        return orderDetails;
+    }
 
     public static Product getProductById(int id) throws ExecutionException, InterruptedException {
         try {
@@ -654,6 +749,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu không tìm thấy hoặc xảy ra lỗi
     }
+
     public static List<Product> getAllProducts() {
         List<Product> productList = new ArrayList<>();
         try {
@@ -685,6 +781,36 @@ public class HandleData {
         }
         return productList; // Trả về danh sách Product
     }
+    public static List<Product> getAllProductByListOrderDetailId(List<Integer> ids) throws ExecutionException, InterruptedException {
+        // Tiếp tục truy vấn OrderDetail
+        Task<QuerySnapshot> orderDetailTask = db.collection("product")
+                .whereIn("id", ids)
+                .get();
+
+        // Chờ đợi kết quả trả về từ Firestore
+        QuerySnapshot orderDetailSnapshot = Tasks.await(orderDetailTask);
+
+        List<Product> products = new ArrayList<>();
+        for (QueryDocumentSnapshot document : orderDetailSnapshot) {
+
+            Product product = new Product();
+            product.setId(document.getLong("id").intValue());
+            product.setName(document.getString("name"));
+            product.setImage_source(document.getLong("image_source").intValue());
+            product.setImage((ArrayList<String>) document.get("image"));
+            product.setPrice(document.getDouble("price"));
+            product.setRate(document.getDouble("rate"));
+            product.setMinutes(document.getLong("minutes").intValue());
+            product.setDescription(document.getString("description"));
+            product.setStoreID(document.getLong("storeID").intValue());
+            product.setCategoryID(document.getLong("categoryID").intValue());
+
+            products.add(product);
+        }
+
+        return products;
+    }
+
 
     public Store getStoreById(int id) {
         try {
@@ -710,6 +836,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu không tìm thấy hoặc có lỗi
     }
+
     public List<Store> getAllStores() {
         List<Store> storeList = new ArrayList<>();
         try {
@@ -733,7 +860,6 @@ public class HandleData {
         }
         return storeList;
     }
-
 
 
     //////////////// HELPER

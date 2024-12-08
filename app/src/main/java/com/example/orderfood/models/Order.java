@@ -10,7 +10,7 @@ public class Order {
     private String Note;
     private double TotalPrice;
     private int PaymentType; // 1 tiền mặt
-    private int Status;// 1 chờ xác nhận
+    private int Status;// 1 chờ xác nhận, 2 đã xác nhận, 3 đang giao, 4 đã giao-hoàn thành, 5 hủy
     private Date Date;
 
     private int AddressId; // id dia chi acc
@@ -32,6 +32,7 @@ public class Order {
     public int getStatus() {
         return Status;
     }
+
 
     public void setStatus(int status) {
         Status = status;

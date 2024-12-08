@@ -94,10 +94,8 @@
                     android:id="@+id/order_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/yellow"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Chờ Xác Nhận"
                     android:textAlignment="center"></TextView>
             </androidx.cardview.widget.CardView>
 

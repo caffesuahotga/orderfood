@@ -1,5 +1,6 @@
 package com.example.orderfood.services;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.example.orderfood.R;
 import com.example.orderfood.component.FeedbackProductDetailAdapter;
 import com.example.orderfood.component.ImageProductDetailAdapter;
 import com.example.orderfood.data.ProductDetailUtil;
+import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.FeedBackDTO;
 import com.example.orderfood.models.dto.ProductDetailDTO;
 import com.example.orderfood.sqlLite.dao.CartDAO;
@@ -234,6 +236,8 @@ public class ProductDetailActivity extends BaseNoBottomActivity {
 
         // bind data 2 nút thêm vào giỏ hàng
         BindDataCart(proDetail);
+
+        BindDataOrder(proDetail);
     }
 
     private void filterCommentsByRating(int selectedStar, ProductDetailDTO proDetail) {
@@ -274,10 +278,7 @@ public class ProductDetailActivity extends BaseNoBottomActivity {
             public void onClick(View view) {
                 shakeAndRotateButton(view);
 
-                cartDAO.deleteAll();
                 cartDAO.addProduct(proDetail.getPID(),proDetail.getName(),1,proDetail.getListImage().get(0));
-                cartDAO.showAllProducts();
-
                 Toast.makeText(view.getContext(), "Thành công! thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
             }
         });
@@ -317,7 +318,32 @@ public class ProductDetailActivity extends BaseNoBottomActivity {
         view.startAnimation(animationSet);
     }
 
-    // bấm icon cart bay qua trang giỏ hàng;
+    /// đặt hàng luôn
 
+    private void BindDataOrder(ProductDetailDTO proDetail)
+    {
+        Button addorder = findViewById(R.id.product_detail_order);
+        addorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shakeAndRotateButton(view);
+
+                ArrayList<CartDTO> productSelect = new ArrayList<>();
+                CartDTO item = new CartDTO();
+
+                item.setProductID(proDetail.getPID());
+                item.setName(proDetail.getName());
+                item.setQuantity(1);
+                item.setImage(proDetail.getListImage().get(0));
+                item.setPrice(proDetail.getPrice());
+
+                productSelect.add(item);
+
+                Intent intent = new Intent(ProductDetailActivity.this, OrderActivity.class);
+                intent.putExtra("product_list", productSelect);
+                startActivity(intent);
+            }
+        });
+    }
 
 }
