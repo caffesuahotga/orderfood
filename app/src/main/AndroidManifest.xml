@@ -23,13 +23,26 @@
         android:theme="@style/Theme.Orderfood"
         tools:targetApi="31">
         <activity
-            android:name=".services.HistoryOrderActivity"
-            android:exported="true">
+            android:name=".services.ShipperHistoryOrderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".services.ShipperHomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
         </activity>
+        <activity
+            android:name=".services.BaseBottomShipperActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+        <activity
+            android:name=".services.HistoryOrderActivity"
+            android:exported="true" />
         <activity
             android:name=".services.OrderSuccessActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.SignUpActivity"
             android:exported="true"
@@ -47,7 +60,7 @@
         <activity
             android:name=".services.CartActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <service
             android:name=".models.MyFirebaseMessagingService"
@@ -84,7 +97,7 @@
         <activity
             android:name=".services.ProductActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.HomeActivity"
             android:exported="true"></activity>
@@ -95,14 +108,14 @@
         <activity
             android:name=".services.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.BaseBottomViewActivity"
             android:exported="true"></activity>
 
         <activity
             android:name=".services.BaseTopBottomViewActivity"
-            android:exported="true"></activity> <!-- Facebook Login Activity -->
+            android:exported="true" /> <!-- Facebook Login Activity -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

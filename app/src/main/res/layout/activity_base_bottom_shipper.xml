@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- Header -->
+    <RelativeLayout
+        android:id="@+id/pd_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingRight="10dp">
+
+        <Button
+            android:id="@+id/product_detail_icon_cart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_baseline_notifications_24"
+            android:padding="10dp" />
+    </RelativeLayout>
+
+    <!-- Nội dung của các Activity -->
+    <FrameLayout
+        android:id="@+id/ship_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pd_header"
+        android:layout_above="@+id/bottom_shipper_bar"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_shipper_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Icon 1 -->
+        <ImageView
+            android:id="@+id/ship_button_home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="40dp"
+            android:contentDescription="Icon 1"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_home_24" />
+
+        <!-- Icon 4 -->
+        <ImageView
+            android:id="@+id/ship_button_history"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="40dp"
+            android:contentDescription="Icon 4"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_history_24" />
+
+        <!-- Icon 5 -->
+        <ImageView
+            android:id="@+id/ship_button_self_me"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:contentDescription="Icon 5"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_account_circle_24" />
+    </LinearLayout>
+</RelativeLayout>
