@@ -46,7 +46,7 @@ public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapte
     public void onBindViewHolder(@NonNull HistoryOrderViewHolder holder, int position) {
         Order item = orders.get(position);
 
-        holder.orderCode.setText(" Mã Đơn Hàng: #" + item.getId());
+        holder.orderCode.setText("Mã Đơn Hàng: #" + item.getId());
         holder.orderCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

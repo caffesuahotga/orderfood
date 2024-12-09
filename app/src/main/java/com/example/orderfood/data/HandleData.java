@@ -23,11 +23,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -351,6 +354,7 @@ public class HandleData {
         return feedBackS;
     }
 
+
     public Order getOrderById(int id) {
         try {
             Task<QuerySnapshot> task = db.collection("orders") // Thay "orders" bằng tên collection của bạn
@@ -539,6 +543,24 @@ public class HandleData {
         return orderList;
     }
 
+    public static ArrayList<Order> getAllOrderByStatus(List<Integer> sta) throws ExecutionException, InterruptedException {
+        // Truy vấn đơn hàng theo danh sách trạng thái
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereIn("status", sta)
+                .get();
+
+        QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+        ArrayList<Order> orderList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
+            Order or = orderDoc.toObject(Order.class);
+            orderList.add(or);
+        }
+
+        return orderList;
+    }
+
+
     public static OrderDTO GetOrderInfo(int odId) throws ExecutionException, InterruptedException {
 
         if (odId == 0) {
@@ -598,6 +620,32 @@ public class HandleData {
 
         // Nếu không tìm thấy đơn hàng, trả về null hoặc một đối tượng OrderDTO mới
         return new OrderDTO();
+    }
+
+    public static boolean ChangeStatusOrder(int odId, int sta) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Truy vấn đơn hàng theo id
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereEqualTo("id", odId)
+                .get();
+        try {
+            QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+            if (!orderSnapshot.isEmpty()) {
+
+                DocumentReference orderRef = orderSnapshot.getDocuments().get(0).getReference();
+                // nhân đơn => 3
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("status", sta);
+
+                Task<Void> updateTask = orderRef.set(updates, SetOptions.merge());
+                Tasks.await(updateTask);
+
+                return true; // Cập nhật thành công
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false; // Cập nhật thất bại
     }
 
 

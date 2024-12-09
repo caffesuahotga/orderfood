@@ -54,6 +54,52 @@ public class OrderUtil {
         }
     }
 
+    public static ArrayList<Order> getAllOrdersNewForShipper()
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    ArrayList<Integer> statusList = new ArrayList<>();
+                    statusList.add(2);
+                    ArrayList<Order> orderNew = HandleData.getAllOrderByStatus(statusList);
+
+                    return orderNew;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<Order> getAllHistoryOrderForShipper()
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    ArrayList<Integer> statusList = new ArrayList<>();
+
+                    statusList.add(3);
+                    statusList.add(4);
+                    statusList.add(5);
+
+                    ArrayList<Order> orderNew = HandleData.getAllOrderByStatus(statusList);
+
+                    return orderNew;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static OrderDTO GetOrderInfo(int odId)
     {
         try {
@@ -63,6 +109,26 @@ public class OrderUtil {
                     OrderDTO data = HandleData.GetOrderInfo(odId);
 
                     return data;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean ChangeStatusOrder(int odId, int sta)
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    boolean data = HandleData.ChangeStatusOrder(odId,sta);
+
+                    return data;
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
