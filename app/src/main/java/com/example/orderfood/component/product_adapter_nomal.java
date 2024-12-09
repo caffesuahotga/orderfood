@@ -1,5 +1,9 @@
 package com.example.orderfood.component;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ClipDrawable;
@@ -34,6 +38,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
 
     private Context context;
     private List<Product> productList;
+    public  int  n =1;
 
     public product_adapter_nomal(List<Product> productList) {
         this.productList = productList;
@@ -71,12 +76,27 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
                 .error(R.drawable.image_error)
                 .into(holder.productImage);
         // sử dụng Glide để set ảnh lên giao diện
-
         holder.productImage.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-            intent.putExtra("productId", product.getId());
-            v.getContext().startActivity(intent);
+
+            // Tạo hiệu ứng scale
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.5f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.5f, 1f);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY);
+            animatorSet.setDuration(600); // Thời gian hiệu ứng
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    // Gửi Intent sang ProductDetailActivity
+                    Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+                    intent.putExtra("productId", product.getId());
+                    v.getContext().startActivity(intent);
+                }
+            });
+            animatorSet.start();
         });
+
+
         //  gửi id  cho trang product detail
 
 
@@ -94,20 +114,35 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         // Hiển thị ngôi sao đánh giá (có thể thêm logic để thay đổi ảnh theo điểm đánh giá)
         setStarRating(holder.starImage, product.getRate());
         holder.productCountFavorite.setText(Integer.toString(product.getStoreID()));
-        holder.btnAddCart.setOnClickListener(v -> {
-            // Thực hiện hành động thêm vào giỏ hàng
-            // Ví dụ: Hiển thị thông báo
-
-            CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
-            cartDAO.deleteAll();
-            cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
-            Toast.makeText(v.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
+        holder.btnAddCart.setOnClickListener(new View.OnClickListener()  {
+            @Override
+            public void onClick(View view){
+                CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
+                cartDAO.deleteAll();
+                cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f, 1f);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f, 1f);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(scaleX, scaleY);
+                animatorSet.setDuration(300); // Thời gian hiệu ứng
+                Toast.makeText(view.getContext(), "Thêm vào giỏ hàng: " + product.getName(), Toast.LENGTH_SHORT).show();
+                animatorSet.start();
+            }
         });
 
         // Sự kiện onClick cho btnAddFavorite
         holder.btnAddFavorite.setOnClickListener(v -> {
-            // Thực hiện hành động thêm vào yêu thích
+
+            // Tạo hiệu ứng scale
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.5f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.5f, 1f);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY);
+            animatorSet.setDuration(300); // Thời gian hiệu ứng
+
+            change_favorite(holder.btnAddFavorite);
             Toast.makeText(v.getContext(), "Thêm vào yêu thích: " + product.getName(), Toast.LENGTH_SHORT).show();
+            animatorSet.start();
         });
     }
 
@@ -147,4 +182,16 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatter.format(price) + " VND";
     }
+    private   void change_favorite(ImageView imageView) {
+        if (n == 1) {
+            imageView.setImageResource(R.drawable.ic_baseline_favorite_24);
+            n = 2;
+        } else {
+            n = 1;
+            imageView.setImageResource(R.drawable.ic_baseline_favorite_click_24);
+        }
+
+
+    }
+
 }

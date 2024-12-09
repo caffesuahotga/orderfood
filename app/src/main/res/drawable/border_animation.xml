@@ -1,0 +1,14 @@
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="#FF0000"
+                android:centerColor="#00FF00"
+                android:endColor="#0000FF"
+                android:gradientRadius="90dp"
+                android:useLevel="true" />
+        </shape>
+    </item>
+</animated-selector>
