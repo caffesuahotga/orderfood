@@ -177,6 +177,25 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+    public static Account getAccountId(int id) {
+        try {
+            // Thực hiện truy vấn Firestore để tìm account theo username
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("id", id)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                QueryDocumentSnapshot accountDoc = (QueryDocumentSnapshot) accountSnapshot.getDocuments().get(0);
+                return accountDoc.toObject(Account.class); // Trả về đối tượng Account
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error getting account by username", e);
+        }
+        return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
     public static Account saveTokenFCMAccount(String username) {
         try {
             // Thực hiện truy vấn Firestore để tìm account theo username
@@ -256,7 +275,25 @@ public class HandleData {
         // Trả về noti đã tạo
         return noti;
     }
+    public static ArrayList<Noti> GetAllNotiByAccId (int accId)  throws ExecutionException, InterruptedException
+    {
+        if (accId == 0) {
+            return new ArrayList<Noti>();
+        }
 
+        Task<QuerySnapshot> orderTask = db.collection("noti")
+                .whereIn("accountId", Collections.singletonList(accId))
+                .get();
+
+        QuerySnapshot notiSnapshot = Tasks.await(orderTask);
+        ArrayList<Noti> notiList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot notiDOc : notiSnapshot) {
+            Noti no = notiDOc.toObject(Noti.class);
+            notiList.add(no);
+        }
+        return notiList;
+    }
 
 
     public Address getAddressByID(int id) {

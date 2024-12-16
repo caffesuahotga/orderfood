@@ -118,7 +118,6 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
             @Override
             public void onClick(View view){
                 CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
-                cartDAO.deleteAll();
                 cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
                 ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f, 1f);
                 ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f, 1f);
