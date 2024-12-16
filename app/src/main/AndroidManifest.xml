@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
@@ -33,7 +35,12 @@
             android:name=".services.OrderNewActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
         </activity>
+            android:name=".services.ProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <activity
             android:name=".services.ShipperHistoryOrderActivity"
             android:exported="false"
@@ -42,13 +49,17 @@
             android:name=".services.ShipperHomeActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <activity
             android:name=".services.BaseBottomShipperActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.HistoryOrderActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
+
         <activity
             android:name=".services.OrderSuccessActivity"
             android:exported="true"
@@ -104,10 +115,8 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.HomeActivity"
-            android:exported="true">
+            android:exported="true" />
 
-
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true" >

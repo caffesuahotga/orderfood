@@ -8,6 +8,7 @@ public class Account {
     private String Phone;
     private int Role; // 0 admin, 1 shipper, 2  customer
     private String Image;
+
     private String FCMToken; //token push noti
 
     public String getFCMToken() {
@@ -16,14 +17,6 @@ public class Account {
 
     public void setFCMToken(String FCMToken) {
         this.FCMToken = FCMToken;
-    }
-
-    public int getStoreId() {
-        return StoreId;
-    }
-
-    public void setStoreId(int storeId) {
-        StoreId = storeId;
     }
 
     private int StoreId;
@@ -96,5 +89,13 @@ public class Account {
 
     public void setRole(int role) {
         Role = role;
+    }
+
+    public int getStoreId() {
+        return StoreId;
+    }
+
+    public void setStoreId(int storeId) {
+        StoreId = storeId;
     }
 }
