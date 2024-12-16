@@ -59,6 +59,11 @@ public class ProfileActivity extends  BaseTopBottomViewActivity {
             tvUsername.setText(user.getUsername());
             tvName.setText(user.getName());
             tvPhone.setText(user.getPhone());
+            if(user.getRole() == 2){
+                tvTransparent.setText("Customer");
+            }else if(user.getRole() == 1){
+                tvTransparent.setText("Shipper");
+            }else {tvTransparent.setText("Admin");}
 
             // Load ảnh đại diện
             Glide.with(this)
