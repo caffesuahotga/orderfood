@@ -1,5 +1,6 @@
 package com.example.orderfood.services;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,17 +16,18 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-public class ShipperHistoryOrderActivity extends BaseBottomShipperActivity {
+public class ListOrderActivity extends BaseTopBottomViewActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_shipper_history_order, findViewById(R.id.ship_content_frame));
+        getLayoutInflater().inflate(R.layout.activity_list_order, findViewById(R.id.content_frame_top_bot));
 
         BindData();
 
         // Xử lý refresh
-        swipeRefreshLayout = findViewById(R.id.ship_history_order_page_refresh);
+        swipeRefreshLayout = findViewById(R.id.side_bar_list_order_page_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Show loading spinner
             swipeRefreshLayout.setRefreshing(true);
@@ -42,15 +44,17 @@ public class ShipperHistoryOrderActivity extends BaseBottomShipperActivity {
                 });
             }).start();
         });
+
     }
+
     private void BindData() {
         // lấy danh sách order của account hiện tại
-        ArrayList<Order> odList = OrderUtil.getAllHistoryOrderForShipper();
+        ArrayList<Order> odList = OrderUtil.getAllListOrdersForManager();
         ArrayList<Order> sortedList = (ArrayList<Order>) odList.stream()
                 .sorted(Comparator.comparingInt(Order::getId).reversed())
                 .collect(Collectors.toList());
 
-        RecyclerView order_new = findViewById(R.id.ship_order_container);
+        RecyclerView order_new = findViewById(R.id.side_bar_list_order_container);
         order_new.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
         if (odList == null) {

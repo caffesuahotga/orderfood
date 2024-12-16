@@ -8,6 +8,17 @@ public class Account {
     private String Phone;
     private int Role; // 0 admin, 1 shipper, 2  customer
     private String Image;
+
+    private String FCMToken; //token push noti
+
+    public String getFCMToken() {
+        return FCMToken;
+    }
+
+    public void setFCMToken(String FCMToken) {
+        this.FCMToken = FCMToken;
+    }
+
     private int StoreId;
 
     public Account(int id, String name, String username, String password, String phone, int role, int storeId, String image) {

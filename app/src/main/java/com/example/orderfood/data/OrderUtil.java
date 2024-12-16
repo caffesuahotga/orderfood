@@ -75,6 +75,53 @@ public class OrderUtil {
         }
     }
 
+    public static ArrayList<Order> getAllOrdersNewForManager()
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    ArrayList<Integer> statusList = new ArrayList<>();
+                    statusList.add(1);
+                    ArrayList<Order> orderNew = HandleData.getAllOrderByStatus(statusList);
+
+                    return orderNew;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // lấy các lịch sử đơn hàng ( lấy all )
+    public static ArrayList<Order> getAllListOrdersForManager()
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+// 1 chờ xác nhận, 2 đã xác nhận, 3 đang giao, 4 đã giao-hoàn thành, 5 hủy
+                    ArrayList<Integer> statusList = new ArrayList<>();
+                    statusList.add(1);
+                    statusList.add(2);
+                    statusList.add(3);
+                    statusList.add(4);
+                    statusList.add(5);
+                    ArrayList<Order> orderNew = HandleData.getAllOrderByStatus(statusList);
+
+                    return orderNew;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ArrayList<Order> getAllHistoryOrderForShipper()
     {
         try {

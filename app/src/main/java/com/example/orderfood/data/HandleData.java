@@ -9,6 +9,7 @@ import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Address;
 import com.example.orderfood.models.Category;
 import com.example.orderfood.models.FeedBack;
+import com.example.orderfood.models.Noti;
 import com.example.orderfood.models.Order;
 import com.example.orderfood.models.OrderDetail;
 import com.example.orderfood.models.Product;
@@ -176,6 +177,86 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+    public static Account saveTokenFCMAccount(String username) {
+        try {
+            // Thực hiện truy vấn Firestore để tìm account theo username
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("username", username)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            // Lấy token
+            String fcm = MyFirebaseMessagingService.getTokenAndSave();
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                QueryDocumentSnapshot accountDoc = (QueryDocumentSnapshot) accountSnapshot.getDocuments().get(0);
+                Account account = accountDoc.toObject(Account.class); // Trả về đối tượng Account
+
+                // Cập nhật token FCM vào đối tượng Account
+                account.setFCMToken(fcm);
+
+                // Cập nhật account trong Firestore
+                Task<Void> updateTask = db.collection("account")
+                        .document(accountDoc.getId())
+                        .set(account);
+
+                // Chờ Task cập nhật hoàn thành
+                Tasks.await(updateTask);
+
+                // Trả về đối tượng Account đã cập nhật
+                return account;
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error saving token for account by username", e);
+        }
+        return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
+    public static List<Account> getFCMTokenAccountsByRole(int role) {
+        List<Account> accountList = new ArrayList<>();
+        try {
+            // Thực hiện truy vấn Firestore để tìm các tài khoản theo role
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("role", role)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                for (DocumentSnapshot accountDoc : accountSnapshot.getDocuments()) {
+                    accountList.add(accountDoc.toObject(Account.class)); // Thêm đối tượng Account vào danh sách
+                }
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error getting accounts by role", e);
+        }
+        return accountList; // Trả về danh sách Account hoặc danh sách rỗng nếu có lỗi hoặc không tìm thấy
+    }
+
+    public static Noti createNoti(String title, String content,Date date,int orderId,  int acId) throws ExecutionException, InterruptedException {
+        // Tạo đối tượng Noti mới
+        Noti noti = new Noti();
+        noti.setAccountId(acId);
+        noti.setContent(content);
+        noti.setTitle(title);
+        noti.setDate(date);
+        noti.setOrderId(orderId);
+
+        // Thêm noti mới vào Firestore
+        Task<DocumentReference> addTask = db.collection("noti").add(noti);
+
+        // Đợi task hoàn thành
+        DocumentReference documentReference = Tasks.await(addTask);
+
+        // Gán ID của tài liệu mới tạo vào đối tượng Noti
+        noti.setId(documentReference.getId());
+
+        // Trả về noti đã tạo
+        return noti;
+    }
+
 
 
     public Address getAddressByID(int id) {
