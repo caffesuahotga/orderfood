@@ -19,13 +19,16 @@ import com.example.orderfood.R;
 import com.example.orderfood.component.ProductCartAdapter;
 import com.example.orderfood.component.ProductOrderAdapter;
 import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.data.NotiUtil;
 import com.example.orderfood.data.OrderUtil;
+import com.example.orderfood.models.Order;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -138,12 +141,18 @@ public class OrderActivity extends BaseNoBottomActivity {
                     @Override
                     public void run() {
                         OrderDTO orderDTO = CreateOrderDTO(productList);
-                        OrderUtil.CreateOrder(orderDTO);
+                        Order od = OrderUtil.CreateOrder(orderDTO);
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 progressDialog.dismiss();
+
+                                NotiUtil.SendNotiToRole(0,
+                                        "Có đơn mới",
+                                        "Bạn có đơn mới kìa: #" + od.getId(),
+                                        new Date(),od.getId());
+
                                 Intent successIntent = new Intent(OrderActivity.this, OrderSuccessActivity.class);
                                 startActivity(successIntent);
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

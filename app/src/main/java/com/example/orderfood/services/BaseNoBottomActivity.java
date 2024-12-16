@@ -1,6 +1,8 @@
 package com.example.orderfood.services;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,14 +10,28 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.orderfood.R;
 import com.example.orderfood.data.CurrentUser;
+import com.google.android.material.navigation.NavigationView;
 
 public class BaseNoBottomActivity extends AppCompatActivity {
+
+    DrawerLayout drawerLayout;
+    Button showSidebarMenu;
+    LinearLayout itemNewOrder;
+    LinearLayout itemHistoryOrder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +39,92 @@ public class BaseNoBottomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base_no_bottom);
 
         BindHead();
+        BindSideBar();
+    }
+
+    private void BindSideBar() {
+        // Ánh xạ các view
+        drawerLayout = findViewById(R.id.drawer_layout);
+        showSidebarMenu = findViewById(R.id.show_sidebar_menu);
+        itemNewOrder = findViewById(R.id.side_bar_item_new_order);
+        itemHistoryOrder = findViewById(R.id.side_bar_item_history_order);
+
+        // Xử lý sự kiện mở/đóng menu
+        showSidebarMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                } else {
+                    drawerLayout.openDrawer(Gravity.LEFT);
+                }
+            }
+        });
+
+        itemNewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hiển thị loading
+                ProgressDialog progressDialog = new ProgressDialog(BaseNoBottomActivity.this);
+                progressDialog.setMessage("Vui lòng đợi...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Thêm DrawerListener để lắng nghe sự kiện đóng drawer
+                drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Chuyển sang màn hình OrderNewActivity
+                        Intent goOrderNew = new Intent(BaseNoBottomActivity.this, OrderNewActivity.class);
+                        BaseNoBottomActivity.this.startActivity(goOrderNew);
+
+                        // Đóng loading khi drawer đã đóng
+                        progressDialog.dismiss();
+
+                        // Loại bỏ DrawerListener để tránh lắng nghe không cần thiết
+                        drawerLayout.removeDrawerListener(this);
+                    }
+                });
+
+                // Đóng drawer
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
+
+        itemHistoryOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hiển thị loading
+                ProgressDialog progressDialog = new ProgressDialog(BaseNoBottomActivity.this);
+                progressDialog.setMessage("Vui lòng đợi...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Thêm DrawerListener để lắng nghe sự kiện đóng drawer
+                drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Chuyển sang màn hình OrderNewActivity
+                        Intent goOrderNew = new Intent(BaseNoBottomActivity.this, ListOrderActivity.class);
+                        BaseNoBottomActivity.this.startActivity(goOrderNew);
+
+                        // Đóng loading khi drawer đã đóng
+                        progressDialog.dismiss();
+
+                        // Loại bỏ DrawerListener để tránh lắng nghe không cần thiết
+                        drawerLayout.removeDrawerListener(this);
+                    }
+                });
+
+                // Đóng drawer
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     private void BindHead() {
         CurrentUser.init(this);
-        if(CurrentUser.getRole() != 1) // role 1 là shiper
+        if (CurrentUser.getRole() != 1) // role 1 là shiper
         {
             Button cartHead = findViewById(R.id.product_detail_icon_cart);
 
@@ -61,9 +158,7 @@ public class BaseNoBottomActivity extends AppCompatActivity {
                     animatorSet.start();
                 }
             });
-        }
-        else
-        {
+        } else {
             Button cartHead = findViewById(R.id.product_detail_icon_cart);
             cartHead.setVisibility(View.GONE);
         }
