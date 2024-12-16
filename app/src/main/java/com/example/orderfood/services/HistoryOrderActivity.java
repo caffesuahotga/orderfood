@@ -26,9 +26,7 @@ public class HistoryOrderActivity  extends BaseTopBottomViewActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
         getLayoutInflater().inflate(R.layout.activity_history_order, findViewById(R.id.content_frame_top_bot));
-
 
         BindData();
 

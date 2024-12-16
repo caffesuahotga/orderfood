@@ -37,6 +37,8 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
         </activity>
+
+        <activity
             android:name=".services.ProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />

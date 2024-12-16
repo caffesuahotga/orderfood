@@ -41,11 +41,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             // Tạo và hiển thị thông báo
-            sendNotification(remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
         }
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title, String messageBody) {
         // Code để tạo và hiển thị thông báo trên thiết bị
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -59,7 +59,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Notification notification = new NotificationCompat.Builder(this, channelId)
-                .setContentTitle("New Notification")
+                .setContentTitle(title)
                 .setContentText(messageBody)
                 .setSmallIcon(R.drawable.icon_order)
                 .build();
