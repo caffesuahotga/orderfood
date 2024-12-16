@@ -116,6 +116,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến ProfileActivity
                     buttonSelfMe.setImageResource(R.drawable.ic_baseline_account_circle_click_24);
                     editor.putString("active_icon", "Profile");
+                    intent = new Intent(this, ProfileActivity.class);
+                    startActivity(intent);
                     break;
                 default:
                     break;

@@ -18,6 +18,7 @@ public class CurrentUser {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_ROLE = "role";
     private static final String KEY_IMAGE = "image";
+    private static final String KEY_STORE_ID = "storeId";
 
     // Khởi tạo SharedPreferences
     public static void init(Context context) {
@@ -35,6 +36,8 @@ public class CurrentUser {
         editor.putString(KEY_PHONE, account.getPhone());
         editor.putInt(KEY_ROLE, account.getRole());
         editor.putString(KEY_IMAGE, account.getImage());
+        editor.putInt(KEY_STORE_ID, account.getStoreId());
+
 
         editor.apply();
     }
@@ -48,6 +51,7 @@ public class CurrentUser {
         user.setPhone(getPhone());
         user.setRole(getRole());
         user.setImage(getImage());
+        user.setStoreId(getStoreId());
         return user;
     }
 
@@ -60,6 +64,7 @@ public class CurrentUser {
         Log.d("CurrentUser", "Phone: " + user.getPhone());
         Log.d("CurrentUser", "Role: " + user.getRole());
         Log.d("CurrentUser", "Image: " + user.getImage());
+        Log.d("CurrentUser","StoreId"+ user.getStoreId());
     }
 
     // Phương thức để xóa thông tin người dùng hiện tại
@@ -92,18 +97,14 @@ public class CurrentUser {
         editor.apply();
     }
 
-    public static String getUsername() {
-        return sharedPreferences.getString(KEY_USERNAME, "No Username");
-    }
+    public static String getUsername() {return sharedPreferences.getString(KEY_USERNAME, "No Username");}
 
     public static void setPassword(String password) {
         editor.putString(KEY_PASSWORD, password);
         editor.apply();
     }
 
-    public static String getPassword() {
-        return sharedPreferences.getString(KEY_PASSWORD, "No Password");
-    }
+    public static String getPassword() {return sharedPreferences.getString(KEY_PASSWORD, "No Password");}
 
     public static void setPhone(String phone) {
         editor.putString(KEY_PHONE, phone);
@@ -130,5 +131,15 @@ public class CurrentUser {
 
     public static String getImage() {
         return sharedPreferences.getString(KEY_IMAGE, "No Image");
+    }
+
+
+    public static void setKeyStoreId(int storeId) {
+        editor.putInt(KEY_STORE_ID, storeId);
+        editor.apply();
+    }
+
+    public static int getStoreId() {
+        return sharedPreferences.getInt(KEY_STORE_ID, -1);
     }
 }
