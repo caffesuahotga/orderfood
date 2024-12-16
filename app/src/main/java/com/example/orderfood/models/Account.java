@@ -8,15 +8,6 @@ public class Account {
     private String Phone;
     private int Role; // 0 admin, 1 shipper, 2  customer
     private String Image;
-
-    public int getStoreId() {
-        return StoreId;
-    }
-
-    public void setStoreId(int storeId) {
-        StoreId = storeId;
-    }
-
     private int StoreId;
 
     public Account(int id, String name, String username, String password, String phone, int role, int storeId, String image) {
@@ -87,5 +78,13 @@ public class Account {
 
     public void setRole(int role) {
         Role = role;
+    }
+
+    public int getStoreId() {
+        return StoreId;
+    }
+
+    public void setStoreId(int storeId) {
+        StoreId = storeId;
     }
 }

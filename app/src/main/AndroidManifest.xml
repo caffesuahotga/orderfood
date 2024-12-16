@@ -4,6 +4,8 @@
     package="com.example.orderfood">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
@@ -23,6 +25,14 @@
         android:theme="@style/Theme.Orderfood"
         tools:targetApi="31">
         <activity
+
+            android:name=".services.ProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".services.HistoryOrderActivity"
+            android:exported="true" />
+        <activity
             android:name=".services.ShipperHistoryOrderActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
@@ -32,13 +42,12 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
         </activity>
+
         <activity
             android:name=".services.BaseBottomShipperActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
-        <activity
-            android:name=".services.HistoryOrderActivity"
-            android:exported="true" />
+
         <activity
             android:name=".services.OrderSuccessActivity"
             android:exported="true"
@@ -100,8 +109,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.HomeActivity"
-            android:exported="true"></activity>
-
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
@@ -111,8 +119,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.BaseBottomViewActivity"
-            android:exported="true"></activity>
-
+            android:exported="true" />
         <activity
             android:name=".services.BaseTopBottomViewActivity"
             android:exported="true" /> <!-- Facebook Login Activity -->
