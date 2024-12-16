@@ -37,6 +37,7 @@ public class BaseNoBottomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_no_bottom);
+        CurrentUser.init(this);
 
         BindHead();
         BindSideBar();
@@ -49,17 +50,24 @@ public class BaseNoBottomActivity extends AppCompatActivity {
         itemNewOrder = findViewById(R.id.side_bar_item_new_order);
         itemHistoryOrder = findViewById(R.id.side_bar_item_history_order);
 
-        // Xử lý sự kiện mở/đóng menu
-        showSidebarMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                    drawerLayout.closeDrawer(Gravity.LEFT);
-                } else {
-                    drawerLayout.openDrawer(Gravity.LEFT);
+        if(CurrentUser.getRole() == 0)
+        {
+            // Xử lý sự kiện mở/đóng menu
+            showSidebarMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                        drawerLayout.closeDrawer(Gravity.LEFT);
+                    } else {
+                        drawerLayout.openDrawer(Gravity.LEFT);
+                    }
                 }
-            }
-        });
+            });
+
+        }else
+        {
+            showSidebarMenu.setVisibility(View.GONE);
+        }
 
         itemNewOrder.setOnClickListener(new View.OnClickListener() {
             @Override

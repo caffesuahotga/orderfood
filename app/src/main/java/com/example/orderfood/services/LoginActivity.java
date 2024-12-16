@@ -385,10 +385,11 @@ public class LoginActivity extends AppCompatActivity {
                                             if (CurrentUser.getRole() == 1) { // shipper
                                                 intent = new Intent(LoginActivity.this, ShipperHomeActivity.class);
 
-                                            } else if (CurrentUser.getRole() == 2) { // customer
+                                            } else if (CurrentUser.getRole() == 2 || CurrentUser.getRole() == 0) { // customer, manager
                                                 intent = new Intent(LoginActivity.this, HomeActivity.class);
 
-                                            } else {
+                                            }
+                                            else {
                                                 // Xử lý trường hợp role không hợp lệ
                                                 Toast.makeText(LoginActivity.this, "Không xác định vai trò người dùng!", Toast.LENGTH_SHORT).show();
                                                 return; // Dừng việc thực hiện tiếp nếu role không hợp lệ

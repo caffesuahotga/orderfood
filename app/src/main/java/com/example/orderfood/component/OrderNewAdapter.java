@@ -240,6 +240,11 @@ public class OrderNewAdapter extends RecyclerView.Adapter<OrderNewAdapter.OrderN
                                                         "Shipper " + CurrentUser.getName() + " đã nhận đơn: #" + item.getId(),
                                                         new Date(), item.getId());
 
+                                                // gửi thông báo đến customer
+                                                NotiUtil.SendNotiToAccount(2,
+                                                        "Shipper đã nhận",
+                                                        "Đơn hàng: #" + item.getId() + " shipper đã nhận \uD83D\uDE1A ",
+                                                        new Date(), item.getId(), item.getCustomerId());
 
                                             } else {
                                                 Toast.makeText(context, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
@@ -283,6 +288,12 @@ public class OrderNewAdapter extends RecyclerView.Adapter<OrderNewAdapter.OrderN
                                                 NotiUtil.SendNotiToRole(0,
                                                         "Shipper Đã Hoàn Thành", "Shipper " + CurrentUser.getName() + " đã hoàn thành đơn: #" + item.getId(),
                                                         new Date(), item.getId());
+
+                                                // gửi thông báo đến customer
+                                                NotiUtil.SendNotiToAccount(2,
+                                                        "Đơn hàng thành công!",
+                                                        "Đơn hàng: #" + item.getId() + " đã thành công, cảm ơn bạn đã ủng hộ \uD83C\uDF86 ",
+                                                        new Date(), item.getId(), item.getCustomerId());
 
                                                 item.setStatus(4);
                                                 int currentPosition = holder.getAdapterPosition();
@@ -346,10 +357,17 @@ public class OrderNewAdapter extends RecyclerView.Adapter<OrderNewAdapter.OrderN
                                             }
 
                                             if (success) {
+                                                // gửi thông báo đến tất cả shipper
                                                 NotiUtil.SendNotiToRole(1,
-                                                        "Có đơn mới",
+                                                        "Cửa hàng thông báo cho shipper có đơn mới",
                                                         "Bạn có đơn mới kìa: #" + item.getId(),
                                                         new Date(), item.getId());
+
+                                                // gửi thông báo đến customer
+                                                NotiUtil.SendNotiToAccount(2,
+                                                        "Store đã xác nhận đơn hàng",
+                                                        "Đơn hàng: #" + item.getId() + " cửa hàng đã xác nhận, vui lòng đợi!",
+                                                        new Date(), item.getId(), item.getCustomerId());
                                             }
 
                                             notifyDataSetChanged();
