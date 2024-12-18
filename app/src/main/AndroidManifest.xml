@@ -27,12 +27,19 @@
         android:theme="@style/Theme.Orderfood"
         tools:targetApi="31">
         <activity
+            android:name=".services.ShipperNotiActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
+        <activity
             android:name=".services.ProfileShipperActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
         <activity
             android:name=".services.NotiActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".services.ListOrderActivity"
             android:exported="true"

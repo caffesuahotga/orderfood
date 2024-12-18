@@ -7,17 +7,45 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.orderfood.R;
 
 public class BaseBottomShipperActivity extends AppCompatActivity {
     private ImageView buttonHome, buttonHistory, buttonSelfMe;
+    private Button noti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_bottom_shipper);
+        noti = findViewById(R.id.shipper_noti);
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Hiển thị ProgressDialog
+                ProgressDialog progressDialog = new ProgressDialog(BaseBottomShipperActivity.this);
+                progressDialog.setMessage("Đang tải...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Mô phỏng một tác vụ tải dữ liệu với thời gian trễ
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Ẩn ProgressDialog
+                        progressDialog.dismiss();
+
+                        // Chuyển tới ShipperNotiActivity
+                        Intent intent = new Intent(BaseBottomShipperActivity.this, ShipperNotiActivity.class);
+                        startActivity(intent);
+                    }
+                }, 1000);
+            }
+        });
+
 
         // Lấy các ImageView bằng id
         buttonHome = findViewById(R.id.ship_button_home);
