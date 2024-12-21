@@ -4,6 +4,7 @@ public class OrderDetail {
     private int Id;
     private int OrderId;
     private int ProductId;
+    private String feedback;
 
     private double Price;
     private int Amount;
@@ -14,6 +15,14 @@ public class OrderDetail {
         ProductId = productId;
         Price = price;
         Amount = amount;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
     public OrderDetail() {
