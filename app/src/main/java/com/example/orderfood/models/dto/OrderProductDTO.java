@@ -6,8 +6,35 @@ public class OrderProductDTO {
     public double Price;
     public String Image;
     public String Name;
+    public int OrderDetailId;
+    public String Feedback;
+    public int Star = 5;
+
+    public String getFeedback() {
+        return Feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        Feedback = feedback;
+    }
 
     public OrderProductDTO() {
+    }
+
+    public int getStar() {
+        return Star;
+    }
+
+    public void setStar(int star) {
+        Star = star;
+    }
+
+    public int getOrderDetailId() {
+        return OrderDetailId;
+    }
+
+    public void setOrderDetailId(int orderDetailId) {
+        OrderDetailId = orderDetailId;
     }
 
     public int getProductId() {

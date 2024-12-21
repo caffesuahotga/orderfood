@@ -14,8 +14,11 @@ import com.example.orderfood.models.Order;
 import com.example.orderfood.models.OrderDetail;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.Store;
+import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -719,18 +722,21 @@ public class HandleData {
             for (OrderDetail pro: listOD) {
                 OrderProductDTO item = new OrderProductDTO();
 
+
                 item.setProductId(pro.getProductId());
                 item.setQuantity(pro.getAmount());
                 item.setPrice(pro.getPrice());
+                item.setOrderDetailId(pro.getId());
+                item.setFeedback(pro.getFeedback());
 
                 // lấy trên và image
                 Product proItem = proList.stream().filter(product -> product.getId() == item.getProductId()).findFirst().orElse(new Product());
                 item.setName(proItem.getName());
                 item.setImage(proItem.getImage().get(0));
-
                 odPro.add(item);
             }
 
+            data.setStatus(order.getStatus());
             data.setProducts(odPro);
 
             return data;
@@ -879,6 +885,107 @@ public class HandleData {
         }
 
         return orderDetails;
+    }
+
+    public static int getLastFeedbackId() {
+        int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
+        try {
+            Query query = db.collection("feedback")
+                    .orderBy("id", Query.Direction.DESCENDING)
+                    .limit(1);
+
+            Task<QuerySnapshot> queryTask = query.get();
+            Tasks.await(queryTask);
+
+            if (queryTask.isSuccessful() && !queryTask.getResult().isEmpty()) {
+                for (DocumentSnapshot document : queryTask.getResult().getDocuments()) {
+                    if (document.contains("id")) {
+                        lastOrderId = document.getLong("id").intValue(); // Lấy giá trị của trường id từ tài liệu
+                    }
+                }
+            } else if (!queryTask.isSuccessful()) {
+                throw new Exception("Error getting last order ID: " + queryTask.getException().getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting last order ID: " + e.getMessage());
+        }
+
+        return lastOrderId;
+    }
+
+    public static boolean addFeedback( ArrayList<CartDTO> cartDTOList) {
+        // b1 : tạo feed back;
+        int id = getLastFeedbackId();
+        id++;
+        for (CartDTO feedback : cartDTOList) {
+            // Tạo một Map để lưu dữ liệu phản hồi
+            Map<String, Object> feedbackData = new HashMap<>();
+            feedbackData.put("id", id);
+            feedbackData.put("orderDetailId", feedback.getOrderDetailId());
+            feedbackData.put("content", feedback.getFeedback());
+            feedbackData.put("star", feedback.getStar());
+
+            // Thêm bản ghi mới vào Firestore
+            db.collection("feedback")
+                    .add(feedbackData)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            System.out.println("Phản hồi được thêm thành công với ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.err.println("Lỗi khi thêm phản hồi: " + e.getMessage());
+                        }
+                    });
+            id++;
+        }
+
+        for (CartDTO orderDetail : cartDTOList) {
+
+            // Truy vấn orderDetail để lấy documentId cho từng feedback
+            Task<QuerySnapshot> orderDetailTask = db.collection("orderDetail")
+                    .whereEqualTo("id", orderDetail.getOrderDetailId())
+                    .get();
+
+            try {
+                // Chờ đợi kết quả trả về từ Firestore
+                QuerySnapshot orderDetailSnapshot = Tasks.await(orderDetailTask);
+
+                // Kiểm tra nếu có kết quả trả về
+                if (!orderDetailSnapshot.isEmpty()) {
+                    for (DocumentSnapshot document : orderDetailSnapshot.getDocuments()) {
+                        // Bước 2 cập nhật order detail lấy feedback cho dễ
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("feedback", orderDetail.getFeedback());
+                        updates.put("star", orderDetail.getStar());
+
+                        db.collection("orderDetail")
+                                .document(document.getId())
+                                .update(updates)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        System.out.println("Feedback và star cập nhật thành công cho orderId: " + orderDetail.getID());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        System.err.println("Lỗi khi cập nhật feedback và star cho orderId: " + orderDetail.getID() + " - " + e.getMessage());
+                                    }
+                                });
+                    }
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                // Xử lý ngoại lệ nếu cần thiết
+            }
+        }
+
+        return true;
     }
 
     public static Product getProductById(int id) throws ExecutionException, InterruptedException {

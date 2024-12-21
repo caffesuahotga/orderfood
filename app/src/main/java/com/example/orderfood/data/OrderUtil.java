@@ -3,7 +3,9 @@ package com.example.orderfood.data;
 import android.content.Context;
 
 import com.example.orderfood.models.Order;
+import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
+import com.example.orderfood.models.dto.OrderProductDTO;
 import com.example.orderfood.services.OrderActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -173,6 +175,26 @@ public class OrderUtil {
                 try {
 
                     boolean data = HandleData.ChangeStatusOrder(odId,sta);
+
+                    return data;
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).get();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean Feedback( ArrayList<CartDTO> cartDTOList)
+    {
+        try {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+
+                    boolean data = HandleData.addFeedback(cartDTOList);
 
                     return data;
 

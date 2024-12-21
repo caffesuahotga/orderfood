@@ -8,6 +8,7 @@ public class OrderDTO {
     private String Phone; // số điện thoại nhận hàng
     private String Note;
     private double TotalPrice;
+    private int Status;
 
     private int AddressId; // id dia chi acc
     private int ShipperId;
@@ -19,7 +20,7 @@ public class OrderDTO {
     // danh sách món ăn
     ArrayList<OrderProductDTO> Products = new ArrayList<OrderProductDTO>();
 
-    public OrderDTO(String nameUserOrder, String address, String phone, String note, int addressId, int shipperId, int customerId, double shipLatitude, double shipLongtitude, ArrayList<OrderProductDTO> products) {
+    public OrderDTO(String nameUserOrder, String address, String phone, String note, int addressId, int shipperId, int customerId, double shipLatitude, double shipLongtitude, ArrayList<OrderProductDTO> products, int status) {
         NameUserOrder = nameUserOrder;
         Address = address;
         Phone = phone;
@@ -30,9 +31,18 @@ public class OrderDTO {
         ShipLatitude = shipLatitude;
         ShipLongtitude = shipLongtitude;
         Products = products;
+        Status = status;
     }
 
     public OrderDTO() {
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
     }
 
     public double getTotalPrice() {
