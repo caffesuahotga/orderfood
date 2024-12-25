@@ -9,12 +9,16 @@ import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Address;
 import com.example.orderfood.models.Category;
 import com.example.orderfood.models.FeedBack;
+import com.example.orderfood.models.Noti;
 import com.example.orderfood.models.Order;
 import com.example.orderfood.models.OrderDetail;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.Store;
+import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,11 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -172,6 +179,123 @@ public class HandleData {
             Log.e("TAG", "Error getting account by username", e);
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
+    public static Account getAccountId(int id) {
+        try {
+            // Thực hiện truy vấn Firestore để tìm account theo username
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("id", id)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                QueryDocumentSnapshot accountDoc = (QueryDocumentSnapshot) accountSnapshot.getDocuments().get(0);
+                return accountDoc.toObject(Account.class); // Trả về đối tượng Account
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error getting account by username", e);
+        }
+        return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
+    public static Account saveTokenFCMAccount(String username) {
+        try {
+            // Thực hiện truy vấn Firestore để tìm account theo username
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("username", username)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            // Lấy token
+            String fcm = MyFirebaseMessagingService.getTokenAndSave();
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                QueryDocumentSnapshot accountDoc = (QueryDocumentSnapshot) accountSnapshot.getDocuments().get(0);
+                Account account = accountDoc.toObject(Account.class); // Trả về đối tượng Account
+
+                // Cập nhật token FCM vào đối tượng Account
+                account.setFCMToken(fcm);
+
+                // Cập nhật account trong Firestore
+                Task<Void> updateTask = db.collection("account")
+                        .document(accountDoc.getId())
+                        .set(account);
+
+                // Chờ Task cập nhật hoàn thành
+                Tasks.await(updateTask);
+
+                // Trả về đối tượng Account đã cập nhật
+                return account;
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error saving token for account by username", e);
+        }
+        return null; // Trả về null nếu có lỗi hoặc không tìm thấy
+    }
+    public static List<Account> getFCMTokenAccountsByRole(int role) {
+        List<Account> accountList = new ArrayList<>();
+        try {
+            // Thực hiện truy vấn Firestore để tìm các tài khoản theo role
+            Task<QuerySnapshot> accountTask = db.collection("account")
+                    .whereEqualTo("role", role)
+                    .get();
+
+            // Chờ Task hoàn thành
+            QuerySnapshot accountSnapshot = Tasks.await(accountTask);
+
+            if (accountTask.isSuccessful() && !accountSnapshot.isEmpty()) {
+                for (DocumentSnapshot accountDoc : accountSnapshot.getDocuments()) {
+                    accountList.add(accountDoc.toObject(Account.class)); // Thêm đối tượng Account vào danh sách
+                }
+            }
+        } catch (Exception e) {
+            Log.e("TAG", "Error getting accounts by role", e);
+        }
+        return accountList; // Trả về danh sách Account hoặc danh sách rỗng nếu có lỗi hoặc không tìm thấy
+    }
+
+    public static Noti createNoti(String title, String content,Date date,int orderId,  int acId) throws ExecutionException, InterruptedException {
+        // Tạo đối tượng Noti mới
+        Noti noti = new Noti();
+        noti.setAccountId(acId);
+        noti.setContent(content);
+        noti.setTitle(title);
+        noti.setDate(date);
+        noti.setOrderId(orderId);
+
+        // Thêm noti mới vào Firestore
+        Task<DocumentReference> addTask = db.collection("noti").add(noti);
+
+        // Đợi task hoàn thành
+        DocumentReference documentReference = Tasks.await(addTask);
+
+        // Gán ID của tài liệu mới tạo vào đối tượng Noti
+        noti.setId(documentReference.getId());
+
+        // Trả về noti đã tạo
+        return noti;
+    }
+    public static ArrayList<Noti> GetAllNotiByAccId (int accId)  throws ExecutionException, InterruptedException
+    {
+        if (accId == 0) {
+            return new ArrayList<Noti>();
+        }
+
+        Task<QuerySnapshot> orderTask = db.collection("noti")
+                .whereIn("accountId", Collections.singletonList(accId))
+                .get();
+
+        QuerySnapshot notiSnapshot = Tasks.await(orderTask);
+        ArrayList<Noti> notiList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot notiDOc : notiSnapshot) {
+            Noti no = notiDOc.toObject(Noti.class);
+            notiList.add(no);
+        }
+        return notiList;
     }
 
 
@@ -350,6 +474,7 @@ public class HandleData {
         }
         return feedBackS;
     }
+
 
     public Order getOrderById(int id) {
         try {
@@ -539,6 +664,24 @@ public class HandleData {
         return orderList;
     }
 
+    public static ArrayList<Order> getAllOrderByStatus(List<Integer> sta) throws ExecutionException, InterruptedException {
+        // Truy vấn đơn hàng theo danh sách trạng thái
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereIn("status", sta)
+                .get();
+
+        QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+        ArrayList<Order> orderList = new ArrayList<>();
+
+        for (QueryDocumentSnapshot orderDoc : orderSnapshot) {
+            Order or = orderDoc.toObject(Order.class);
+            orderList.add(or);
+        }
+
+        return orderList;
+    }
+
+
     public static OrderDTO GetOrderInfo(int odId) throws ExecutionException, InterruptedException {
 
         if (odId == 0) {
@@ -579,18 +722,21 @@ public class HandleData {
             for (OrderDetail pro: listOD) {
                 OrderProductDTO item = new OrderProductDTO();
 
+
                 item.setProductId(pro.getProductId());
                 item.setQuantity(pro.getAmount());
                 item.setPrice(pro.getPrice());
+                item.setOrderDetailId(pro.getId());
+                item.setFeedback(pro.getFeedback());
 
                 // lấy trên và image
                 Product proItem = proList.stream().filter(product -> product.getId() == item.getProductId()).findFirst().orElse(new Product());
                 item.setName(proItem.getName());
                 item.setImage(proItem.getImage().get(0));
-
                 odPro.add(item);
             }
 
+            data.setStatus(order.getStatus());
             data.setProducts(odPro);
 
             return data;
@@ -598,6 +744,32 @@ public class HandleData {
 
         // Nếu không tìm thấy đơn hàng, trả về null hoặc một đối tượng OrderDTO mới
         return new OrderDTO();
+    }
+
+    public static boolean ChangeStatusOrder(int odId, int sta) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Truy vấn đơn hàng theo id
+        Task<QuerySnapshot> orderTask = db.collection("order")
+                .whereEqualTo("id", odId)
+                .get();
+        try {
+            QuerySnapshot orderSnapshot = Tasks.await(orderTask);
+            if (!orderSnapshot.isEmpty()) {
+
+                DocumentReference orderRef = orderSnapshot.getDocuments().get(0).getReference();
+                // nhân đơn => 3
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("status", sta);
+
+                Task<Void> updateTask = orderRef.set(updates, SetOptions.merge());
+                Tasks.await(updateTask);
+
+                return true; // Cập nhật thành công
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false; // Cập nhật thất bại
     }
 
 
@@ -713,6 +885,107 @@ public class HandleData {
         }
 
         return orderDetails;
+    }
+
+    public static int getLastFeedbackId() {
+        int lastOrderId = 0; // Giá trị mặc định nếu không có đơn hàng nào trước đó
+        try {
+            Query query = db.collection("feedback")
+                    .orderBy("id", Query.Direction.DESCENDING)
+                    .limit(1);
+
+            Task<QuerySnapshot> queryTask = query.get();
+            Tasks.await(queryTask);
+
+            if (queryTask.isSuccessful() && !queryTask.getResult().isEmpty()) {
+                for (DocumentSnapshot document : queryTask.getResult().getDocuments()) {
+                    if (document.contains("id")) {
+                        lastOrderId = document.getLong("id").intValue(); // Lấy giá trị của trường id từ tài liệu
+                    }
+                }
+            } else if (!queryTask.isSuccessful()) {
+                throw new Exception("Error getting last order ID: " + queryTask.getException().getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting last order ID: " + e.getMessage());
+        }
+
+        return lastOrderId;
+    }
+
+    public static boolean addFeedback( ArrayList<CartDTO> cartDTOList) {
+        // b1 : tạo feed back;
+        int id = getLastFeedbackId();
+        id++;
+        for (CartDTO feedback : cartDTOList) {
+            // Tạo một Map để lưu dữ liệu phản hồi
+            Map<String, Object> feedbackData = new HashMap<>();
+            feedbackData.put("id", id);
+            feedbackData.put("orderDetailId", feedback.getOrderDetailId());
+            feedbackData.put("content", feedback.getFeedback());
+            feedbackData.put("star", feedback.getStar());
+
+            // Thêm bản ghi mới vào Firestore
+            db.collection("feedback")
+                    .add(feedbackData)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            System.out.println("Phản hồi được thêm thành công với ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.err.println("Lỗi khi thêm phản hồi: " + e.getMessage());
+                        }
+                    });
+            id++;
+        }
+
+        for (CartDTO orderDetail : cartDTOList) {
+
+            // Truy vấn orderDetail để lấy documentId cho từng feedback
+            Task<QuerySnapshot> orderDetailTask = db.collection("orderDetail")
+                    .whereEqualTo("id", orderDetail.getOrderDetailId())
+                    .get();
+
+            try {
+                // Chờ đợi kết quả trả về từ Firestore
+                QuerySnapshot orderDetailSnapshot = Tasks.await(orderDetailTask);
+
+                // Kiểm tra nếu có kết quả trả về
+                if (!orderDetailSnapshot.isEmpty()) {
+                    for (DocumentSnapshot document : orderDetailSnapshot.getDocuments()) {
+                        // Bước 2 cập nhật order detail lấy feedback cho dễ
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("feedback", orderDetail.getFeedback());
+                        updates.put("star", orderDetail.getStar());
+
+                        db.collection("orderDetail")
+                                .document(document.getId())
+                                .update(updates)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        System.out.println("Feedback và star cập nhật thành công cho orderId: " + orderDetail.getID());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        System.err.println("Lỗi khi cập nhật feedback và star cho orderId: " + orderDetail.getID() + " - " + e.getMessage());
+                                    }
+                                });
+                    }
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                // Xử lý ngoại lệ nếu cần thiết
+            }
+        }
+
+        return true;
     }
 
     public static Product getProductById(int id) throws ExecutionException, InterruptedException {

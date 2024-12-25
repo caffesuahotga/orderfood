@@ -9,12 +9,14 @@ public class Account {
     private int Role; // 0 admin, 1 shipper, 2  customer
     private String Image;
 
-    public int getStoreId() {
-        return StoreId;
+    private String FCMToken; //token push noti
+
+    public String getFCMToken() {
+        return FCMToken;
     }
 
-    public void setStoreId(int storeId) {
-        StoreId = storeId;
+    public void setFCMToken(String FCMToken) {
+        this.FCMToken = FCMToken;
     }
 
     private int StoreId;
@@ -87,5 +89,13 @@ public class Account {
 
     public void setRole(int role) {
         Role = role;
+    }
+
+    public int getStoreId() {
+        return StoreId;
+    }
+
+    public void setStoreId(int storeId) {
+        StoreId = storeId;
     }
 }

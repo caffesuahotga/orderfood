@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,13 +20,17 @@ import com.example.orderfood.R;
 import com.example.orderfood.component.ProductCartAdapter;
 import com.example.orderfood.component.ProductOrderAdapter;
 import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.data.HandleData;
+import com.example.orderfood.data.NotiUtil;
 import com.example.orderfood.data.OrderUtil;
+import com.example.orderfood.models.Order;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,6 +77,7 @@ public class OrderActivity extends BaseNoBottomActivity {
 
     }
 
+    // bind data đặt hàng
     private void bindData(ArrayList<CartDTO> productList) {
         RecyclerView order_product_view = findViewById(R.id.product_order_container);
         order_product_view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -83,6 +89,9 @@ public class OrderActivity extends BaseNoBottomActivity {
         bindInforUser();
 
         order(productList);
+
+        TextView feedback = findViewById(R.id.btn_order_feedback);
+        feedback.setVisibility(View.GONE);
     }
 
     private void bindInforUser() {
@@ -138,12 +147,18 @@ public class OrderActivity extends BaseNoBottomActivity {
                     @Override
                     public void run() {
                         OrderDTO orderDTO = CreateOrderDTO(productList);
-                        OrderUtil.CreateOrder(orderDTO);
+                        Order od = OrderUtil.CreateOrder(orderDTO);
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 progressDialog.dismiss();
+
+                                NotiUtil.SendNotiToRole(0,
+                                        "Có đơn mới",
+                                        "Bạn có đơn mới kìa: #" + od.getId(),
+                                        new Date(), od.getId());
+
                                 Intent successIntent = new Intent(OrderActivity.this, OrderSuccessActivity.class);
                                 startActivity(successIntent);
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -222,7 +237,10 @@ public class OrderActivity extends BaseNoBottomActivity {
                     product.getName(),
                     product.getQuantity(),
                     product.getImage(),
-                    product.getPrice()
+                    product.getPrice(),
+                    product.getFeedback(),
+                    product.getOrderDetailId(),
+                    product.getStar()
             );
             cartDTOList.add(cartDTO);
         }
@@ -230,7 +248,9 @@ public class OrderActivity extends BaseNoBottomActivity {
         RecyclerView order_product_view = findViewById(R.id.product_order_container);
         order_product_view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        ProductOrderAdapter productCartAdapter = new ProductOrderAdapter(this, cartDTOList);
+        // trống thì cho.
+        boolean allFeedbackEmpty = orderDTO.getProducts().stream().allMatch(product -> product.getFeedback() == null || product.getFeedback().isEmpty());
+        ProductOrderAdapter productCartAdapter = new ProductOrderAdapter(this, cartDTOList,orderDTO.getStatus() == 4);
         order_product_view.setAdapter(productCartAdapter);
 
 
@@ -250,5 +270,67 @@ public class OrderActivity extends BaseNoBottomActivity {
 
         TextView order = findViewById(R.id.btn_order);
         order.setVisibility(View.GONE);
+
+        TextView feedback = findViewById(R.id.btn_order_feedback);
+
+        if (orderDTO.getStatus() == 4 && CurrentUser.getRole() == 2 && allFeedbackEmpty) {
+
+            // gui feedback
+            feedback.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Kiểm tra tất cả sản phẩm trong cartDTOList
+                    boolean allFeedbackGiven = true;
+                    for (CartDTO product : cartDTOList) {
+                        if (product.getFeedback() == null || product.getFeedback().isEmpty()) {
+                            allFeedbackGiven = false;
+                            break;
+                        }
+                    }
+
+                    if (!allFeedbackGiven) {
+                        // Nếu có sản phẩm chưa được ghi phản hồi, hiển thị Toast
+                        Toast.makeText(view.getContext(), "Please provide feedback for all products.", Toast.LENGTH_SHORT).show();
+                        return; // Dừng lại, không thực hiện gửi feedback
+                    }
+
+
+                    // Hiển thị ProgressDialog
+                    ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+                    progressDialog.setMessage("Sending feedback...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+
+                    // Chạy quá trình gửi phản hồi trên một luồng phụ
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //ArrayList<CartDTO> cartDTOList
+                            boolean ck = OrderUtil.Feedback(cartDTOList);
+
+                            // Cập nhật giao diện người dùng trên luồng chính
+                            ((Activity) view.getContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Đóng ProgressDialog sau khi hoàn thành
+                                    progressDialog.dismiss();
+
+                                    // Hiển thị thông báo kết quả
+                                    if (ck) {
+                                        Toast.makeText(view.getContext(), "Feedback sent successfully!", Toast.LENGTH_SHORT).show();
+                                        ((Activity) view.getContext()).finish();
+                                    } else {
+                                        Toast.makeText(view.getContext(), "Failed to send feedback. Try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }).start();
+                }
+            });
+        } else {
+            feedback.setVisibility(View.GONE);
+        }
     }
 }

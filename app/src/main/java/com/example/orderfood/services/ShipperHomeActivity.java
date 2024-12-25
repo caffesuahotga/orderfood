@@ -1,6 +1,10 @@
 package com.example.orderfood.services;
 
-import android.Manifest;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -11,79 +15,41 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.GridLayoutManager;  // Thêm GridLayoutManager để tạo lưới
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.GridLayoutManager;  // Thêm GridLayoutManager để tạo lưới
-
-
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.orderfood.R;
-import com.example.orderfood.component.HistoryOrderAdapter;
-import com.example.orderfood.component.category_adapter;
-
-import com.example.orderfood.component.product_adapter;
-
-import com.example.orderfood.data.OrderUtil;
-
+import com.example.orderfood.component.OrderNewAdapter;
 import com.example.orderfood.data.NotiUtil;
-
-import com.example.orderfood.models.Category;
-import com.example.orderfood.data.HandleData;
+import com.example.orderfood.data.OrderUtil;
 import com.example.orderfood.models.Order;
-import com.example.orderfood.models.Product;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-
-import java.util.stream.Collectors;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
-
-public class HomeActivity extends BaseTopBottomViewActivity {
-
-    private RecyclerView recyclerView;
-    private category_adapter categoryAdapter;
-    private List<Category> categoryList;
-    private RecyclerView recyclerView1;
-    private product_adapter productAdapter;
-    private List<Product> productList;
+public class ShipperHomeActivity extends BaseBottomShipperActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private static final String TAG = "HomeActivity";
     private static final int REQUEST_CODE_ACCESS_NOTIFICATION_POLICY = 1;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String TAG = "ShipperHomeActivity";
     private static boolean isFirstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
-        getLayoutInflater().inflate(R.layout.activity_home, findViewById(R.id.content_frame_top_bot));
+        getLayoutInflater().inflate(R.layout.activity_shipper_home, findViewById(R.id.ship_content_frame));
+
         BindData();
 
-        swipeRefreshLayout = findViewById(R.id.home_page_refresh);
+        // Xử lý refresh
+        swipeRefreshLayout = findViewById(R.id.ship_order_page_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Show loading spinner
             swipeRefreshLayout.setRefreshing(true);
 
             // Call lại API hoặc logic tải dữ liệu trong background thread
             new Thread(() -> {
-                loadHome();
+
+                loadOrder();
 
                 // Sau khi dữ liệu được tải, thực hiện thao tác trên UI thread
                 runOnUiThread(() -> {
@@ -94,44 +60,9 @@ public class HomeActivity extends BaseTopBottomViewActivity {
         });
 
 
-    }
-
-    private void BindData() {
-        ImageSlider imageSlider = findViewById(R.id.image_slider);
-        ArrayList<SlideModel> slideModelArrayList = new ArrayList<>();
-
-        slideModelArrayList.add(new SlideModel(R.drawable.image_slider_1, ScaleTypes.FIT));
-        slideModelArrayList.add(new SlideModel(R.drawable.image_slider_2, ScaleTypes.FIT));
-        slideModelArrayList.add(new SlideModel(R.drawable.image_slider_3, ScaleTypes.FIT));
-        slideModelArrayList.add(new SlideModel(R.drawable.image_slider_4, ScaleTypes.FIT));
-
-        imageSlider.setImageList(slideModelArrayList, ScaleTypes.FIT);
-
-
-        recyclerView = findViewById(R.id.view_item);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
-        recyclerView.setLayoutManager(gridLayoutManager);  // Áp dụng LayoutManager
-
-
-        // Khởi tạo danh sách category
-        HandleData handleData = new HandleData();
-        categoryList = handleData.getAllCategories();
-        categoryAdapter = new category_adapter(categoryList);
-        recyclerView.setAdapter(categoryAdapter);
-        // Set adapter cho RecyclerView
-
-        recyclerView1 = findViewById(R.id.view_product);
-        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
-        recyclerView1.setLayoutManager(gridLayoutManager1);
-
-        HandleData handleData1 = new HandleData();
-        productList = handleData1.getAllProducts();
-        productAdapter = new product_adapter(this, productList);
-        recyclerView1.setAdapter(productAdapter);
-
-
         // Kiểm tra và yêu cầu quyền ACCESS_NOTIFICATION_POLICY
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
             Log.d(TAG, "Notification policy access not granted. Requesting permission.");
 
@@ -159,13 +90,7 @@ public class HomeActivity extends BaseTopBottomViewActivity {
             Log.d(TAG, "Notification policy access already granted.");
             runTokenSaveTask();
         }
-    }
 
-    // cập nhật data khi kéo
-    private void loadHome() {
-        runOnUiThread(() -> {
-            BindData();
-        });
     }
 
     @Override
@@ -193,7 +118,7 @@ public class HomeActivity extends BaseTopBottomViewActivity {
             executorService.execute(() -> {
                 try {
                     // Lưu token FCM cho tài khoản
-                    NotiUtil.saveTokenFCMAccount(HomeActivity.this);
+                    NotiUtil.saveTokenFCMAccount(ShipperHomeActivity.this);
                     // Đánh dấu ứng dụng đã chạy lần đầu tiên
                     isFirstRun = false;
                 } catch (Exception e) {
@@ -205,5 +130,29 @@ public class HomeActivity extends BaseTopBottomViewActivity {
             executorService.shutdown();
         }
     }
-}
 
+    private void BindData() {
+        // lấy danh sách order của account hiện tại
+        ArrayList<Order> odList = OrderUtil.getAllOrdersNewForShipper();
+        ArrayList<Order> sortedList = (ArrayList<Order>) odList.stream()
+                .sorted(Comparator.comparingInt(Order::getId).reversed())
+                .collect(Collectors.toList());
+
+        RecyclerView order_new = findViewById(R.id.ship_order_container);
+        order_new.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
+        if (odList == null) {
+            odList = new ArrayList<>(); // Nếu danh sách trả về null, khởi tạo một ArrayList rỗng
+        }
+
+        OrderNewAdapter order_new_adap = new OrderNewAdapter(this, sortedList);
+        order_new.setAdapter(order_new_adap);
+    }
+
+    // cập nhật data khi kéo
+    private void loadOrder() {
+        runOnUiThread(() -> {
+            BindData();
+        });
+    }
+}

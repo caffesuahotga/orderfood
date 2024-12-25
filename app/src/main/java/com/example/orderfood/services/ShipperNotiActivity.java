@@ -8,30 +8,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 
 import com.example.orderfood.R;
-import com.example.orderfood.component.HistoryOrderAdapter;
-import com.example.orderfood.component.ProductCartAdapter;
-import com.example.orderfood.data.HandleData;
-import com.example.orderfood.data.OrderUtil;
-import com.example.orderfood.models.Order;
-import com.example.orderfood.models.dto.CartDTO;
+import com.example.orderfood.component.NotiAdapter;
+import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.data.NotiUtil;
+import com.example.orderfood.models.Noti;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class HistoryOrderActivity  extends BaseTopBottomViewActivity  {
+public class ShipperNotiActivity extends BaseBottomShipperActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_history_order, findViewById(R.id.content_frame_top_bot));
-
+        getLayoutInflater().inflate(R.layout.activity_shipper_noti, findViewById(R.id.ship_content_frame));
+        CurrentUser.init(this);
         BindData();
 
         // Xử lý refresh
-        swipeRefreshLayout = findViewById(R.id.history_order_page_refresh);
+        swipeRefreshLayout = findViewById(R.id.shipper_noti_page_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             // Show loading spinner
             swipeRefreshLayout.setRefreshing(true);
@@ -52,21 +49,22 @@ public class HistoryOrderActivity  extends BaseTopBottomViewActivity  {
 
     private void BindData()
     {
+        int id = CurrentUser.getId();
         // lấy danh sách order của account hiện tại
-        ArrayList<Order> odList = OrderUtil.getAllOrdersByAccountId(this);
-        ArrayList<Order> sortedList = (ArrayList<Order>) odList.stream()
-                .sorted(Comparator.comparingInt(Order::getId).reversed())
+        ArrayList<Noti> notiList = NotiUtil.GetNotiByAccId(CurrentUser.getId());
+        ArrayList<Noti> sortedList = (ArrayList<Noti>) notiList.stream()
+                .sorted(Comparator.comparing(Noti::getDate).reversed())
                 .collect(Collectors.toList());
 
-        RecyclerView history_order = findViewById(R.id.history_order_container);
-        history_order.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        RecyclerView noti_rec = findViewById(R.id.shipper_noti_container);
+        noti_rec.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        if (odList == null) {
-            odList = new ArrayList<>(); // Nếu danh sách trả về null, khởi tạo một ArrayList rỗng
+        if (notiList == null) {
+            notiList = new ArrayList<>(); // Nếu danh sách trả về null, khởi tạo một ArrayList rỗng
         }
 
-        HistoryOrderAdapter historyOrderAdapter = new HistoryOrderAdapter(this, sortedList);
-        history_order.setAdapter(historyOrderAdapter);
+        NotiAdapter notiAdapter = new NotiAdapter(this, sortedList);
+        noti_rec.setAdapter(notiAdapter);
     }
 
     // cập nhật data khi kéo

@@ -12,6 +12,7 @@ public class Order {
     private int PaymentType; // 1 tiền mặt
     private int Status;// 1 chờ xác nhận, 2 đã xác nhận, 3 đang giao, 4 đã giao-hoàn thành, 5 hủy
     private Date Date;
+    private String Feedback;
 
     private int AddressId; // id dia chi acc
     private int ShipperId;
@@ -19,6 +20,14 @@ public class Order {
 
     private double ShipLatitude; // tọa đọ shiper
     private double ShipLongtitude; // tọa đọ shiper
+
+    public String getFeedback() {
+        return Feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        Feedback = feedback;
+    }
 
     public Order(int id, String address, int shipperId, int customerId, double shipLatitude, double shipLongtitude) {
         Id = id;
@@ -28,6 +37,7 @@ public class Order {
         ShipLatitude = shipLatitude;
         ShipLongtitude = shipLongtitude;
     }
+
 
     public int getStatus() {
         return Status;
@@ -84,6 +94,24 @@ public class Order {
         Address = address;
         Phone = phone;
         Note = note;
+        ShipperId = shipperId;
+        CustomerId = customerId;
+        ShipLatitude = shipLatitude;
+        ShipLongtitude = shipLongtitude;
+    }
+
+    public Order(int id, String nameUserOrder, String address, String phone, String note, double totalPrice, int paymentType, int status, java.util.Date date, String feedback, int addressId, int shipperId, int customerId, double shipLatitude, double shipLongtitude) {
+        Id = id;
+        NameUserOrder = nameUserOrder;
+        Address = address;
+        Phone = phone;
+        Note = note;
+        TotalPrice = totalPrice;
+        PaymentType = paymentType;
+        Status = status;
+        Date = date;
+        Feedback = feedback;
+        AddressId = addressId;
         ShipperId = shipperId;
         CustomerId = customerId;
         ShipLatitude = shipLatitude;

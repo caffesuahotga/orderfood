@@ -106,6 +106,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến NoticeActivity
                     notice.setImageResource(R.drawable.ic_baseline_notifications_click_24);
                     editor.putString("active_icon", "Notice");
+                    intent = new Intent(this, NotiActivity.class);
+                    startActivity(intent);
                     break;
                 case "History":
                     // Điều hướng đến HistoryActivity
@@ -118,6 +120,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến ProfileActivity
                     buttonSelfMe.setImageResource(R.drawable.ic_baseline_account_circle_click_24);
                     editor.putString("active_icon", "Profile");
+                    intent = new Intent(this, ProfileActivity.class);
+                    startActivity(intent);
                     break;
                 default:
                     break;

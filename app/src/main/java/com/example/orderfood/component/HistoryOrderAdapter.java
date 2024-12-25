@@ -46,7 +46,7 @@ public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapte
     public void onBindViewHolder(@NonNull HistoryOrderViewHolder holder, int position) {
         Order item = orders.get(position);
 
-        holder.orderCode.setText(" Mã Đơn Hàng: #" + item.getId());
+        holder.orderCode.setText("Mã Đơn Hàng: #" + item.getId());
         holder.orderCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +91,33 @@ public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapte
         Log.d("OrderStatus", "Status: " + status);
         switch (status) {
             case 1: {
-                holder.orderStatus.setText("Chờ xác nhận");
+                holder.orderStatus.setText("Chờ Xác Nhận");
+                holder.orderStatus.setBackgroundResource(R.color.purple_500);
+                holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.white));
+                break;
+            }
+            case 2: {
+                holder.orderStatus.setText("Đã Xác Nhận");
                 holder.orderStatus.setBackgroundResource(R.color.yellow);
                 holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.black));
+                break;
+            }
+            case 3: {
+                holder.orderStatus.setText("Shipper Đã Nhận");
+                holder.orderStatus.setBackgroundResource(R.color.grean);
+                holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.white));
+                break;
+            }
+            case 4: {
+                holder.orderStatus.setText("Đã Hoàn Thành");
+                holder.orderStatus.setBackgroundResource(R.color.teal_700);
+                holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.white));
+                break;
+            }
+            case 5: {
+                holder.orderStatus.setText("Hủy");
+                holder.orderStatus.setBackgroundResource(R.color.selected_rating_color);
+                holder.orderStatus.setTextColor(ContextCompat.getColor(context, R.color.white));
                 break;
             }
             default:
@@ -117,8 +141,6 @@ public class HistoryOrderAdapter extends RecyclerView.Adapter<HistoryOrderAdapte
 
         // Gán giá trị định dạng vào TextView
         holder.orderDate.setText(formattedDate);
-
-
     }
 
     @Override
