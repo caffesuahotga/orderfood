@@ -75,19 +75,24 @@
             android:name=".services.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+
+        </activity>
+        <activity
+            android:name=".services.ProductActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".services.HomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".services.ProductActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
-        <activity
-            android:name=".services.HomeActivity"
-            android:exported="true"></activity>
 
         <activity
             android:name=".MainActivity"
@@ -102,7 +107,19 @@
 
         <activity
             android:name=".services.BaseTopBottomViewActivity"
-            android:exported="true"></activity> <!-- Facebook Login Activity -->
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".services.FavoriteActivity"
+            android:exported="true">
+
+
+
+        </activity>
+
+
+
+        <!-- Facebook Login Activity -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

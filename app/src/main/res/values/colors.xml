@@ -14,6 +14,9 @@
     <color name="grean">#19d100</color>
     <color name="đỏ_button">#ef2a39</color>
     <color name="text_color">#212121</color>
+    <color name="colorPrimary">#6200EA</color>
+    <color name="colorCancel">#FF5252</color>
+    <color name="hint_color">#8B4513</color>
 
 
 

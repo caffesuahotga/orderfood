@@ -22,6 +22,8 @@ import com.example.orderfood.component.product_adapter_nomal;
 import com.example.orderfood.data.HandleData;
 import com.example.orderfood.models.Category;
 import com.example.orderfood.models.Product;
+import com.example.orderfood.models.dto.FavoriteDTO;
+import com.example.orderfood.sqlLite.dao.FavoriteDAO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +37,8 @@ public class ProductActivity extends BaseTopBottomViewActivity {
     private RecyclerView recyclerView2;
     private CategoryNomalAdapter categoryNomalAdapter;
     private Context context;
-
+    private  List<FavoriteDTO> favoriteDTOList;
+    private FavoriteDAO favoriteDAO = new FavoriteDAO(this);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,7 @@ public class ProductActivity extends BaseTopBottomViewActivity {
         recyclerView2.setLayoutManager(layoutManager);
         categoryNomalAdapter = new CategoryNomalAdapter(categoryList);
         recyclerView2.setAdapter(categoryNomalAdapter);
+
         int categoryID = getIntent().getIntExtra("categoryID", -1);
 
 
@@ -90,7 +94,7 @@ public class ProductActivity extends BaseTopBottomViewActivity {
         recyclerView1 = findViewById(R.id.view_product);
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
         recyclerView1.setLayoutManager(gridLayoutManager1);
-        productAdapter = new product_adapter_nomal(filteredProducts);
+        productAdapter = new product_adapter_nomal(this,filteredProducts);
         recyclerView1.setAdapter(productAdapter);
 
     }
