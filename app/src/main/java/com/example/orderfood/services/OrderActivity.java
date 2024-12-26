@@ -27,6 +27,15 @@ import com.example.orderfood.models.Order;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -34,8 +43,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class OrderActivity extends BaseNoBottomActivity {
+public class OrderActivity extends BaseNoBottomActivity implements OnMapReadyCallback {
     private SwipeRefreshLayout swipeRefreshLayout;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +85,47 @@ public class OrderActivity extends BaseNoBottomActivity {
             }).start();
         });
 
+        // Lấy SupportMapFragment và nhận thông báo khi bản đồ đã sẵn sàng
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.getUiSettings().setMapToolbarEnabled(true);
+
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
+
+        mMap.getUiSettings().setScrollGesturesEnabled(true);
+
+        // Thêm marker đầu tiên (màu đỏ)
+        LatLng location1 = new LatLng(10.67528679747168, 106.69065846511778);  // 10.67528679747168, 106.69065846511778
+        mMap.addMarker(new MarkerOptions().position(location1).title("Ho Chi Minh City Open University")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+        // Thêm marker thứ hai (màu xanh lá)
+        LatLng location2 = new LatLng(10.675584641302393, 106.69159723822689);  // 10.675584641302393, 106.69159723822689
+        mMap.addMarker(new MarkerOptions().position(location2).title("Training and Competition House")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+        // Di chuyển và zoom camera để hiển thị cả hai marker
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(location1);
+        builder.include(location2);
+        LatLngBounds bounds = builder.build();
+
+        int padding = 100; // padding theo pixel
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
+    }
+
 
     // bind data đặt hàng
     private void bindData(ArrayList<CartDTO> productList) {
