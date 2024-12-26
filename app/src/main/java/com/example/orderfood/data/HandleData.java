@@ -979,6 +979,13 @@ public class HandleData {
                                 });
                     }
                 }
+
+                // chỗ này update sao của product; cartDTOList => lấy id => truy vấn product => cập nhật cái rate
+                ///
+                ///
+
+
+
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 // Xử lý ngoại lệ nếu cần thiết
