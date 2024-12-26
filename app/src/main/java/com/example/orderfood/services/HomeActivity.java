@@ -13,28 +13,46 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;  // Thêm GridLayoutManager để tạo lưới
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.GridLayoutManager;  // Thêm GridLayoutManager để tạo lưới
 
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.orderfood.R;
+import com.example.orderfood.component.HistoryOrderAdapter;
 import com.example.orderfood.component.category_adapter;
 
 import com.example.orderfood.component.product_adapter;
+
+import com.example.orderfood.data.OrderUtil;
+
 import com.example.orderfood.data.NotiUtil;
+
 import com.example.orderfood.models.Category;
 import com.example.orderfood.data.HandleData;
+import com.example.orderfood.models.Order;
 import com.example.orderfood.models.Product;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
+import java.util.stream.Collectors;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class HomeActivity extends BaseTopBottomViewActivity {
 
@@ -44,6 +62,7 @@ public class HomeActivity extends BaseTopBottomViewActivity {
     private RecyclerView recyclerView1;
     private product_adapter productAdapter;
     private List<Product> productList;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private static final String TAG = "HomeActivity";
     private static final int REQUEST_CODE_ACCESS_NOTIFICATION_POLICY = 1;
@@ -54,9 +73,30 @@ public class HomeActivity extends BaseTopBottomViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        getLayoutInflater().inflate(R.layout.activity_home, findViewById(R.id.content_frame));
+        getLayoutInflater().inflate(R.layout.activity_home, findViewById(R.id.content_frame_top_bot));
+        BindData();
 
-        // Khởi tạo ImageSlider và thêm các slide hình ảnh
+        swipeRefreshLayout = findViewById(R.id.home_page_refresh);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Show loading spinner
+            swipeRefreshLayout.setRefreshing(true);
+
+            // Call lại API hoặc logic tải dữ liệu trong background thread
+            new Thread(() -> {
+                loadHome();
+
+                // Sau khi dữ liệu được tải, thực hiện thao tác trên UI thread
+                runOnUiThread(() -> {
+                    // Kết thúc hiệu ứng refresh
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+            }).start();
+        });
+
+
+    }
+
+    private void BindData() {
         ImageSlider imageSlider = findViewById(R.id.image_slider);
         ArrayList<SlideModel> slideModelArrayList = new ArrayList<>();
 
@@ -72,6 +112,7 @@ public class HomeActivity extends BaseTopBottomViewActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         recyclerView.setLayoutManager(gridLayoutManager);  // Áp dụng LayoutManager
 
+
         // Khởi tạo danh sách category
         HandleData handleData = new HandleData();
         categoryList = handleData.getAllCategories();
@@ -79,19 +120,18 @@ public class HomeActivity extends BaseTopBottomViewActivity {
         recyclerView.setAdapter(categoryAdapter);
         // Set adapter cho RecyclerView
 
-
         recyclerView1 = findViewById(R.id.view_product);
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2);
         recyclerView1.setLayoutManager(gridLayoutManager1);
 
         HandleData handleData1 = new HandleData();
         productList = handleData1.getAllProducts();
-        productAdapter = new product_adapter(productList);
+        productAdapter = new product_adapter(this, productList);
         recyclerView1.setAdapter(productAdapter);
+
 
         // Kiểm tra và yêu cầu quyền ACCESS_NOTIFICATION_POLICY
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
             Log.d(TAG, "Notification policy access not granted. Requesting permission.");
 
@@ -119,6 +159,13 @@ public class HomeActivity extends BaseTopBottomViewActivity {
             Log.d(TAG, "Notification policy access already granted.");
             runTokenSaveTask();
         }
+    }
+
+    // cập nhật data khi kéo
+    private void loadHome() {
+        runOnUiThread(() -> {
+            BindData();
+        });
     }
 
     @Override

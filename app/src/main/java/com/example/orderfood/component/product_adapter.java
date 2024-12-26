@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.models.Product;
+import com.example.orderfood.models.dto.FavoriteDTO;
 import com.example.orderfood.services.BaseNoBottomActivity;
 import com.example.orderfood.services.CartActivity;
 import com.example.orderfood.services.ProductDetailActivity;
 import com.example.orderfood.sqlLite.dao.CartDAO;
+import com.example.orderfood.sqlLite.dao.FavoriteDAO;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -34,14 +36,13 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
 
     private Context context;
     private List<Product> productList;
-    public  int  n =1;
+    private List<FavoriteDTO> favoriteDTOS;
+    FavoriteDAO favoriteDAO;
 
-    public product_adapter(List<Product> productList) {
-        this.productList = productList;
-    }
     public product_adapter(Context context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
+        favoriteDAO = new FavoriteDAO(context) ;
     }
 
 
@@ -87,6 +88,12 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
             animatorSet.start();
         });
         //  gửi id  cho trang product detail
+        if(favoriteDAO.check_favorite(product.getId())){
+            holder.btnAddFavorite.setImageResource(R.drawable.ic_baseline_favorite_click_24);
+        }
+        else {
+            holder.btnAddFavorite.setImageResource(R.drawable.ic_baseline_favorite_24);
+        }
 
         holder.productPrice.setText(formatVND((product.getPrice())));
         holder.btnAddFavorite.setOnClickListener(v -> {
@@ -98,8 +105,8 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
             animatorSet.playTogether(scaleX, scaleY);
             animatorSet.setDuration(300); // Thời gian hiệu ứng
 
-            change_favorite(holder.btnAddFavorite);
-            Toast.makeText(v.getContext(), "Thêm vào yêu thích: " + product.getName(), Toast.LENGTH_SHORT).show();
+            addFavorite(product.getId(), product.getName(),product.getImage().get(0),"", holder.btnAddFavorite);
+
             animatorSet.start();
         });
         holder.btnAddCart.setOnClickListener(new View.OnClickListener()  {
@@ -144,16 +151,15 @@ public class product_adapter extends RecyclerView.Adapter<product_adapter.Produc
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatter.format(price) + " VND";
     }
-    private   void change_favorite(ImageView imageView) {
-        if (n == 1) {
-            imageView.setImageResource(R.drawable.ic_baseline_favorite_24);
-            n = 2;
-        } else {
-            n = 1;
-            imageView.setImageResource(R.drawable.ic_baseline_favorite_click_24);
+    public void  addFavorite(int id , String name, String image, String description, ImageView view) {
+        if (!favoriteDAO.check_favorite(id)) {
+            view.setImageResource(R.drawable.ic_baseline_favorite_click_24);
+            favoriteDAO.addFavorite(id, name, image, description);
+            Toast.makeText(view.getContext(), "Thêm vào yêu thích: " +name, Toast.LENGTH_SHORT).show();
         }
-
-
+        else {
+            Toast.makeText(view.getContext(), "Đã có : " +name+" trong yêu thích của bạn", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

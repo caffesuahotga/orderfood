@@ -99,6 +99,8 @@ public class BaseTopBottomViewActivity extends  BaseNoBottomActivity{
                     // Điều hướng đến FavoriteActivity
                     buttonFavorite.setImageResource(R.drawable.ic_baseline_favorite_click_24);
                     editor.putString("active_icon", "Favorite");
+                    intent = new Intent(this, FavoriteActivity.class);
+                    startActivity(intent);
                     break;
                 case "Notice":
                     // Điều hướng đến NoticeActivity

@@ -1,0 +1,89 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:background="@color/white"
+    android:divider="@android:color/darker_gray"
+    android:dividerPadding="10dp"
+    android:showDividers="middle">
+
+    <!-- TextView hiển thị ghi chú -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_title_favorite">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:text="GHI CHÚ"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="18sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/note_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nội dung ghi chú sẽ hiển thị tại đây"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:textColor="#F98866"
+             />
+
+    </LinearLayout>
+
+
+
+    <!-- EditText để nhập ghi chú mới -->
+    <EditText
+        android:id="@+id/note_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Nhập ghi chú mới"
+        android:gravity="top|start"
+        android:background="@drawable/edittext_background"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/text_color"
+        android:scrollbars="vertical"
+        android:overScrollMode="always"
+        android:lines="5"
+        android:maxLines="10"
+        android:ellipsize="none"
+        android:textColorHint="@color/hint_color" />
+
+
+
+    <!-- Button hủy và lưu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/rounded_background"
+            android:padding="12dp"
+            android:text="Lưu"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>
