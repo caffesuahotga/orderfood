@@ -21,7 +21,9 @@ import android.widget.Toast;
 
 import com.example.orderfood.R;
 import com.example.orderfood.component.ProductCartAdapter;
+import com.example.orderfood.data.CurrentUser;
 import com.example.orderfood.data.HandleData;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.sqlLite.dao.CartDAO;
@@ -69,8 +71,9 @@ public class CartActivity extends BaseNoBottomActivity {
 
         RecyclerView cart_view = findViewById(R.id.product_cart_container);
         cart_view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        Account currentUser = CurrentUser.getCurrentUser();
 
-        ArrayList<CartDTO> carts = cartDAO.getAllProducts();
+        ArrayList<CartDTO> carts = cartDAO.getAllProducts(currentUser.getId());
 
         if (carts == null) {
             carts = new ArrayList<>(); // Nếu danh sách trả về null, khởi tạo một ArrayList rỗng

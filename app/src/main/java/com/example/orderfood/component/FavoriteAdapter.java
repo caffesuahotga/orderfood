@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 
+import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.dto.FavoriteDTO;
 import com.example.orderfood.services.FavoriteActivity;
 import com.example.orderfood.sqlLite.dao.CartDAO;
@@ -35,6 +37,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     private List<FavoriteDTO> favoriteDTOList;
     private FragmentActivity fragmentActivity;
     private FavoriteDAO favoriteDAO;
+    private Account currentUser = CurrentUser.getCurrentUser();
 
 
     public FavoriteAdapter(Context context, FragmentActivity fragmentActivity, List<FavoriteDTO> favoriteDTOList) {
@@ -52,15 +55,15 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
 
     @Override
     public void onBindViewHolder(FavoriteViewHolder holder, int position) {
-
+        Account currentUser = CurrentUser.getCurrentUser();
         FavoriteDTO favoriteDTOItem = favoriteDTOList.get(position);
         setStarRating(holder.starImage, favoriteDTOItem.getRate());
         holder.btnAddCart.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view){
                 CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
-                cartDAO.deleteAll();
-                cartDAO.addProduct(favoriteDTOItem.getProductID(),favoriteDTOItem.getName(),1,favoriteDTOItem.getImage());
+                cartDAO.deleteAll(currentUser.getId());
+                cartDAO.addProduct(favoriteDTOItem.getProductID(),favoriteDTOItem.getName(),1,favoriteDTOItem.getImage(),currentUser.getId());
                 ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f, 1f);
                 ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f, 1f);
                 AnimatorSet animatorSet = new AnimatorSet();
@@ -87,7 +90,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         });
         holder.btnDeleteFavorite.setOnClickListener(v -> {
 
-            favoriteDAO.deleteProduct(favoriteDTOItem.getProductID());
+            favoriteDAO.deleteProduct(favoriteDTOItem.getProductID(), currentUser.getId());
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(v, "scaleX", 1f, 1.5f, 1f);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(v, "scaleY", 1f, 1.5f, 1f);
             AnimatorSet animatorSet = new AnimatorSet();
