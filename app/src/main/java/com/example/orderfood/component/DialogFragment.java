@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.orderfood.R;
+import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.dto.FavoriteDTO;
 import com.example.orderfood.sqlLite.dao.FavoriteDAO;
 
@@ -25,7 +27,7 @@ class ParentClass {
 
         private static final String ARG_ITEM = "arg_item";
         private Context context;
-
+        private Account currentUser  = CurrentUser.getCurrentUser();
         private FavoriteDAO favoriteDAO ;
 
         public static NoteDialogFragment newInstance(FavoriteDTO item) {
@@ -51,7 +53,7 @@ class ParentClass {
 
             // Lấy dữ liệu từ arguments
             FavoriteDTO item1 = (FavoriteDTO) getArguments().getSerializable(ARG_ITEM);
-            FavoriteDTO item =  favoriteDAO.getProductById(item1.getID());
+            FavoriteDTO item =  favoriteDAO.getFavoriteByIdAndAccountID(item1.getID(), currentUser.getId());
 
             // Hiển thị dữ liệu ra giao diện
             TextView noteTextView = view.findViewById(R.id.note_text_view);
@@ -64,7 +66,7 @@ class ParentClass {
                 if (!noteText.isEmpty()) {
                     // Ví dụ: Hiển thị nội dung
                     Toast.makeText(view.getContext(), "Nội dung đã được lưu: " , Toast.LENGTH_SHORT).show();
-                    favoriteDAO.updateDescription(item.getProductID(),noteText);
+                    favoriteDAO.updateDescription(item.getProductID(),noteText, currentUser.getId());
                     dismiss();
 
 

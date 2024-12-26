@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
+import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.FavoriteDTO;
@@ -43,6 +45,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
     private List<Product> productList;
     private List<FavoriteDTO> favoriteDTOS;
     FavoriteDAO favoriteDAO;
+    private Account currentUser = CurrentUser.getCurrentUser();
 
 
     public product_adapter_nomal(Context context, List<Product> productList ) {
@@ -63,6 +66,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+
 
 
         // Set tên sản phẩm
@@ -121,7 +125,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
             @Override
             public void onClick(View view){
                 CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
-                cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0));
+                cartDAO.addProduct(product.getId(),product.getName(),1,product.getImage().get(0), currentUser.getId());
                 ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.5f, 1f);
                 ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.5f, 1f);
                 AnimatorSet animatorSet = new AnimatorSet();
@@ -131,7 +135,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
                 animatorSet.start();
             }
         });
-        if(favoriteDAO.check_favorite(product.getId())){
+        if(favoriteDAO.check_favorite(product.getId(), currentUser.getId())){
             holder.btnAddFavorite.setImageResource(R.drawable.ic_baseline_favorite_click_24);
         }
         else {
@@ -189,9 +193,9 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
         return formatter.format(price) + " VND";
     }
     public void  addFavorite(int id , String name, String image, String description, ImageView view) {
-        if (!favoriteDAO.check_favorite(id)) {
+        if (!favoriteDAO.check_favorite(id, currentUser.getId())) {
             view.setImageResource(R.drawable.ic_baseline_favorite_click_24);
-            favoriteDAO.addFavorite(id, name, image, description);
+            favoriteDAO.addFavorite(id, name, image, description, currentUser.getId());
             Toast.makeText(view.getContext(), "Thêm vào yêu thích: " +name, Toast.LENGTH_SHORT).show();
         }
         else {

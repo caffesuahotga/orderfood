@@ -15,7 +15,9 @@ import com.example.orderfood.R;
 import com.example.orderfood.component.FavoriteAdapter;
 import com.example.orderfood.component.category_adapter;
 import com.example.orderfood.component.product_adapter;
+import com.example.orderfood.data.CurrentUser;
 import com.example.orderfood.data.HandleData;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.Category;
 import com.example.orderfood.models.dto.FavoriteDTO;
 import com.example.orderfood.sqlLite.dao.FavoriteDAO;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteActivity extends BaseTopBottomViewActivity {
+    private Account currentUser = CurrentUser.getCurrentUser();
     private RecyclerView recyclerView;
     private FavoriteAdapter favoriteAdapter;
     private List<FavoriteDTO>  favoriteDTOList = new ArrayList<>();
@@ -33,7 +36,7 @@ public class FavoriteActivity extends BaseTopBottomViewActivity {
         getSupportActionBar().hide();
         getLayoutInflater().inflate(R.layout.activity_favorite, findViewById(R.id.content_frame_top_bot));
 
-        favoriteDTOList = favoriteDAO.getAllProducts();
+        favoriteDTOList = favoriteDAO.getAllProducts(currentUser.getId());
         if (favoriteDTOList == null || favoriteDTOList.size()==0) {
             Toast.makeText(this, "Bạn chưa có sản  phẩm yêu thích" , Toast.LENGTH_SHORT).show();
         }

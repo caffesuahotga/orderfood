@@ -24,7 +24,9 @@ import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.component.FeedbackProductDetailAdapter;
 import com.example.orderfood.component.ImageProductDetailAdapter;
+import com.example.orderfood.data.CurrentUser;
 import com.example.orderfood.data.ProductDetailUtil;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.FeedBackDTO;
 import com.example.orderfood.models.dto.ProductDetailDTO;
@@ -49,6 +51,7 @@ public class ProductDetailActivity extends BaseNoBottomActivity {
 
         emptyFeedbackPlaceholder = findViewById(R.id.product_detail_feedback_empt);
         swipeRefreshLayout = findViewById(R.id.product_detail_refresh);
+
 
         // get product có id là 1
         int productId = getIntent().getIntExtra("productId", -1);
@@ -273,12 +276,13 @@ public class ProductDetailActivity extends BaseNoBottomActivity {
     private void BindDataCart(ProductDetailDTO proDetail)
     {
         Button addCart = findViewById(R.id.product_detail_cart);
+        Account currentUser = CurrentUser.getCurrentUser();
         addCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 shakeAndRotateButton(view);
 
-                cartDAO.addProduct(proDetail.getPID(),proDetail.getName(),1,proDetail.getListImage().get(0));
+                cartDAO.addProduct(proDetail.getPID(),proDetail.getName(),1,proDetail.getListImage().get(0),currentUser.getId());
                 Toast.makeText(view.getContext(), "Thành công! thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
             }
         });

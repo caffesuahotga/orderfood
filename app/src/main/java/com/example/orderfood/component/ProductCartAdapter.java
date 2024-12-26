@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.models.Account;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.FeedBackDTO;
 import com.example.orderfood.services.CartActivity;
@@ -55,6 +56,7 @@ public class ProductCartAdapter extends RecyclerView.Adapter<ProductCartAdapter.
     @Override
     public void onBindViewHolder(@NonNull ProductCartViewHolder holder, int position) {
         CartDTO item = CartDTOs.get(position);
+        Account currentUser = CurrentUser.getCurrentUser();
 
         // nạp ảnh product
         Glide.with(holder.itemView.getContext())
@@ -174,7 +176,7 @@ public class ProductCartAdapter extends RecyclerView.Adapter<ProductCartAdapter.
                         // Kiểm tra xem vị trí có hợp lệ không
                         if (position != RecyclerView.NO_POSITION) {
                             CartDTOs.remove(position);
-                            cartDAO2.deleteProduct(item.getProductID()); // xóa khỏi db
+                            cartDAO2.deleteProduct(currentUser.getId(),item.getProductID()); // xóa khỏi db
 
                             // Thông báo Adapter rằng dữ liệu đã thay đổi tại vị trí này
                             notifyItemRemoved(position);

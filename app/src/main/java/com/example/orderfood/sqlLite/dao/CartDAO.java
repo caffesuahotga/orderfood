@@ -25,15 +25,15 @@ public class CartDAO {
     }
 
     // Add product to cart ( không add trùng id product )
-    public long addProduct(int productID, String name, int quantity, String image) {
+    public long addProduct(int productID, String name, int quantity, String image, int accountID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Kiểm tra nếu productID đã tồn tại trong giỏ hàng
+        // Kiểm tra nếu productID đã tồn tại trong giỏ hàng của accountID cụ thể
         Cursor cursor = db.query(
                 DatabaseHelper.TABLE_CART,
                 new String[]{DatabaseHelper.COLUMN_PRODUCT_ID},
-                DatabaseHelper.COLUMN_PRODUCT_ID + " = ?",
-                new String[]{String.valueOf(productID)},
+                DatabaseHelper.COLUMN_PRODUCT_ID + " = ? AND " + DatabaseHelper.COLUMN_ID_ACCOUNT_CART + " = ?",
+                new String[]{String.valueOf(productID), String.valueOf(accountID)},
                 null, null, null
         );
 
@@ -41,7 +41,7 @@ public class CartDAO {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.close();
             db.close();
-            return -1; // Trả về -1 để thông báo rằng sản phẩm đã tồn tại
+            return -1; // Trả về -1 để thông báo rằng sản phẩm đã tồn tại trong giỏ hàng của tài khoản
         }
 
         // Nếu sản phẩm chưa tồn tại, tiến hành thêm vào giỏ hàng
@@ -50,6 +50,7 @@ public class CartDAO {
         values.put(DatabaseHelper.COLUMN_NAME, name);
         values.put(DatabaseHelper.COLUMN_QUANTITY, quantity);
         values.put(DatabaseHelper.COLUMN_IMAGE, image);
+        values.put(DatabaseHelper.COLUMN_ID_ACCOUNT_CART, accountID); // Gắn accountID vào bản ghi
 
         long result = db.insert(DatabaseHelper.TABLE_CART, null, values);
         db.close();
@@ -58,39 +59,65 @@ public class CartDAO {
 
 
     // Update product quantity
-    public int updateProductQuantity(int productID, int quantity) {
+    public int updateProductQuantity(int productID, int quantity, int accountID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_QUANTITY, quantity);
 
-        int rows = db.update(DatabaseHelper.TABLE_CART, values,
-                DatabaseHelper.COLUMN_PRODUCT_ID + " = ?", new String[]{String.valueOf(productID)});
+        // Thêm điều kiện accountID vào câu lệnh WHERE
+        int rows = db.update(
+                DatabaseHelper.TABLE_CART,
+                values,
+                DatabaseHelper.COLUMN_PRODUCT_ID + " = ? AND " + DatabaseHelper.COLUMN_ID_ACCOUNT_CART + " = ?",
+                new String[]{String.valueOf(productID), String.valueOf(accountID)}
+        );
+
         db.close();
-        return rows;
+        return rows; // Trả về số dòng bị ảnh hưởng
     }
+
 
     // Delete product from cart
-    public int deleteProduct(int productID) {
+    public int deleteProduct(int accountID, int productID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int rows = db.delete(DatabaseHelper.TABLE_CART,
-                DatabaseHelper.COLUMN_PRODUCT_ID + " = ?", new String[]{String.valueOf(productID)});
+        int rows = db.delete(
+                DatabaseHelper.TABLE_CART,
+                DatabaseHelper.COLUMN_PRODUCT_ID + " = ? AND " + DatabaseHelper.COLUMN_ID_ACCOUNT_CART + " = ?",
+                new String[]{String.valueOf(productID), String.valueOf(accountID)}
+        );
         db.close();
         return rows;
     }
 
-    public int deleteAll() {
+
+    public int deleteAll(int accountID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int rowsDeleted = db.delete(DatabaseHelper.TABLE_CART, null, null); // không có điều kiện, xóa tất cả dòng
+        // Thêm điều kiện WHERE để chỉ xóa các dòng thuộc AccountID
+        int rowsDeleted = db.delete(DatabaseHelper.TABLE_CART,
+                DatabaseHelper.COLUMN_ID_ACCOUNT_CART + " = ?", // Điều kiện WHERE
+                new String[]{String.valueOf(accountID)}); // Giá trị điều kiện
         db.close();
         return rowsDeleted;
     }
 
+
     // Get all products from cart and return as a list of Cart objects
-    public  ArrayList<CartDTO> getAllProducts() {
+    public  ArrayList<CartDTO> getAllProducts(int accountID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Product> products = HandleData.getAllProducts(); // keo product từ mạng về để tránh price bị đổi
 
-        Cursor cursor = db.query(DatabaseHelper.TABLE_CART, null, null, null, null, null, null);
+        String selection = DatabaseHelper.COLUMN_ID_ACCOUNT_CART + " = ?";
+        String[] selectionArgs = {String.valueOf(accountID)};
+
+        Cursor cursor = db.query(
+                DatabaseHelper.TABLE_CART, // Tên bảng
+                null,                      // Lấy tất cả các cột
+                selection,                 // Điều kiện WHERE
+                selectionArgs,             // Tham số cho điều kiện WHERE
+                null,                      // groupBy
+                null,                      // having
+                null                       // orderBy
+        );
 
         ArrayList<CartDTO> cartList = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
@@ -122,7 +149,7 @@ public class CartDAO {
 
                     double price = proItem.getPrice() * quantity;
 
-                    CartDTO cart = new CartDTO(ID,productID, name, quantity, image, price);
+                    CartDTO cart = new CartDTO(ID,productID, name, quantity, image, price, accountID);
                     cartList.add(cart);
                 } while (cursor.moveToNext());
             } else {
@@ -135,9 +162,9 @@ public class CartDAO {
         return cartList;
     }
 
-    public  void showAllProducts() {
+    public  void showAllProducts(int accountID) {
         // Lấy tất cả sản phẩm từ giỏ hàng
-        List<CartDTO> cartList = getAllProducts();
+        List<CartDTO> cartList = getAllProducts(accountID);
 
         // Kiểm tra xem có sản phẩm không
         if (cartList != null && !cartList.isEmpty()) {

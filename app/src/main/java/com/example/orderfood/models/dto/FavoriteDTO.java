@@ -10,11 +10,12 @@ public class FavoriteDTO implements Serializable {
     private String image;
     private double rate;
     private String description;
+    private int accountID;
 
     public FavoriteDTO() {
     }
 
-    public FavoriteDTO(int ID,int productID, String name, double price, String image, double rate, String description) {
+    public FavoriteDTO(int ID,int productID, String name, double price, String image, double rate, String description,int accountID) {
         this.ID = ID;
         this.productID = productID;
         this.name = name;
@@ -22,6 +23,8 @@ public class FavoriteDTO implements Serializable {
         this.image = image;
         this.rate = rate;
         this.description = description;
+        this.accountID = accountID;
+
     }
 
     public int getID() {
@@ -78,5 +81,13 @@ public class FavoriteDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
     }
 }

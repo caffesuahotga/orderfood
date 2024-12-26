@@ -19,6 +19,7 @@ public class CartDTO  implements Serializable {
     private String feedback = "Trống";
     private int OrderDetailId;
     private int Star;
+    private int accountID;
 
     public int getStar() {
         return Star;
@@ -28,13 +29,14 @@ public class CartDTO  implements Serializable {
         Star = star;
     }
 
-    public CartDTO(int ID, int productID, String name, int quantity, String image, double price) {
+    public CartDTO(int ID, int productID, String name, int quantity, String image, double price, int accountID) {
         this.ID = ID;
         this.productID = productID;
         this.name = name;
         this.quantity = quantity;
         this.image = image;
         Price = price;
+        this.accountID = accountID;
     }
 
     public String getFeedback() {
@@ -65,6 +67,7 @@ public class CartDTO  implements Serializable {
         feedback = fb;
         OrderDetailId =odId;
         Star = sao;
+
     }
 
     public boolean isSelected() {
@@ -123,4 +126,11 @@ public class CartDTO  implements Serializable {
         Price = price;
     }
 
+    public int getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
+    }
 }

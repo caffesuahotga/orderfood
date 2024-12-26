@@ -241,6 +241,7 @@ public class OrderActivity extends BaseNoBottomActivity {
                     product.getFeedback(),
                     product.getOrderDetailId(),
                     product.getStar()
+
             );
             cartDTOList.add(cartDTO);
         }
