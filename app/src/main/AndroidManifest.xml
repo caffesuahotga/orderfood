@@ -131,11 +131,7 @@
         <activity
             android:name=".services.HomeActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -145,10 +141,6 @@
             android:name=".services.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".services.BaseBottomViewActivity"
@@ -186,7 +178,21 @@
         </activity>
         <activity
             android:name=".test.TestUtil"
-            android:exported="true" />
+            android:exported="true" >
+
+
+        </activity>
+        <activity
+            android:name=".services.StatisticalActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
