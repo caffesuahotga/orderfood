@@ -3,15 +3,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/xám_nhạt">
+    android:layout_height="match_parent">
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="@drawable/pxfuel"
+        android:background="@drawable/background_title_favorite"
         tools:context=".services.ProfileActivity">
 
         <LinearLayout
@@ -26,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="THÔNG TIN"
-                android:textColor="#FFFF"
+                android:textColor="#000"
                 android:textSize="35dp"
                 android:textStyle="bold" />
 
@@ -60,7 +59,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="Username"
                 android:padding="10dp"
                 android:textSize="20dp" />
@@ -74,10 +73,11 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="New Username"
                 android:padding="10dp"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:inputType="text" />
 
             <TextView
                 android:id="@+id/tvName"
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="Name"
                 android:padding="10dp"
                 android:textSize="20dp" />
@@ -96,10 +96,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="New Name"
                 android:padding="10dp"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/etOldPassword"
@@ -107,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="Old Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
@@ -119,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="New Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
@@ -131,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="Phone"
                 android:padding="10dp"
                 android:textSize="20dp" />
@@ -142,10 +143,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/background_description"
                 android:hint="New Phone"
                 android:padding="10dp"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:inputType="text" />
 
             <!-- Nút lưu -->
             <Button
