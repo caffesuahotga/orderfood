@@ -117,6 +117,7 @@ public class Order {
         ShipLatitude = shipLatitude;
         ShipLongtitude = shipLongtitude;
     }
+    public Order(Date date, double totalPrice ){}
 
     public String getNameUserOrder() {
         return NameUserOrder;

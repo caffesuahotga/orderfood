@@ -29,7 +29,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -180,6 +184,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public static Account getAccountId(int id) {
         try {
             // Thực hiện truy vấn Firestore để tìm account theo username
@@ -199,6 +204,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public static Account saveTokenFCMAccount(String username) {
         try {
             // Thực hiện truy vấn Firestore để tìm account theo username
@@ -235,6 +241,7 @@ public class HandleData {
         }
         return null; // Trả về null nếu có lỗi hoặc không tìm thấy
     }
+
     public static List<Account> getFCMTokenAccountsByRole(int role) {
         List<Account> accountList = new ArrayList<>();
         try {
@@ -257,7 +264,7 @@ public class HandleData {
         return accountList; // Trả về danh sách Account hoặc danh sách rỗng nếu có lỗi hoặc không tìm thấy
     }
 
-    public static Noti createNoti(String title, String content,Date date,int orderId,  int acId) throws ExecutionException, InterruptedException {
+    public static Noti createNoti(String title, String content, Date date, int orderId, int acId) throws ExecutionException, InterruptedException {
         // Tạo đối tượng Noti mới
         Noti noti = new Noti();
         noti.setAccountId(acId);
@@ -278,8 +285,8 @@ public class HandleData {
         // Trả về noti đã tạo
         return noti;
     }
-    public static ArrayList<Noti> GetAllNotiByAccId (int accId)  throws ExecutionException, InterruptedException
-    {
+
+    public static ArrayList<Noti> GetAllNotiByAccId(int accId) throws ExecutionException, InterruptedException {
         if (accId == 0) {
             return new ArrayList<Noti>();
         }
@@ -531,7 +538,7 @@ public class HandleData {
     public List<Order> getAllOrders() {
         List<Order> orderList = new ArrayList<>();
         try {
-            Task<QuerySnapshot> task = db.collection("orders").get(); // Thay "orders" bằng tên collection của bạn
+            Task<QuerySnapshot> task = db.collection("order").get(); // Lấy tất cả đơn hàng từ Firestore
 
             // Chờ Task hoàn thành
             while (!task.isComplete()) {
@@ -541,20 +548,29 @@ public class HandleData {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Order order = new Order();
-                    order.setId(document.getLong("Id").intValue());
-                    order.setAddressId(document.getLong("AddressId").intValue());
-                    order.setShipperId(document.getLong("ShipperId").intValue());
-                    order.setCustomerId(document.getLong("CustomerId").intValue());
-                    order.setShipLatitude(document.getDouble("ShipLatitude"));
-                    order.setShipLongtitude(document.getDouble("ShipLongtitude"));
-                    orderList.add(order);
+                    order.setId(document.getLong("id").intValue()); // Lấy id đơn hàng
+                    order.setAddressId(document.getLong("addressId").intValue()); // Lấy addressId
+                    order.setCustomerId(document.getLong("customerId").intValue()); // Lấy customerId
+                    order.setNameUserOrder(document.getString("nameUserOrder")); // Lấy tên người đặt hàng
+                    order.setNote(document.getString("note")); // Lấy ghi chú
+                    order.setPhone(document.getString("phone")); // Lấy số điện thoại
+                    order.setShipLatitude(document.getDouble("shipLatitude")); // Lấy vĩ độ
+                    order.setShipLongtitude(document.getDouble("shipLongtitude")); // Lấy kinh độ
+                    order.setShipperId(document.getLong("shipperId").intValue()); // Lấy shipperId
+                    order.setStatus(document.getLong("status").intValue()); // Lấy trạng thái đơn hàng
+                    order.setTotalPrice(document.getDouble("totalPrice")); // Lấy tổng giá trị đơn hàng
+                    order.setDate(document.getDate("date"));
+
+                    orderList.add(order); // Thêm đơn hàng vào danh sách
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error getting all orders: " + e.getMessage());
+            Log.e(TAG, "Error getting all orders", e); // Ghi lỗi nếu có
         }
-        return orderList; // Trả về danh sách Order
+        return orderList; // Trả về danh sách đơn hàng
     }
+
+
 
     public static List<Order> getAllOrders(List<Integer> OrderIDs) throws ExecutionException, InterruptedException {
         if (OrderIDs.size() == 0) {
@@ -575,6 +591,7 @@ public class HandleData {
 
         return orderList;
     }
+
 
     public static Order createOrder(OrderDTO dto) {
         try {
@@ -719,7 +736,7 @@ public class HandleData {
 
             ArrayList<OrderProductDTO> odPro = new ArrayList<>();
 
-            for (OrderDetail pro: listOD) {
+            for (OrderDetail pro : listOD) {
                 OrderProductDTO item = new OrderProductDTO();
 
 
@@ -771,6 +788,24 @@ public class HandleData {
         }
         return false; // Cập nhật thất bại
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public static int getLastOrderDetailId() {
