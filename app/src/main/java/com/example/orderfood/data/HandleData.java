@@ -1,6 +1,8 @@
 package com.example.orderfood.data;
 
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -17,6 +19,7 @@ import com.example.orderfood.models.Store;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
+import com.example.orderfood.test.TestUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +50,9 @@ public class HandleData {
 
     private static final String TAG = "FirestoreData";
     public static final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public HandleData() {
+    }
 
     public Account getAccountByID(int id) {
         try {
@@ -481,6 +487,37 @@ public class HandleData {
         }
         return feedBackS;
     }
+
+    public static FeedBack getFeedbackByOrderDetailID(int orderDetailID) throws ExecutionException, InterruptedException {
+        FeedBack feedBack = null;  // Khởi tạo feedBack là null
+
+        try {
+            // Tạo truy vấn để lấy phản hồi theo orderDetailId
+            Query query = db.collection("feedback")
+                    .whereEqualTo("orderDetailId", orderDetailID)
+                    .limit(1);  // Giới hạn chỉ lấy 1 phản hồi
+
+            // Thực hiện truy vấn và đợi kết quả trả về
+            Task<QuerySnapshot> queryTask = query.get();
+            Tasks.await(queryTask);
+
+            // Kiểm tra xem có phản hồi nào được trả về hay không
+            if (queryTask.isSuccessful() && !queryTask.getResult().isEmpty()) {
+                // Lấy tài liệu phản hồi đầu tiên từ kết quả truy vấn
+                DocumentSnapshot document = queryTask.getResult().getDocuments().get(0);
+                feedBack = document.toObject(FeedBack.class);  // Chuyển đổi tài liệu thành đối tượng FeedBack
+            } else if (!queryTask.isSuccessful()) {
+                throw new Exception("Error getting feedback: " + queryTask.getException().getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting feedback: " + e.getMessage());
+        }
+
+        // Trả về phản hồi nếu có, hoặc null nếu không tìm thấy
+        return feedBack;
+    }
+
+
 
 
     public Order getOrderById(int id) {
@@ -949,6 +986,8 @@ public class HandleData {
     }
 
     public static boolean addFeedback( ArrayList<CartDTO> cartDTOList) {
+
+
         // b1 : tạo feed back;
         int id = getLastFeedbackId();
         id++;
@@ -1021,14 +1060,84 @@ public class HandleData {
 
 
 
+
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 // Xử lý ngoại lệ nếu cần thiết
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
         return true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
+
+    public static void setRateProductByID(int productID, double newRate) throws ExecutionException, InterruptedException {
+        try {
+            // Truy vấn collection "product" để tìm sản phẩm với ID tương ứng
+            Task<QuerySnapshot> task = db.collection("product")
+                    .whereEqualTo("id", productID)
+                    .get();
+
+            QuerySnapshot querySnapshot = Tasks.await(task);
+
+            if (!querySnapshot.isEmpty()) {
+                // Lấy tài liệu đầu tiên khớp với điều kiện
+                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
+                // Lấy tham chiếu đến tài liệu
+                DocumentReference productDocRef = document.getReference();
+
+                // Tạo map để chứa dữ liệu cập nhật
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("rate", newRate);
+
+                // Cập nhật dữ liệu trong Firestore
+                Task<Void> updateTask = productDocRef.update(updates);
+                Tasks.await(updateTask);
+
+                System.out.println("Cập nhật rate thành công cho sản phẩm ID: " + productID + " thành " + newRate);
+            } else {
+                System.out.println("Không tìm thấy sản phẩm với ID: " + productID);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            System.err.println("Lỗi khi cập nhật rate: " + e.getMessage());
+            throw e; // Ném lại ngoại lệ để xử lý ở mức cao hơn nếu cần
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+        }
+    }
+
+
 
     public static Product getProductById(int id) throws ExecutionException, InterruptedException {
         try {

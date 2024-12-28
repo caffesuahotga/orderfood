@@ -1,8 +1,12 @@
 package com.example.orderfood.data;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
+import com.example.orderfood.models.FeedBack;
 import com.example.orderfood.models.Order;
+import com.example.orderfood.models.OrderDetail;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.OrderDTO;
 import com.example.orderfood.models.dto.OrderProductDTO;
@@ -16,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 public class OrderUtil {
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private HandleData handleData;
 
     public static Order CreateOrder(OrderDTO od) {
         try {
@@ -188,23 +193,93 @@ public class OrderUtil {
         }
     }
 
-    public static boolean Feedback( ArrayList<CartDTO> cartDTOList)
-    {
+    public static boolean Feedback(ArrayList<CartDTO> cartDTOList) {
         try {
-            return CompletableFuture.supplyAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 try {
-
                     boolean data = HandleData.addFeedback(cartDTOList);
+//                    List<OrderDetail> orderDetailList = new ArrayList<>();
+//                    double rate = 0.0;
+//                    int count = 0;
+//                    List<FeedBack> feedBackList = new ArrayList<>();
+//
+//                    for (CartDTO cartDTO : cartDTOList) {
+//                        orderDetailList = HandleData.getOrderDetailsByProductID(cartDTO.getProductID());
+//                        for (OrderDetail orderDetail : orderDetailList) {
+//                            feedBackList.add(HandleData.getFeedbackByOrderDetailID(orderDetail.getId()));
+//                            rate = 0.0; // Reset rate for each new product
+//                            count = 0;
+//
+//                            for (FeedBack feedBack : feedBackList) {
+//                                rate += feedBack.getStar();
+//                                count += 1;
+//                            }
+//
+//                            // Tính giá trị rate trung bình
+//                            double averageRate = (count > 0) ? rate / count : 0;
+//
+//                            // Gọi UpdateRateTask để cập nhật rate cho sản phẩm
+//                            new UpdateRateTask().execute(cartDTO.getProductID(), averageRate);
+//
+//                            // Clear feedBackList for next iteration
+//                            feedBackList.clear();
+//                        }
+                    //}
 
                     return data;
-
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }).get();
+            }).thenAccept(result -> {
+                if (result) {
+                    Log.e("Feedback", "Successfully added feedback");
+                } else {
+                    Log.e("Feedback", "Failed to add feedback");
+                }
+            }).exceptionally(ex -> {
+                Log.e("Feedback", "Error in processing feedback", ex);
+                return null;
+            });
 
+            return true; // Indicating async task has been triggered
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    public static class UpdateRateTask extends AsyncTask<Object, Void, Boolean> {
+        private HandleData handleData;
+
+        // Constructor nhận đối tượng HandleData
+        public UpdateRateTask() {
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            // Chuyển từ Object sang đúng kiểu
+            int productID = (int) params[0];  // productID là kiểu int
+            double rate = (double) params[1]; // rate là kiểu double
+
+            try {
+                // Sử dụng đối tượng handleData để gọi phương thức không tĩnh
+                handleData.setRateProductByID(productID, rate);
+                return true; // Trả về true nếu thành công
+            } catch (ExecutionException | InterruptedException e) {
+                return false; // Trả về false nếu có lỗi
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            if (success) {
+                Log.e("oke", "sdsdsd");
+            } else {
+                Log.e("ngu", "sdsdsd");
+            }
+        }
+    }
+
+
 }
