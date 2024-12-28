@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".services.StatisticsPieCharActivity">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thống kê trạng thái đơn hàng"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="8dp" />
+
+    <!-- Date Range Selection -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Từ ngày: "
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/etStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="dd/MM/yyyy"
+            android:inputType="date"
+            android:focusable="false"
+            android:padding="8dp"
+            android:background="@drawable/rounded_corner" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đến ngày: "
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/etEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="dd/MM/yyyy"
+            android:inputType="date"
+            android:focusable="false"
+            android:padding="8dp"
+            android:background="@drawable/rounded_corner" />
+    </LinearLayout>
+
+    <!-- Statistic Button -->
+    <Button
+        android:id="@+id/btnStatistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thống kê"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp" /> <!-- Đã sửa thành layout_marginTop -->
+
+    <!-- Pie Chart -->
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
