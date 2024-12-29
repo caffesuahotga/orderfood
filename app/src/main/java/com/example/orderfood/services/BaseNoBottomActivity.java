@@ -32,6 +32,7 @@ public class BaseNoBottomActivity extends AppCompatActivity {
     LinearLayout itemNewOrder;
     LinearLayout itemHistoryOrder;
     LinearLayout itemStatisticOrderStatus;
+    LinearLayout itemStatistic;
 
 
     @Override
@@ -50,6 +51,7 @@ public class BaseNoBottomActivity extends AppCompatActivity {
         showSidebarMenu = findViewById(R.id.show_sidebar_menu);
         itemNewOrder = findViewById(R.id.side_bar_item_new_order);
         itemHistoryOrder = findViewById(R.id.side_bar_item_history_order);
+        itemStatistic  = findViewById(R.id.side_bar_item_statistic);
         itemStatisticOrderStatus = findViewById(R.id.side_bar_item_statistic_oder_status);
 
         if(CurrentUser.getRole() == 0)
@@ -160,6 +162,49 @@ public class BaseNoBottomActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
+
+        itemStatistic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hiển thị loading
+                ProgressDialog progressDialog = new ProgressDialog(BaseNoBottomActivity.this);
+                progressDialog.setMessage("Vui lòng đợi...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Thêm DrawerListener để lắng nghe sự kiện đóng drawer
+                drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Chuyển sang màn hình OrderNewActivity
+                        Intent goOrderNew = new Intent(BaseNoBottomActivity.this, StatisticalActivity.class);
+                        BaseNoBottomActivity.this.startActivity(goOrderNew);
+
+                        // Đóng loading khi drawer đã đóng
+                        progressDialog.dismiss();
+
+                        // Loại bỏ DrawerListener để tránh lắng nghe không cần thiết
+                        drawerLayout.removeDrawerListener(this);
+                    }
+                });
+
+                // Đóng drawer
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void BindHead() {

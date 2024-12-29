@@ -64,19 +64,43 @@
             android:gravity="center_vertical"
             android:clickable="true"
             android:layout_marginTop="10dp"
-            android:id="@+id/side_bar_item_statistic_oder_status">
+            android:id="@+id/side_bar_item_statistic">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/history_order"
+                android:src="@drawable/statistical"
                 android:contentDescription="Order Icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Thống kê trạng thái đơn hàng 🥪"
+                android:text="Thống kê doanh thu"
+                android:textStyle="bold"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:id="@+id/side_bar_item_statistic_oder_status">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/statistical_status"
+                android:contentDescription="Order Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Thống kê trạng thái đơn hàng "
                 android:textStyle="bold"
                 android:textSize="20dp" />
         </LinearLayout>

@@ -13,11 +13,9 @@ public class Order {
     private int Status;// 1 chờ xác nhận, 2 đã xác nhận, 3 đang giao, 4 đã giao-hoàn thành, 5 hủy
     private Date Date;
     private String Feedback;
-
     private int AddressId; // id dia chi acc
     private int ShipperId;
     private int CustomerId;
-
     private double ShipLatitude; // tọa đọ shiper
     private double ShipLongtitude; // tọa đọ shiper
 

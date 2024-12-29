@@ -592,6 +592,51 @@ public class HandleData {
         return orderList;
     }
 
+    public List<Order> getAllOrderList() {
+        List<Order> orderList = new ArrayList<>();
+
+        try {
+            Task<QuerySnapshot> task = db.collection("order").get(); // Lấy tất cả đơn hàng từ Firestore
+
+            // Chờ Task hoàn thành
+            while (!task.isComplete()) {
+                Thread.sleep(10); // Đợi Task hoàn thành
+            }
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+
+
+                for (QueryDocumentSnapshot orderDoc : task.getResult()) {
+                Order order = new Order();
+
+                // Ánh xạ các trường String
+                order.setNameUserOrder(orderDoc.getString("nameUserOrder") != null ? orderDoc.getString("nameUserOrder") : "");
+                order.setAddress(orderDoc.getString("address") != null ? orderDoc.getString("address") : "");
+                order.setPhone(orderDoc.getString("phone") != null ? orderDoc.getString("phone") : "");
+                order.setNote(orderDoc.getString("note") != null ? orderDoc.getString("note") : "");
+
+                // Các trường khác
+                order.setId(orderDoc.getLong("id") != null ? orderDoc.getLong("id").intValue() : 0);
+                order.setTotalPrice(orderDoc.getDouble("totalPrice") != null ? orderDoc.getDouble("totalPrice") : 0.0);
+                order.setPaymentType(orderDoc.getLong("paymentType") != null ? orderDoc.getLong("paymentType").intValue() : 0);
+                order.setStatus(orderDoc.getLong("status") != null ? orderDoc.getLong("status").intValue() : 0);
+                order.setDate(orderDoc.getDate("date"));
+                order.setFeedback(orderDoc.getString("feedback") != null ? orderDoc.getString("feedback") : "");
+                order.setAddressId(orderDoc.getLong("addressId") != null ? orderDoc.getLong("addressId").intValue() : 0);
+                order.setShipperId(orderDoc.getLong("shipperId") != null ? orderDoc.getLong("shipperId").intValue() : 0);
+                order.setCustomerId(orderDoc.getLong("customerId") != null ? orderDoc.getLong("customerId").intValue() : 0);
+                order.setShipLatitude(orderDoc.getDouble("shipLatitude") != null ? orderDoc.getDouble("shipLatitude") : 0.0);
+                order.setShipLongtitude(orderDoc.getDouble("shipLongtitude") != null ? orderDoc.getDouble("shipLongtitude") : 0.0);
+
+                // Thêm đối tượng vào danh sách
+                orderList.add(order);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting all orders", e); // Ghi lỗi nếu có
+        }
+        return orderList; // Trả về danh sách đơn hàng
+    }
+
 
     public static Order createOrder(OrderDTO dto) {
         try {

@@ -174,7 +174,7 @@ public class StatisticStatusActivity extends AppCompatActivity {
 
     public List<StatisticalDTO> getStatusStatistics() {
         HandleData handleData = new HandleData();
-        List<Order> orderList = handleData.getAllOrders();
+        List<Order> orderList = handleData.getAllOrderList();
 
         // Khởi tạo một mảng để đếm đơn đặt hàng theo trạng thái
         double[] statusCount = new double[5]; // Để đếm cho 5 trạng thái
