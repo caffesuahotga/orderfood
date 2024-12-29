@@ -208,8 +208,7 @@ public class StatisticalActivity extends BaseTopBottomViewActivity {
 
     public StatisticalDTO getTotalPriceByDate(String date) {
         HandleData handleData = new HandleData();
-        List<Order> orderList = handleData.getAllOrders();
-
+        List<Order> orderList = handleData.getAllOrderList();
         String formattedDate=null;
 
         double total = 0.0;
