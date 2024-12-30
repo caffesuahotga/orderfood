@@ -25,10 +25,14 @@ import java.util.Locale;
 import com.bumptech.glide.Glide;
 import com.example.orderfood.R;
 import com.example.orderfood.data.CurrentUser;
+import com.example.orderfood.data.ProductDetailUtil;
 import com.example.orderfood.models.Account;
+import com.example.orderfood.models.FeedBack;
 import com.example.orderfood.models.Product;
 import com.example.orderfood.models.dto.CartDTO;
 import com.example.orderfood.models.dto.FavoriteDTO;
+import com.example.orderfood.models.dto.FeedBackDTO;
+import com.example.orderfood.models.dto.ProductDetailDTO;
 import com.example.orderfood.services.CartActivity;
 import com.example.orderfood.services.ProductDetailActivity;
 import com.example.orderfood.sqlLite.dao.CartDAO;
@@ -66,6 +70,23 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+        ProductDetailDTO productDetail = ProductDetailUtil.getProductById(product.getId());
+        Double star = 0.0;
+        int count=0;
+        for(FeedBackDTO feedBackDTO: productDetail.getListFeedBack()){
+            star+=feedBackDTO.getStar();
+            count++;
+
+        }
+        Double averageStar = (count > 0) ? (star / count) : null;
+
+        // Set điểm đánh giá
+        if (averageStar != null) {
+            holder.productRatePoint.setText(String.valueOf(averageStar));
+        } else {
+            holder.productRatePoint.setText(""); // Chuỗi rỗng
+        }
+
 
 
 
@@ -111,16 +132,15 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
 
 
         // Set số lượt đánh giá
-        holder.productCountRate.setText(product.getStoreID() + " lượt");
+        holder.productCountRate.setText(count + " lượt");
 
 
 
-        // Set điểm đánh giá
-        holder.productRatePoint.setText(String.valueOf(product.getRate()));
+
 
         // Hiển thị ngôi sao đánh giá (có thể thêm logic để thay đổi ảnh theo điểm đánh giá)
-        setStarRating(holder.starImage, product.getRate());
-        holder.productCountFavorite.setText(Integer.toString(product.getStoreID()));
+        setStarRating(holder.starImage, 5);
+
         holder.btnAddCart.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view){
@@ -176,7 +196,7 @@ public class product_adapter_nomal extends RecyclerView.Adapter<product_adapter_
             productCountRate = itemView.findViewById(R.id.product_count_rate);
             productRatePoint = itemView.findViewById(R.id.product_rate_point);
             starImage = itemView.findViewById(R.id.starImage);
-            productCountFavorite = itemView.findViewById(R.id.count_favorite);
+
             btnAddCart = itemView.findViewById(R.id.btnAddCart);
             btnAddFavorite = itemView.findViewById(R.id.btnAddFavorite);
         }
