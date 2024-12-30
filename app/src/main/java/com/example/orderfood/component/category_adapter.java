@@ -1,5 +1,9 @@
 package com.example.orderfood.component;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +51,25 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.Cate
 
         // Thiết lập tên danh mục
         holder.categoryName.setText(categoryItem.getName());
-        holder.viewCard.setOnClickListener(view -> {
 
-            Intent intent = new Intent(view.getContext(), ProductActivity.class);
-            intent.putExtra("categoryID", categoryItem.getId());
-            view.getContext().startActivity(intent);
+
+        holder.viewCard.setOnClickListener(view -> {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(holder.categoryImage, "scaleX", 1f, 1.5f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(holder.categoryImage, "scaleY", 1f, 1.5f, 1f);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY); animatorSet.setDuration(1000);
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                @Override public void onAnimationEnd(Animator animation) {
+                    // Gửi Intent sang ProductActivity
+                    Intent intent = new Intent(view.getContext(), ProductActivity.class);
+                    intent.putExtra("categoryID", categoryItem.getId());
+                    view.getContext().startActivity(intent); } }); // Bắt đầu hiệu ứng animatorSet.start();
+                    animatorSet.start();
         });
     }
+
+
+
 
     @Override
     public int getItemCount() {
